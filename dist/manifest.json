@@ -1,0 +1,580 @@
+{
+  "version": 1,
+  "groups": [
+    {
+      "id": "living",
+      "name": "Living"
+    },
+    {
+      "id": "bedroom",
+      "name": "Bedroom"
+    },
+    {
+      "id": "dining",
+      "name": "Dining"
+    },
+    {
+      "id": "kitchen",
+      "name": "Kitchen"
+    },
+    {
+      "id": "bathroom",
+      "name": "Bathroom and laundry"
+    },
+    {
+      "id": "office",
+      "name": "Office"
+    },
+    {
+      "id": "comms",
+      "name": "Comms and server room"
+    },
+    {
+      "id": "network",
+      "name": "Networking and AV"
+    },
+    {
+      "id": "security",
+      "name": "Security"
+    },
+    {
+      "id": "safety",
+      "name": "Fire and safety"
+    },
+    {
+      "id": "outdoor",
+      "name": "Outdoor and small buildings"
+    },
+    {
+      "id": "structure",
+      "name": "Structure"
+    }
+  ],
+  "elements": [
+    {
+      "id": "sofa-3",
+      "name": "Sofa, 3-seat",
+      "group": "living",
+      "size": {
+        "w": 210,
+        "d": 90,
+        "h": 85
+      },
+      "footprint": {
+        "w": 210,
+        "d": 90
+      }
+    },
+    {
+      "id": "bed-queen",
+      "name": "Bed, queen",
+      "group": "bedroom",
+      "size": {
+        "w": 153,
+        "d": 203,
+        "h": 100
+      },
+      "footprint": {
+        "w": 153,
+        "d": 203
+      }
+    },
+    {
+      "id": "toilet",
+      "name": "Toilet",
+      "group": "bathroom",
+      "size": {
+        "w": 40,
+        "d": 70,
+        "h": 80
+      },
+      "footprint": {
+        "w": 40,
+        "d": 70
+      }
+    },
+    {
+      "id": "rack-wall-600x450-6u",
+      "name": "Wall-mount cabinet 6U, 600 × 450",
+      "group": "comms",
+      "tags": [
+        "network"
+      ],
+      "size": {
+        "w": 60,
+        "d": 45,
+        "h": 40
+      },
+      "mount": 150,
+      "footprint": {
+        "w": 60,
+        "d": 45
+      }
+    },
+    {
+      "id": "rack-wall-600x450-9u",
+      "name": "Wall-mount cabinet 9U, 600 × 450",
+      "group": "comms",
+      "tags": [
+        "network"
+      ],
+      "size": {
+        "w": 60,
+        "d": 45,
+        "h": 53
+      },
+      "mount": 150,
+      "footprint": {
+        "w": 60,
+        "d": 45
+      }
+    },
+    {
+      "id": "rack-wall-600x450-12u",
+      "name": "Wall-mount cabinet 12U, 600 × 450",
+      "group": "comms",
+      "tags": [
+        "network"
+      ],
+      "size": {
+        "w": 60,
+        "d": 45,
+        "h": 66
+      },
+      "mount": 150,
+      "footprint": {
+        "w": 60,
+        "d": 45
+      }
+    },
+    {
+      "id": "rack-wall-600x450-15u",
+      "name": "Wall-mount cabinet 15U, 600 × 450",
+      "group": "comms",
+      "tags": [
+        "network"
+      ],
+      "size": {
+        "w": 60,
+        "d": 45,
+        "h": 80
+      },
+      "mount": 150,
+      "footprint": {
+        "w": 60,
+        "d": 45
+      }
+    },
+    {
+      "id": "rack-600x600-18u",
+      "name": "Comms cabinet 18U, 600 × 600",
+      "group": "comms",
+      "tags": [
+        "network"
+      ],
+      "size": {
+        "w": 60,
+        "d": 60,
+        "h": 93
+      },
+      "footprint": {
+        "w": 60,
+        "d": 60
+      }
+    },
+    {
+      "id": "rack-600x600-24u",
+      "name": "Comms cabinet 24U, 600 × 600",
+      "group": "comms",
+      "tags": [
+        "network"
+      ],
+      "size": {
+        "w": 60,
+        "d": 60,
+        "h": 120
+      },
+      "footprint": {
+        "w": 60,
+        "d": 60
+      }
+    },
+    {
+      "id": "rack-600x600-27u",
+      "name": "Comms cabinet 27U, 600 × 600",
+      "group": "comms",
+      "tags": [
+        "network"
+      ],
+      "size": {
+        "w": 60,
+        "d": 60,
+        "h": 133
+      },
+      "footprint": {
+        "w": 60,
+        "d": 60
+      }
+    },
+    {
+      "id": "rack-600x800-27u",
+      "name": "Network cabinet 27U, 600 × 800",
+      "group": "comms",
+      "tags": [
+        "network"
+      ],
+      "size": {
+        "w": 60,
+        "d": 80,
+        "h": 133
+      },
+      "footprint": {
+        "w": 60,
+        "d": 80
+      }
+    },
+    {
+      "id": "rack-600x800-32u",
+      "name": "Network cabinet 32U, 600 × 800",
+      "group": "comms",
+      "tags": [
+        "network"
+      ],
+      "size": {
+        "w": 60,
+        "d": 80,
+        "h": 155
+      },
+      "footprint": {
+        "w": 60,
+        "d": 80
+      }
+    },
+    {
+      "id": "rack-600x800-37u",
+      "name": "Network cabinet 37U, 600 × 800",
+      "group": "comms",
+      "tags": [
+        "network"
+      ],
+      "size": {
+        "w": 60,
+        "d": 80,
+        "h": 177
+      },
+      "footprint": {
+        "w": 60,
+        "d": 80
+      }
+    },
+    {
+      "id": "rack-600x800-42u",
+      "name": "Network cabinet 42U, 600 × 800",
+      "group": "comms",
+      "tags": [
+        "network"
+      ],
+      "size": {
+        "w": 60,
+        "d": 80,
+        "h": 200
+      },
+      "footprint": {
+        "w": 60,
+        "d": 80
+      }
+    },
+    {
+      "id": "rack-600x1000-42u",
+      "name": "Server rack 42U, 600 × 1000",
+      "group": "comms",
+      "tags": [
+        "network"
+      ],
+      "size": {
+        "w": 60,
+        "d": 100,
+        "h": 200
+      },
+      "footprint": {
+        "w": 60,
+        "d": 100
+      }
+    },
+    {
+      "id": "rack-600x1000-45u",
+      "name": "Server rack 45U, 600 × 1000",
+      "group": "comms",
+      "tags": [
+        "network"
+      ],
+      "size": {
+        "w": 60,
+        "d": 100,
+        "h": 213
+      },
+      "footprint": {
+        "w": 60,
+        "d": 100
+      }
+    },
+    {
+      "id": "rack-600x1100-42u",
+      "name": "Server rack 42U, 600 × 1100",
+      "group": "comms",
+      "tags": [
+        "network"
+      ],
+      "size": {
+        "w": 60,
+        "d": 110,
+        "h": 200
+      },
+      "footprint": {
+        "w": 60,
+        "d": 110
+      }
+    },
+    {
+      "id": "rack-600x1100-45u",
+      "name": "Server rack 45U, 600 × 1100",
+      "group": "comms",
+      "tags": [
+        "network"
+      ],
+      "size": {
+        "w": 60,
+        "d": 110,
+        "h": 213
+      },
+      "footprint": {
+        "w": 60,
+        "d": 110
+      }
+    },
+    {
+      "id": "rack-600x1200-42u",
+      "name": "Server rack 42U, 600 × 1200",
+      "group": "comms",
+      "tags": [
+        "network"
+      ],
+      "size": {
+        "w": 60,
+        "d": 120,
+        "h": 200
+      },
+      "footprint": {
+        "w": 60,
+        "d": 120
+      }
+    },
+    {
+      "id": "rack-600x1200-45u",
+      "name": "Server rack 45U, 600 × 1200",
+      "group": "comms",
+      "tags": [
+        "network"
+      ],
+      "size": {
+        "w": 60,
+        "d": 120,
+        "h": 213
+      },
+      "footprint": {
+        "w": 60,
+        "d": 120
+      }
+    },
+    {
+      "id": "rack-800x1000-42u",
+      "name": "Server rack 42U, 800 × 1000",
+      "group": "comms",
+      "tags": [
+        "network"
+      ],
+      "size": {
+        "w": 80,
+        "d": 100,
+        "h": 200
+      },
+      "footprint": {
+        "w": 80,
+        "d": 100
+      }
+    },
+    {
+      "id": "rack-800x1000-45u",
+      "name": "Server rack 45U, 800 × 1000",
+      "group": "comms",
+      "tags": [
+        "network"
+      ],
+      "size": {
+        "w": 80,
+        "d": 100,
+        "h": 213
+      },
+      "footprint": {
+        "w": 80,
+        "d": 100
+      }
+    },
+    {
+      "id": "rack-800x1100-42u",
+      "name": "Server rack 42U, 800 × 1100",
+      "group": "comms",
+      "tags": [
+        "network"
+      ],
+      "size": {
+        "w": 80,
+        "d": 110,
+        "h": 200
+      },
+      "footprint": {
+        "w": 80,
+        "d": 110
+      }
+    },
+    {
+      "id": "rack-800x1100-45u",
+      "name": "Server rack 45U, 800 × 1100",
+      "group": "comms",
+      "tags": [
+        "network"
+      ],
+      "size": {
+        "w": 80,
+        "d": 110,
+        "h": 213
+      },
+      "footprint": {
+        "w": 80,
+        "d": 110
+      }
+    },
+    {
+      "id": "rack-800x1200-42u",
+      "name": "Server rack 42U, 800 × 1200",
+      "group": "comms",
+      "tags": [
+        "network"
+      ],
+      "size": {
+        "w": 80,
+        "d": 120,
+        "h": 200
+      },
+      "footprint": {
+        "w": 80,
+        "d": 120
+      }
+    },
+    {
+      "id": "rack-800x1200-45u",
+      "name": "Server rack 45U, 800 × 1200",
+      "group": "comms",
+      "tags": [
+        "network"
+      ],
+      "size": {
+        "w": 80,
+        "d": 120,
+        "h": 213
+      },
+      "footprint": {
+        "w": 80,
+        "d": 120
+      }
+    },
+    {
+      "id": "rack-open-2post-24u",
+      "name": "Open frame rack, 2-post 24U",
+      "group": "comms",
+      "tags": [
+        "network"
+      ],
+      "size": {
+        "w": 53,
+        "d": 40,
+        "h": 120
+      },
+      "footprint": {
+        "w": 53,
+        "d": 40
+      }
+    },
+    {
+      "id": "rack-open-2post-42u",
+      "name": "Open frame rack, 2-post 42U",
+      "group": "comms",
+      "tags": [
+        "network"
+      ],
+      "size": {
+        "w": 53,
+        "d": 40,
+        "h": 200
+      },
+      "footprint": {
+        "w": 53,
+        "d": 40
+      }
+    },
+    {
+      "id": "rack-open-4post-42u",
+      "name": "Open frame rack, 4-post 42U",
+      "group": "comms",
+      "tags": [
+        "network"
+      ],
+      "size": {
+        "w": 60,
+        "d": 100,
+        "h": 200
+      },
+      "footprint": {
+        "w": 60,
+        "d": 100
+      }
+    },
+    {
+      "id": "split-ac-indoor",
+      "name": "Split AC, wall unit",
+      "group": "comms",
+      "tags": [
+        "cooling"
+      ],
+      "size": {
+        "w": 90,
+        "d": 25,
+        "h": 30
+      },
+      "mount": 210,
+      "footprint": {
+        "w": 90,
+        "d": 25
+      }
+    },
+    {
+      "id": "cctv-dome",
+      "name": "CCTV dome camera",
+      "group": "security",
+      "tags": [
+        "security"
+      ],
+      "size": {
+        "w": 14,
+        "d": 14,
+        "h": 10
+      },
+      "mount": 270,
+      "footprint": {
+        "w": 40,
+        "d": 40
+      },
+      "symbol": true
+    }
+  ]
+}

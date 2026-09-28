@@ -1,0 +1,19 @@
+{
+  "name": "@qant-au/elements",
+  "version": "0.1.0",
+  "description": "Shared element library for Axonometra and Reticulyne: one model per element, rendered as plan and isometric SVGs.",
+  "license": "MIT",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "sheet": "node scripts/sheet.mjs",
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "playwright": "^1.63.0"
+  }
+}
