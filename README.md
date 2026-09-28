@@ -11,7 +11,8 @@ centimetres. Every view is generated from that model:
 - **Plan** (Axonometra): top-down, true to scale. _Built._
 - **Isometric** (Reticulyne): shaded 30° view. _Experimental: generated but
   not yet reviewed item by item._
-- **3D** (Axonometra's planned 3D view): the same solids as meshes. _Later._
+- **3D** (Axonometra's 3D view): the same solids as meshes, from
+  `dist/models.json` (solids with colours resolved; decals left out). _Built._
 
 So a rack is the same rack, the same size and the same colours in a floor plan
 and in a network diagram, and nobody keeps two icon sets in step.
@@ -21,7 +22,7 @@ and in a network diagram, and nobody keeps two icon sets in step.
 ```sh
 npm install
 npm test                 # rules every element must meet
-npm run build            # dist/manifest.json + dist/plan/<id>.svg
+npm run build            # dist/manifest.json, dist/models.json, dist/plan/<id>.svg
 npm run build -- --iso   # also dist/iso/<id>.svg (experimental)
 npm run sheet            # review/<group>.png contact sheets
 npm run sheet -- comms --iso
