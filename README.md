@@ -85,7 +85,8 @@ per face: `top`, `front`, `side`.
 ### Decals
 
 Marks on a face, in cm relative to the face's top-left corner. On `top` that
-is the part's plan position; on `front` and `side`, v runs **down** from the
+is the top-left corner of the part's bounding box on the plan (for a `cyl`,
+`dome` or `poly`, the box around it, not the plan origin); on `front` and `side`, v runs **down** from the
 face's top edge.
 
 | Decal                                                  | Draws                                            |
