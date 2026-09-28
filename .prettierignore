@@ -1,0 +1,3 @@
+# Element models are coordinate data; one part or decal per line reads better than Prettier's layout.
+src/elements/
+dist/

@@ -11,20 +11,8 @@ export default [
     symbol: {
       frame: 'circle',
       glyph: [
-        {
-          line: [
-            [20, 20],
-            [8, 36]
-          ],
-          stroke: 'detail'
-        },
-        {
-          line: [
-            [20, 20],
-            [32, 36]
-          ],
-          stroke: 'detail'
-        },
+        { line: [[20, 20], [8, 36]], stroke: 'detail' },
+        { line: [[20, 20], [32, 36]], stroke: 'detail' },
         { circle: [20, 20, 9], fill: 'dark', stroke: 'outline' },
         { circle: [20, 23, 3], accent: 'security' }
       ]
