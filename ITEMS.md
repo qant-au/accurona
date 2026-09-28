@@ -260,8 +260,8 @@ Racks are generated in `src/elements/comms.mjs` (26 variants): wall-mount 600 ×
 
 | id              | name             | W×D×H           |
 | --------------- | ---------------- | --------------- |
-| stairs-straight | Stairs, straight | 100×300×300     |
-| stairs-l        | Stairs, L-shaped | 200×250×300     |
+| stairs-straight | Stairs, straight | 100×400×300     |
+| stairs-l        | Stairs, L-shaped | 200×375×300     |
 | stairs-u        | Stairs, U-shaped | 220×300×300     |
 | stairs-spiral   | Spiral stairs    | 160×160×300     |
 | column-square   | Column, square   | 40×40×270       |
