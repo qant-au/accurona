@@ -259,11 +259,11 @@ export default [
     size: { w: 60, d: 120, h: 1 },
     mount: 270,
     parts: [
-      { x: 0, y: 0, z: 0, w: 60, d: 120, h: 0.5, role: 'soft' },
-      { x: 5, y: 5, z: 0.5, w: 50, d: 110, h: 0.5, role: 'glass' }
+      // Overhead, so dashed on the plan.
+      { x: 0, y: 0, z: 0, w: 60, d: 120, h: 0.5, role: 'soft', dash: '6 4' },
+      { x: 5, y: 5, z: 0.5, w: 50, d: 110, h: 0.5, role: 'glass', dash: '4 3' }
     ],
     plan: [
-      { rect: [2, 2, 56, 116], dash: '6 4', stroke: 'outline' },
       { line: [[5, 5], [55, 115]], dash: '5 4' },
       { line: [[5, 115], [55, 5]], dash: '5 4' }
     ]

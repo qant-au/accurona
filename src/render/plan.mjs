@@ -21,12 +21,13 @@ function decal(dc, ox, oy, sw) {
   const fill = dc.fill ? fillFor(dc.fill) : dc.accent ? colour : 'none';
   const stroke = dc.accent && !dc.stroke ? 'none' : colour;
   const width = dc.weight === 'outline' ? sw * 2 : sw;
-  const paint = `fill="${fill}" stroke="${stroke}" stroke-width="${f(width)}"`;
+  const dash = dc.dash ? ` stroke-dasharray="${dc.dash}"` : '';
+  const paint = `fill="${fill}" stroke="${stroke}" stroke-width="${f(width)}"${dash}`;
   const shift = (a) => a.map(([u, v]) => [ox + u, oy + v]);
   if (dc.line) {
     const tag = dc.closed ? 'polygon' : 'polyline';
     const lineFill = dc.closed ? fill : 'none';
-    return `<${tag} points="${pts(shift(dc.line))}" fill="${lineFill}" stroke="${colour}" stroke-width="${f(width)}"${dc.dash ? ` stroke-dasharray="${dc.dash}"` : ''}/>`;
+    return `<${tag} points="${pts(shift(dc.line))}" fill="${lineFill}" stroke="${colour}" stroke-width="${f(width)}"${dash}/>`;
   }
   if (dc.rect) {
     const [u, v, w, h] = dc.rect;
@@ -52,13 +53,14 @@ function decal(dc, ox, oy, sw) {
       (a0 * Math.PI) / 180,
       (a1 * Math.PI) / 180
     );
-    return `<polyline points="${pts(a)}" fill="none" stroke="${colour}" stroke-width="${f(width)}"${dc.dash ? ` stroke-dasharray="${dc.dash}"` : ''}/>`;
+    return `<polyline points="${pts(a)}" fill="none" stroke="${colour}" stroke-width="${f(width)}"${dash}/>`;
   }
   throw new Error(`unknown decal ${JSON.stringify(dc)}`);
 }
 
 function partShape(p, fill, stroke, sw, inset) {
-  const paint = `fill="${fill}" stroke="${stroke}" stroke-width="${f(sw)}"`;
+  const dash = p.dash ? ` stroke-dasharray="${p.dash}"` : '';
+  const paint = `fill="${fill}" stroke="${stroke}" stroke-width="${f(sw)}"${dash}`;
   const round = p.cyl ?? p.dome;
   if (round) {
     const [cx, cy, rx, ry] = round;
@@ -112,7 +114,8 @@ export function planSvg(el) {
     .map(({ p }) => p);
   const body = [];
   for (const p of parts) {
-    const heavy = p === el.parts[0] || p.outline;
+    // The first part takes the heavy outline unless it opts out (outline: false).
+    const heavy = p.outline ?? p === el.parts[0];
     const inset = p === el.parts[0] && !p.poly && !p.noInset ? so / 2 : 0;
     body.push(
       partShape(

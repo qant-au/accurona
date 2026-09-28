@@ -75,9 +75,10 @@ the wrong order).
 | `{ dome: [cx, cy, r], z, h }`      | Dome (camera domes, lights).                                                              |
 | `{ poly: [[x, y], ...], z, h }`    | Extruded polygon for L-shapes and curves. List points **clockwise** on the plan (y down). |
 
-Common part options: `role` (fill, default `body`), `outline: true` (draw
-with the heavy outline on the plan; the first part always is), and decals
-per face: `top`, `front`, `side`.
+Common part options: `role` (fill, default `body`), `outline` (`true` draws
+the part with the heavy plan outline; the first part has it unless it sets
+`outline: false`), `dash` (a dashed plan outline, e.g. `'6 4'`, for overhead
+items such as skylights), and decals per face: `top`, `front`, `side`.
 
 **Roles:** `body`, `soft` (cushions, tops, trays), `dark` (equipment),
 `metal`, `wood`, `glass` (glass and water), `plant`, `ground` (rugs, paving).

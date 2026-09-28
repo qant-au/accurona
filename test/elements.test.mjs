@@ -12,6 +12,13 @@ const groupIds = new Set(GROUPS.map((g) => g.id));
 const LEGACY_IDS = ['bed', 'chair', 'table'];
 const TOLERANCE = 0.5; // cm
 
+// Solids must not overlap: the isometric renderer orders parts by assuming
+// they are separate. Only box against box is checked, because for cylinders,
+// domes and polygons the bounding boxes can overlap while the shapes do not.
+const isBox = (p) => !p.cyl && !p.dome && !p.poly;
+const overlap = (a, b, k, s) =>
+  Math.min(a[k] + a[s], b[k] + b[s]) - Math.max(a[k], b[k]);
+
 test('ids are unique kebab-case', () => {
   const seen = new Set();
   for (const el of elements) {
@@ -21,17 +28,13 @@ test('ids are unique kebab-case', () => {
   }
 });
 
-test(
-  'legacy Axonometra ids are present',
-  { todo: elements.length < 50 },
-  () => {
-    for (const id of LEGACY_IDS)
-      assert.ok(
-        elements.some((e) => e.id === id),
-        id
-      );
-  }
-);
+test('legacy Axonometra ids are present', () => {
+  for (const id of LEGACY_IDS)
+    assert.ok(
+      elements.some((e) => e.id === id),
+      id
+    );
+});
 
 for (const el of elements) {
   test(`${el.id}: well formed`, () => {
@@ -64,6 +67,23 @@ for (const el of elements) {
         `part past height ${JSON.stringify(b)}`
       );
     }
+  });
+
+  test(`${el.id}: boxes do not overlap`, () => {
+    const boxes = el.parts.filter(isBox).map(bounds);
+    for (let i = 0; i < boxes.length; i++)
+      for (let j = i + 1; j < boxes.length; j++) {
+        const [a, b] = [boxes[i], boxes[j]];
+        const into = [
+          overlap(a, b, 'x', 'w'),
+          overlap(a, b, 'y', 'd'),
+          overlap(a, b, 'z', 'h')
+        ];
+        assert.ok(
+          into.some((v) => v <= TOLERANCE),
+          `parts ${JSON.stringify(a)} and ${JSON.stringify(b)} overlap`
+        );
+      }
   });
 
   test(`${el.id}: renders`, () => {

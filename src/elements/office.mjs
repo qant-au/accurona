@@ -77,7 +77,7 @@ function pod({ id, name, cols, dw = 160, d = 150, screen = false }) {
     }))
   ).flat();
   const divider = screen
-    ? [{ x: 4, y: dd, z: z - 10, w: w - 8, d: gap, h: h - (z - 10), role: 'soft', outline: true }]
+    ? [{ x: 4, y: dd, z, w: w - 8, d: gap, h: h - z, role: 'soft', outline: true }]
     : [];
   return { id, name, group: 'office', size: { w, d, h }, parts: [...tops, ...frames, ...divider] };
 }
