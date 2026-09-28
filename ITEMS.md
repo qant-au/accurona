@@ -35,10 +35,10 @@ A row marked "(done)" or covered by a note already exists in `src/elements/`.
 | id               | name                                  | W×D×H       |
 | ---------------- | ------------------------------------- | ----------- |
 | bed              | Bed, double (legacy id, head at left) | 200×150×100 |
-| bed-single       | Bed, single                           | 92×188×55   |
-| bed-king-single  | Bed, king single                      | 107×203×55  |
+| bed-single       | Bed, single                           | 92×188×100  |
+| bed-king-single  | Bed, king single                      | 107×203×100 |
 | bed-queen        | Bed, queen (done)                     | 153×203×100 |
-| bed-king         | Bed, king                             | 183×203×55  |
+| bed-king         | Bed, king                             | 183×203×100 |
 | bunk-bed         | Bunk bed                              | 97×200×160  |
 | cot              | Cot                                   | 75×135×90   |
 | bedside-table    | Bedside table                         | 45×40×55    |
