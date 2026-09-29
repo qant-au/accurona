@@ -1,0 +1,20 @@
+# Dependabot version updates: npm only (the one dependency is playwright, dev).
+# No @qant-au/* deps, so no private registry. Security updates need no config.
+version: 2
+
+updates:
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "07:00"
+      timezone: Australia/Perth
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: "build(deps)"
+      prefix-development: "build(deps-dev)"
+    groups:
+      npm-minor-and-patch:
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
