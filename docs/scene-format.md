@@ -1,14 +1,26 @@
 # Accurona scene format
 
-**Status: specification, version 1.** Nothing reads or writes this format yet. The
-executable schema (zod, with a JSON Schema generated from it) is to live in the
-`@accurona/core` package; until it exists, this document is the definition.
+**Status: specification, version 1.** This is the **native file format** of Accurona,
+[Axonometra](https://github.com/qant-au/axonometra) and
+[Reticulyne](https://github.com/qant-au/reticulyne): each saves and opens a scene as a
+plain `.json` file, not as an import or export target beside a format of its own.
+Nothing reads or writes it yet.
+
+- **One schema.** A scene is validated by one [Zod 4](https://zod.dev) schema, defined
+  in the `@accurona/core` package and imported by Axonometra and Reticulyne. Neither
+  tool keeps a schema of its own. Until the package exists, this document is the
+  definition.
+- **A JSON Schema for everyone else.** The build generates a JSON Schema (Draft
+  2020-12) from the Zod schema (`z.toJSONSchema()`), and each release publishes it, so a
+  scene can be validated in any language without Accurona's code. A file names it in
+  its [`$schema`](#top-level-shape) field.
+- **Element definitions are not scenes.** Accurona's element library stays library
+  source; a scene refers to its elements by id.
 
 One JSON document describes a floor plan, an isometric network diagram and a flat 2D
-(schematic) diagram of the same things, so that
-[Axonometra](https://github.com/qant-au/axonometra) and
-[Reticulyne](https://github.com/qant-au/reticulyne) can share one file, and so that
-code, or a language model, can write a drawing without knowing either editor.
+(schematic) diagram of the same things, so that the tools open and save the same file,
+and so that code, or a language model, can write a drawing without knowing either
+editor.
 
 ## The one idea
 
@@ -27,11 +39,13 @@ Reticulyne already works this way for its own views (model `items`, placed by vi
 
 ```ts
 interface Scene {
+  $schema?: string;         // URL of the published JSON Schema for this version
   format: 'accurona-scene'; // fixed; identifies the file
   version: 1;               // schema version, see Versioning
   id: Id;                   // this scene's own id
   title?: string;           // max 100; default 'Untitled'
   description?: string;     // max 1000
+  units?: 'mm' | 'cm' | 'm' | 'in' | 'ft-in'; // display and entry unit; default 'mm'
   objects: SceneObject[];   // the model: every thing, once
   connections?: Connection[]; // logical links between objects
   views?: View[];           // where objects are drawn; default []
@@ -44,6 +58,15 @@ interface Scene {
 
 A scene with `objects` and no `views` is valid: it says what exists and how it
 connects, and leaves the drawing to an editor (see [Writing a scene from code](#writing-a-scene-from-code)).
+
+- **`$schema`** points at the JSON Schema published for this version, in the form
+  `https://cdn.jsdelivr.net/npm/@accurona/core@<major>/schema/scene-v1.json`. It is
+  optional and never changes how a file is read; it lets an editor or a validator in any
+  language find the schema. Editors write it on save.
+- **`units`** is how lengths are **shown and typed**, not how they are stored. Every
+  length is stored in millimetres whatever it says (see [Plan views](#plan-views)), so
+  changing it never rewrites a number. Showing and entering other units is the editors'
+  job, not the format's.
 
 ## Ids
 
@@ -75,7 +98,16 @@ interface SceneObject {
   description?: string;   // max 1000
   tags?: string[];        // e.g. ['network', 'poe']; max 20, each max 40
   props?: Record<string, string | number | boolean>; // max 50 keys
+  ports?: Port[];         // where connections attach; ids unique within the object
   links?: ExternalLink[]; // links back to external tools
+}
+
+interface Port {
+  id: Id;                 // e.g. 'eth1', '24', 'psu-a'
+  name?: string;          // max 100
+  kind?: string;          // free text, e.g. 'ethernet', 'sfp', 'power'
+  props?: Record<string, string | number | boolean>; // max 50 keys
+  links?: ExternalLink[]; // e.g. the port on a switch controller
 }
 ```
 
@@ -93,6 +125,9 @@ interface SceneObject {
 - **`props`** holds the facts about the thing: an IP address, a MAC, a serial number, a
   port count. Flat, and scalar values only, so that every tool can show and edit it as
   a table without knowing what the keys mean.
+- **`ports`** are the points a connection can attach to: a switch's ports, a patch
+  panel's sockets, a device's power inlets. An object lists only the ports it needs;
+  a connection to an object with no ports attaches to the object as a whole.
 
 ## Connections
 
@@ -104,14 +139,31 @@ drawn somewhere else.
 interface Connection {
   id: Id;
   from: Id;               // an object id
+  fromPort?: Id;          // a port of the `from` object
   to: Id;                 // an object id
+  toPort?: Id;            // a port of the `to` object
   kind?: string;          // free text, e.g. 'ethernet', 'fibre', 'power', 'wireless'
   name?: string;          // max 100
   description?: string;   // max 1000
-  props?: Record<string, string | number | boolean>; // e.g. { fromPort: 'eth1', toPort: 24, vlan: 20 }
+  props?: Record<string, string | number | boolean>; // e.g. { vlan: 20, poe: true }
   links?: ExternalLink[];
 }
 ```
+
+The model uses the vocabulary of the IETF network topology model,
+[RFC 8345](https://www.rfc-editor.org/rfc/rfc8345), so a topology can be read into and
+out of tools that speak it without renaming anything's meaning:
+
+| RFC 8345 | Scene |
+|---|---|
+| node | an object |
+| termination point (`tp-id`) | a port |
+| link (`source-node` + `source-tp`, `dest-node` + `dest-tp`) | a connection (`from` + `fromPort`, `to` + `toPort`) |
+
+The fields keep the names `connections` and `ports` because `links` already means
+[links back to external tools](#links-back-to-external-tools). RFC 8345 links are
+directed; a connection is too, but only by which end is written first, and an editor
+may draw it either way.
 
 How a connection is **drawn** is up to each view: a diagram view draws it as a
 connector, a plan view may draw it as a cable run or not at all. A view connector says
@@ -186,13 +238,13 @@ interface PlanView extends ViewBase {
 interface Floor {
   id: Id;
   name?: string;          // e.g. 'Ground', 'Level 2'
-  elevationCm?: number;   // floor level above ground; default 300 per storey below it
-  wallHeightCm?: number;  // default 270
+  elevationMm?: number;   // floor level above ground; default 3000 per storey below it
+  wallHeightMm?: number;  // default 2700
   nodes?: WallNode[];     // wall corners
   walls?: Wall[];
 }
 
-interface WallNode { id: Id; x: number; y: number } // cm
+interface WallNode { id: Id; x: number; y: number } // mm
 
 interface Wall {
   id: Id;
@@ -205,21 +257,22 @@ interface Wall {
 interface PlanPlacement {
   object: Id;
   floor: Id;
-  x: number;              // cm: the centre of the footprint
-  y: number;              // cm
+  x: number;              // mm: the centre of the footprint
+  y: number;              // mm
   rotation?: number;      // degrees clockwise; default 0
   mirror?: { x?: boolean; y?: boolean }; // flips, e.g. a door's hinge side and swing
-  mountCm?: number;       // underside above the floor; default the element's `mount`, else 0
-  size?: { w?: number; d?: number; h?: number }; // cm; overrides the element's size
+  mountMm?: number;       // underside above the floor; default the element's `mount`, else 0
+  size?: { w?: number; d?: number; h?: number }; // mm; overrides the element's size
   attach?: { wall: Id };  // doors, windows and anything else fixed into a wall
   layer?: Id;
-  symbol?: boolean;       // force the 40 cm plan symbol; default is the element's choice
+  symbol?: boolean;       // force the 400 mm plan symbol; default is the element's choice
 }
 ```
 
-- **Units are centimetres**, the same as Accurona elements. **Axes:** x runs right, y
-  runs down the plan, z runs up. **Rotation** is clockwise in degrees, about the
-  footprint centre.
+- **Every length is stored in millimetres**, as an integer wherever the value allows,
+  whatever the scene's `units` says. Accurona elements are authored in centimetres; an
+  editor reads an element's `size` and `mount` x 10. **Axes:** x runs right, y runs down
+  the plan, z runs up. **Rotation** is clockwise in degrees, about the footprint centre.
 - **The footprint** is the element's `size.w` by `size.d`, unless `size` overrides it.
   An editor records the size it placed, as Axonometra does today, when the scene must
   not change if the element library does.
@@ -358,8 +411,8 @@ describing a network in words. So:
 - **Placement is optional.** A scene can list objects and connections with no views at
   all; an editor opening it places the unplaced objects itself. An object that is in no
   view is still part of the scene.
-- **Rotation is in degrees**, not radians, and **sizes are in centimetres**, because
-  those are the numbers people write down.
+- **Rotation is in degrees**, not radians, and **lengths are in millimetres**, because
+  those are the numbers people write down and read off a drawing.
 - **Ids can be readable.** `core-switch` is as good as a UUID.
 
 ### Smallest valid scene
@@ -378,19 +431,19 @@ describing a network in words. So:
   "title": "Branch office",
   "objects": [
     { "id": "fw", "element": "firewall", "name": "Firewall" },
-    { "id": "core", "element": "network-switch", "name": "Core switch" },
+    { "id": "core", "element": "network-switch", "name": "Core switch", "ports": [{ "id": "1", "kind": "ethernet" }] },
     { "id": "ap-1", "element": "wifi-ap", "name": "AP reception" }
   ],
   "connections": [
     { "id": "c1", "from": "fw", "to": "core", "kind": "ethernet" },
-    { "id": "c2", "from": "core", "to": "ap-1", "kind": "ethernet", "props": { "toPort": 1, "poe": true } }
+    { "id": "c2", "from": "core", "fromPort": "1", "to": "ap-1", "kind": "ethernet", "props": { "poe": true } }
   ]
 }
 ```
 
 ### A plan
 
-One room, 4 m by 3 m, with a door and a rack.
+One room, 4 m by 3 m (4000 by 3000 mm), with a door and a rack.
 
 ```json
 {
@@ -412,9 +465,9 @@ One room, 4 m by 3 m, with a door and a rack.
           "name": "Ground",
           "nodes": [
             { "id": "n1", "x": 0, "y": 0 },
-            { "id": "n2", "x": 400, "y": 0 },
-            { "id": "n3", "x": 400, "y": 300 },
-            { "id": "n4", "x": 0, "y": 300 }
+            { "id": "n2", "x": 4000, "y": 0 },
+            { "id": "n3", "x": 4000, "y": 3000 },
+            { "id": "n4", "x": 0, "y": 3000 }
           ],
           "walls": [
             { "id": "w1", "from": "n1", "to": "n2", "exterior": true },
@@ -425,8 +478,8 @@ One room, 4 m by 3 m, with a door and a rack.
         }
       ],
       "placements": [
-        { "object": "door-1", "floor": "g", "x": 300, "y": 300, "attach": { "wall": "w3" } },
-        { "object": "rack-1", "floor": "g", "x": 60, "y": 60 }
+        { "object": "door-1", "floor": "g", "x": 3000, "y": 3000, "attach": { "wall": "w3" } },
+        { "object": "rack-1", "floor": "g", "x": 600, "y": 600 }
       ]
     }
   ]
@@ -452,6 +505,7 @@ remote-management console and a network-monitoring console.
       "element": "network-switch",
       "name": "Level 2 switch",
       "props": { "ip": "10.0.20.2" },
+      "ports": [{ "id": "14", "kind": "ethernet" }],
       "links": [
         { "source": "rmm", "ref": "Sw2AgentId0001", "url": "https://rmm.example.com/agents/Sw2AgentId0001" },
         { "source": "nsm", "url": "https://nsm.example.com/#/hunt?q=10.0.20.2" }
@@ -470,17 +524,17 @@ remote-management console and a network-monitoring console.
     }
   ],
   "connections": [
-    { "id": "c-ap", "from": "sw-2", "to": "ap-2e", "kind": "ethernet", "props": { "fromPort": 14, "poe": true } }
+    { "id": "c-ap", "from": "sw-2", "fromPort": "14", "to": "ap-2e", "kind": "ethernet", "props": { "poe": true } }
   ],
   "views": [
     {
       "id": "plan",
       "kind": "plan",
       "name": "Building",
-      "floors": [{ "id": "l2", "name": "Level 2", "elevationCm": 350 }],
+      "floors": [{ "id": "l2", "name": "Level 2", "elevationMm": 3500 }],
       "placements": [
-        { "object": "sw-2", "floor": "l2", "x": 120, "y": 80 },
-        { "object": "ap-2e", "floor": "l2", "x": 1840, "y": 620, "mountCm": 270 }
+        { "object": "sw-2", "floor": "l2", "x": 1200, "y": 800 },
+        { "object": "ap-2e", "floor": "l2", "x": 18400, "y": 6200, "mountMm": 2700 }
       ]
     },
     {
@@ -506,10 +560,18 @@ remote-management console and a network-monitoring console.
 }
 ```
 
-## From today's formats
+## Migrating from today's formats
 
-Both tools keep their own file formats. Each gets a lossless import and export to
-this one; a round trip through the scene format gives back an equivalent file.
+The scene format replaces the formats each project uses today: Axonometra's plan
+format (version 2), Reticulyne's model, and Accurona's own JSON and SVG output for
+drawings. The old formats are **read, never written**:
+
+- **On load**, an editor that is given a plan v2 file or a Reticulyne model converts
+  it to a scene as below, and from then on works on the scene.
+- **On save**, it writes only the scene format. There is no "save as plan v2" or "save
+  as Reticulyne model", and no round trip back to either.
+- **Exports are separate and unchanged.** Exporting a drawing as SVG, PDF or PNG is
+  output, not a file format, and works as it does today.
 
 ### Axonometra plan (version 2)
 
@@ -521,19 +583,19 @@ plan becomes one scene with one `plan` view.
 |---|---|---|
 | `floors[i]` | `views[0].floors[i]` | `id` generated (`floor-0`, `floor-1`...), since Axonometra floors have none |
 | `wallNodes[].id` (number) | `nodes[].id` (string) | the number as a string |
-| `wallNodes[].x`, `.y` | `nodes[].x`, `.y` | same units: Axonometra editor units are cm |
+| `wallNodes[].x`, `.y` | `nodes[].x`, `.y` | x 10: Axonometra editor units are cm |
 | `wallNodeLinks` (adjacency list) | `walls[]` | one wall per unordered node pair; `id` = `w-<a>-<b>` with `a < b` |
 | `exteriorWalls` | `walls[].exterior` | |
-| `wallHeightM`, `elevationM` | `wallHeightCm`, `elevationCm` | x 100 |
+| `wallHeightM`, `elevationM` | `wallHeightMm`, `elevationMm` | x 1000 |
 | `furnitureArray[]` | one object + one placement each | object `id` = the furniture id as a string |
 | `texturePath` | `objects[].element` | it is already the Accurona element id, or a built-in wall fitting such as `door` |
-| `width`, `height` (m) | `placements[].size.w`, `.d` (cm) | x 100; Axonometra's `height` is depth, not how tall |
-| `heightM`, `mountM` | `size.h`, `mountCm` | x 100 |
+| `width`, `height` (m) | `placements[].size.w`, `.d` (mm) | x 1000; Axonometra's `height` is depth, not how tall |
+| `heightM`, `mountM` | `size.h`, `mountMm` | x 1000 |
 | `x`, `y` | `x`, `y` | Axonometra stores the footprint's top-left corner, which is also the point it rotates about; the centre is that point plus the half-size rotated by `rotation`. Doors are also offset by the wall thickness at orientations 1 and 3, and the converter undoes it |
 | `rotation` (radians) | `rotation` (degrees) | x 180 / pi; both clockwise |
 | `orientation` 0 / 1 / 2 / 3 | `mirror` none / `{x}` / `{x, y}` / `{y}` | each step flips one axis in place |
 | `attachedToLeft`, `attachedToRight` | `attach.wall` | the wall between the two nodes |
-| `zIndex` | none | derived from mount height and placement order on export |
+| `zIndex` | none | derived from mount height and placement order when drawn |
 | `furnitureId`, `wallNodeId` counters | none | ids are strings; an editor keeps its own counters |
 
 ### Reticulyne model
@@ -549,11 +611,11 @@ becomes one scene with one `iso` view per Reticulyne view.
 | `icons[]`, `colors[]` | `icons[]`, `colors[]` | unchanged |
 | `views[]` | `views[]` with `kind: 'iso'` | |
 | view `items[]` (`id`, `tile`, `labelHeight`, `parentGroupId`) | `placements[]` (`object`, `tile`, `labelHeight`, `group`) | a view item's `id` is its model item's id |
-| `connectors[]` | `connectors[]` | anchor `ref.item` becomes `ref.object`; no `connection` on import |
+| `connectors[]` | `connectors[]` | anchor `ref.item` becomes `ref.object`; no `connection` |
 | `rectangles[]`, `textBoxes[]`, `groups[]` | same | `parentGroupId` becomes `group` |
 | `version` (string) | none | the scene carries its own `version` |
 
-Reticulyne connectors carry no logical connection today. On import, a connector
+Reticulyne connectors carry no logical connection today. On load, a connector
 whose two ends are objects may also create a `Connection` between them; an editor
 that does so must do it only when asked, since two connectors between the same pair
 are not necessarily two cables.
@@ -579,11 +641,12 @@ than being dropped), and every string length and array size is capped:
 | layers | 100 |
 | icons | 5,000 |
 | colors | 100 |
-| links per object, connection or scene | 20 |
+| ports per object | 1,000 |
+| links per object, port, connection or scene | 20 |
 
 **Coordinates.** Diagram tiles are integers from -1000 to 1000 (a pathfinder allocates
-a grid the size of the area a connector spans). Plan coordinates are finite numbers
-from -1,000,000 to 1,000,000 cm (10 km).
+a grid the size of the area a connector spans). Plan coordinates and lengths are finite
+numbers in millimetres from -10,000,000 to 10,000,000 (10 km).
 
 **URLs.** An icon `url` may be `http:`, `https:`, `blob:`, a relative path, or a
 `data:image/` URI of type png, jpeg, gif, webp or svg+xml. An external link `url` must
@@ -591,7 +654,8 @@ be `http:` or `https:`. Everything else is rejected, percent-encoded schemes inc
 
 **References.** Every id reference must resolve:
 
-- a connection's `from` and `to`, and a placement's `object`, to an object;
+- a connection's `from` and `to`, and a placement's `object`, to an object, and a
+  connection's `fromPort` and `toPort` to a port of that end's object;
 - a plan placement's `floor` to a floor of that view, and `attach.wall` to a wall of
   that floor;
 - a wall's `from` and `to` to nodes of the same floor;
@@ -605,7 +669,10 @@ And no object is placed twice in one view.
 
 ## Versioning
 
-- `version` is a single integer. This document is version 1.
+- `version` is a single integer. This document is version 1. The Zod schema in
+  `@accurona/core` and the JSON Schema generated from it are published per version
+  (`scene-v1.json`), so a file's `$schema` keeps pointing at the schema it was written
+  against.
 - A new required field, a removed field, or a change to what a field means bumps the
   version, and adds a forward-only migration from the previous version.
 - A new optional field, whose absence means the old behaviour, needs no migration, but
@@ -623,3 +690,6 @@ And no object is placed twice in one view.
 - **Anything product-specific.** Links to other tools are generic
   ([Links back to external tools](#links-back-to-external-tools)); a tool that wants
   more stores it in `props`.
+- **Importing other formats.** The scene format is the native format; reading a
+  building or diagram from another standard (IFC, glTF, GraphML, draw.io) is not part of
+  it, and exporting a drawing (SVG, PDF, PNG) is separate from it.
