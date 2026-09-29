@@ -1,7 +1,7 @@
 {
-  "name": "@qant-au/elements",
+  "name": "@accurona/elements",
   "version": "0.1.0",
-  "description": "Shared element library for Axonometra and Reticulyne: one model per element, rendered as plan and isometric SVGs.",
+  "description": "Accurona: the shared element library for Axonometra and Reticulyne. One model per element, rendered as plan, isometric and 3D views.",
   "license": "MIT",
   "type": "module",
   "private": true,

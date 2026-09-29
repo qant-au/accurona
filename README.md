@@ -1,9 +1,15 @@
-# Elements
+# Accurona
 
-The shared element library for [Axonometra](https://github.com/qant-au/axonometra)
-(floor plans) and [Reticulyne](https://github.com/qant-au/reticulyne) (network
-diagrams): furniture, fixtures, comms and security equipment, one set of
-groups, ids and look for both.
+The shared core behind [Axonometra](https://github.com/qant-au/axonometra) (floor
+plans and 3D) and [Reticulyne](https://github.com/qant-au/reticulyne) (network
+diagrams): one source of truth for what the two tools draw, so the same thing looks
+and measures the same in both, and so other tools can build on it too.
+
+Today Accurona is the **element library**: furniture, fixtures, comms and security
+equipment, with one set of groups, ids and look. The shared data structures (a common
+scene format) and a shared keymap are planned to live here as well.
+
+## Elements
 
 Each element is modelled **once**, as a few simple solids at real size in
 centimetres. Every view is generated from that model:
@@ -13,6 +19,8 @@ centimetres. Every view is generated from that model:
   not yet reviewed item by item._
 - **3D** (Axonometra's 3D view): the same solids as meshes, from
   `dist/models.json` (solids with colours resolved; decals left out). _Built._
+- **2D schematic** (Reticulyne's planned flat view): a symbol for conventional
+  network diagrams. _Planned._
 
 So a rack is the same rack, the same size and the same colours in a floor plan
 and in a network diagram, and nobody keeps two icon sets in step.
