@@ -1,7 +1,7 @@
 {
   "name": "@accurona/core",
   "version": "0.1.0",
-  "description": "Accurona's shared, framework-free core for Axonometra and Reticulyne: length units today, the scene format next.",
+  "description": "Accurona's shared, framework-free core for Axonometra and Reticulyne: the scene format (a Zod schema, with a generated JSON Schema) and length units.",
   "license": "MIT",
   "type": "module",
   "private": true,
@@ -12,16 +12,21 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
-    }
+    },
+    "./schema/scene-v1.json": "./schema/scene-v1.json"
   },
   "files": [
-    "dist"
+    "dist",
+    "schema"
   ],
   "scripts": {
-    "build": "rm -rf dist && tsc -p tsconfig.json",
+    "build": "rm -rf dist && tsc -p tsconfig.json && node scripts/schema.mjs",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "devDependencies": {
     "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "zod": "^4.6.5"
   }
 }
