@@ -23,7 +23,7 @@ declare module '@mui/material/styles' {
   }
 }
 
-const createVars = (mode: PaletteMode): CustomThemeVars => {
+export const lineworkVars = (mode: PaletteMode = 'light'): CustomThemeVars => {
   const isDark = mode === 'dark';
   return {
     appPadding: { x: 40, y: 40 },
@@ -45,13 +45,14 @@ const createShadows = (mode: PaletteMode) => {
     ) as Required<ThemeOptions>['shadows'];
 };
 
-export const createLineworkTheme = (mode: PaletteMode = 'light') => {
+// The theme as options, for a host that builds its own theme on top.
+export const lineworkThemeOptions = (
+  mode: PaletteMode = 'light'
+): ThemeOptions => {
   const isDark = mode === 'dark';
 
-  return createTheme({
-    // Exposes the palette as --mui-* CSS variables for plain CSS modules.
-    cssVariables: true,
-    customVars: createVars(mode),
+  return {
+    customVars: lineworkVars(mode),
     shadows: createShadows(mode),
     typography: {
       h2: { fontSize: '4em', fontWeight: 'bold', lineHeight: 1.2 },
@@ -96,5 +97,17 @@ export const createLineworkTheme = (mode: PaletteMode = 'light') => {
         defaultProps: { variant: 'outlined' }
       }
     }
-  });
+  };
 };
+
+export interface LineworkThemeSettings {
+  // Expose the palette as --mui-* CSS variables, for plain CSS modules. Off
+  // by default: MUI writes them to :root, which an embedded component must
+  // not do to its host page.
+  cssVariables?: boolean;
+}
+
+export const createLineworkTheme = (
+  mode: PaletteMode = 'light',
+  { cssVariables = false }: LineworkThemeSettings = {}
+) => createTheme({ ...lineworkThemeOptions(mode), cssVariables });

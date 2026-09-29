@@ -145,13 +145,20 @@ of the symbol.
 screen. Both use [MUI](https://mui.com); these are the parts that must look and
 behave the same in both:
 
-| Export                              | What                                                               |
-| ----------------------------------- | ------------------------------------------------------------------ |
-| `createLineworkTheme(mode)`         | The theme: palette, type, shadows, component defaults.             |
-| `ToolButton`, `ToolMenu`, `Surface` | Toolbar buttons, a menu that opens on hover or click, their card.  |
-| `SidePanel`, `FloatingPanel`        | A panel from the right; a non-modal panel pinned top right (help). |
-| `AppDialog`, `CloseButton`          | A modal with a titled header; every close is named "Close".        |
-| `notify()`, `NotificationHost`      | Transient messages, raised from anywhere, including plain classes. |
+| Export                                 | What                                                               |
+| -------------------------------------- | ------------------------------------------------------------------ |
+| `createLineworkTheme(mode)`            | The theme: palette, type, shadows, component defaults.             |
+| `ToolButton`, `ToolMenu`, `Surface`    | Toolbar buttons, a menu that opens on hover or click, their card.  |
+| `SidePanel`, `FloatingPanel`           | A panel from the right; a non-modal panel pinned top right (help). |
+| `AppDialog`, `CloseButton`             | A modal with a titled header; every close is named "Close".        |
+| `notify()`, `NotificationHost`         | Transient messages, raised from anywhere, including plain classes. |
+| `ContextMenu`                          | The right-click menu on the drawing.                               |
+| `Panel`, `PanelSection`, `PanelHeader` | A properties panel: sticky header, titled sections.                |
+
+`createLineworkTheme(mode, { cssVariables })` leaves MUI's CSS variables off
+unless asked: MUI writes them to `:root`, which an embedded editor must not do
+to its host page. `lineworkThemeOptions(mode)` and `lineworkVars(mode)` give
+the same theme as options, for a host that builds its own.
 
 It is built with `tsc` to `packages/ui/dist/` (JavaScript plus types) by
 `npm run build`, and takes React, MUI and Emotion as peer dependencies.

@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import {
   Box,
   Dialog,
+  DialogActions,
   DialogContent,
   DialogTitle,
   type Breakpoint
@@ -14,6 +15,9 @@ interface Props {
   // Shown in the header and names the dialog; leave out for a bare card.
   title?: string;
   children: ReactNode;
+  // Buttons along the bottom. A submit button for a form in the content
+  // names it with its `form` attribute.
+  actions?: ReactNode;
   fullScreen?: boolean;
   maxWidth?: Breakpoint | false;
 }
@@ -25,6 +29,7 @@ export const AppDialog = ({
   onClose,
   title,
   children,
+  actions,
   fullScreen = false,
   maxWidth = 'xs'
 }: Props) => (
@@ -64,5 +69,6 @@ export const AppDialog = ({
     >
       {children}
     </DialogContent>
+    {actions && <DialogActions>{actions}</DialogActions>}
   </Dialog>
 );

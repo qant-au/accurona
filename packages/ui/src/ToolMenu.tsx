@@ -25,20 +25,30 @@ interface Props {
   name: string;
   icon: ReactNode;
   items: ToolMenuItem[];
+  // Open on hover as well as on click (a toolbar's "Add" menu). Off, it
+  // opens on click only (a main menu).
+  openOnHover?: boolean;
+  // Shown under the items, after a divider, such as a version number.
+  footer?: ReactNode;
   placement?: PopperPlacementType;
   // Gap between the button and the menu, in px.
   offset?: number;
-  // How long the menu stays after the pointer leaves, in ms.
+  minWidth?: number;
+  // How long a hover menu stays after the pointer leaves, in ms.
   closeDelay?: number;
 }
 
-// A toolbar button that opens a menu on hover, or on click and keyboard.
+// A toolbar button that opens a menu. The menu is not modal: a click outside
+// closes it and still reaches whatever was clicked.
 export const ToolMenu = ({
   name,
   icon,
   items,
+  openOnHover = true,
+  footer,
   placement = 'right-start',
   offset = 8,
+  minWidth,
   closeDelay = 500
 }: Props) => {
   const anchor = useRef<HTMLSpanElement>(null);
@@ -49,6 +59,7 @@ export const ToolMenu = ({
 
   const cancelClose = () => clearTimeout(closeTimer.current);
   const scheduleClose = () => {
+    if (!openOnHover) return;
     cancelClose();
     closeTimer.current = setTimeout(() => setOpen(false), closeDelay);
   };
@@ -61,7 +72,16 @@ export const ToolMenu = ({
     cancelClose();
     setOpen(false);
   };
+  // Closed from the keyboard: focus goes back to the button.
+  const closeToButton = () => {
+    close();
+    anchor.current?.querySelector('button')?.focus();
+  };
   useEffect(() => cancelClose, []);
+
+  const hover = openOnHover
+    ? { onMouseEnter: () => show(false), onMouseLeave: scheduleClose }
+    : {};
 
   return (
     <>
@@ -69,15 +89,16 @@ export const ToolMenu = ({
         component="span"
         ref={anchor}
         sx={{ display: 'inline-flex' }}
-        onMouseEnter={() => show(false)}
-        onMouseLeave={scheduleClose}
+        {...hover}
       >
         <ToolButton
           name={name}
           icon={icon}
           hasPopup
           expanded={open}
-          onClick={() => (open && focusItems ? close() : show(true))}
+          onClick={() =>
+            open && (focusItems || !openOnHover) ? close() : show(true)
+          }
         />
       </Box>
       <Popper
@@ -97,13 +118,16 @@ export const ToolMenu = ({
           <Paper
             onMouseEnter={cancelClose}
             onMouseLeave={scheduleClose}
-            sx={{ boxShadow: 3 }}
+            sx={{ boxShadow: 3, minWidth }}
           >
             <MenuList
               aria-label={name}
               autoFocusItem={focusItems}
               onKeyDown={(e) => {
-                if (e.key === 'Escape' || e.key === 'Tab') close();
+                if (e.key === 'Escape') {
+                  e.stopPropagation();
+                  closeToButton();
+                } else if (e.key === 'Tab') close();
               }}
             >
               {items.map((item, i) => (
@@ -121,6 +145,12 @@ export const ToolMenu = ({
                 </Fragment>
               ))}
             </MenuList>
+            {footer && (
+              <>
+                <Divider />
+                <Box sx={{ px: 2, py: 1 }}>{footer}</Box>
+              </>
+            )}
           </Paper>
         </ClickAwayListener>
       </Popper>
