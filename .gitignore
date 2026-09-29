@@ -1,3 +1,8 @@
 node_modules/
 review/
 .DS_Store
+
+# Local-only: maintainer tooling output and assistant instructions, never published
+graphify-out/
+CLAUDE.md
+.claude/

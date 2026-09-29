@@ -1,5 +1,5 @@
 # Dependabot version updates: npm only (the one dependency is playwright, dev).
-# No @qant-au/* deps, so no private registry. Security updates need no config.
+# Public registry only. Security updates need no config.
 version: 2
 
 updates:

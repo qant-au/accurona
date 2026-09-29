@@ -149,7 +149,27 @@ of the symbol.
   wardrobes, desks), write one function and call it per size, as
   `bed()` in `bedroom.mjs` and `rack()` in `comms.mjs` do.
 
-## Licence
+## Contributing
+
+Issues and pull requests are welcome.
+
+- **Found a bug, or have an idea or a question?**
+  [Open an issue](https://github.com/qant-au/accurona/issues/new/choose). For anything
+  substantial, open the issue before writing code so we can agree on the scope.
+- **Sending a pull request?** Read [CONTRIBUTING.md](CONTRIBUTING.md) for setup, checks
+  and conventions.
+- **Found a security problem?** Report it privately, as described in
+  [SECURITY.md](SECURITY.md).
+
+Everyone taking part is expected to follow the [Code of Conduct](CODE_OF_CONDUCT.md).
+
+## Author
+
+Created and maintained by **Adam Burgess** ([adamburgess.me](https://adamburgess.me)).
+Adam is available for customer implementation work through
+[QANT Pty Ltd](https://qant.au).
+
+## License
 
 MIT. Every element is drawn here, from scratch; nothing is copied from a
 third-party icon set.
