@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/accurona-logo.svg" alt="Accurona" width="360">
+</p>
+
 # Accurona
 
 The shared core behind [Axonometra](https://github.com/qant-au/axonometra) (floor
