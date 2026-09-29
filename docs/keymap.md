@@ -17,6 +17,14 @@ right and the tool is behind.
 Checked against Excalidraw's `packages/excalidraw/components/HelpDialog.tsx` on the
 `master` branch, 2026-09-29.
 
+## In code
+
+The tables on this page are `@accurona/core`'s `keymap` module (`packages/core/src/keymap.ts`):
+the bindings, `resolveAction()` (the matching rules below, including read-only and
+not-while-typing), `formatChord()` for menus and tooltips, and `shortcutSections()` plus
+`DIFFERENCES` for the `?` dialog, which `@accurona/ui` renders as `KeyboardShortcutsDialog`.
+The page and the module change together.
+
 ## Principles
 
 1. **Same action, same key.** If Excalidraw has the action, use its key, letter and

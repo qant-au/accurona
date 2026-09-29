@@ -154,6 +154,7 @@ behave the same in both:
 | `AppDialog`, `CloseButton`             | A modal with a titled header; every close is named "Close".        |
 | `notify()`, `NotificationHost`         | Transient messages, raised from anywhere, including plain classes. |
 | `ContextMenu`                          | The right-click menu on the drawing.                               |
+| `KeyboardShortcutsDialog`              | The `?` list, from the shared keymap, with its Excalidraw differences. |
 | `Panel`, `PanelSection`, `PanelHeader` | A properties panel: sticky header, titled sections.                |
 
 `createLineworkTheme(mode, { cssVariables })` leaves MUI's CSS variables off
