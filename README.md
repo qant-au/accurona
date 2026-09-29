@@ -13,7 +13,8 @@ Today Accurona is the **element library**: furniture, fixtures, comms and securi
 equipment, with one set of groups, ids and look. It also holds the
 [shared keymap](docs/keymap.md) both tools follow, and the
 [scene format](docs/scene-format.md): one file for floor plans, isometric and 2D
-diagrams, with one stable id per object (specified; not yet read by either tool).
+diagrams, with one stable id per object: the file format both tools open and save,
+implemented in `@accurona/core`.
 And it holds the [shared UI](#shared-ui): the MUI theme, menus and panels both
 tools are built from, so that switching between them needs no retraining.
 

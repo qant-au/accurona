@@ -4,12 +4,12 @@
 [Axonometra](https://github.com/qant-au/axonometra) and
 [Reticulyne](https://github.com/qant-au/reticulyne): each saves and opens a scene as a
 plain `.json` file, not as an import or export target beside a format of its own.
-Nothing reads or writes it yet.
+Both editors read and write it, and `@accurona/core` (`packages/core`) implements it.
 
 - **One schema.** A scene is validated by one [Zod 4](https://zod.dev) schema, defined
   in the `@accurona/core` package and imported by Axonometra and Reticulyne. Neither
-  tool keeps a schema of its own. Until the package exists, this document is the
-  definition.
+  tool keeps a schema of its own. This document and that schema say the same thing:
+  the package's tests validate every example below.
 - **A JSON Schema for everyone else.** The build generates a JSON Schema (Draft
   2020-12) from the Zod schema (`z.toJSONSchema()`), and each release publishes it, so a
   scene can be validated in any language without Accurona's code. A file names it in
