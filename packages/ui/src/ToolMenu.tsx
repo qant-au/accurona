@@ -36,6 +36,10 @@ interface Props {
   minWidth?: number;
   // How long a hover menu stays after the pointer leaves, in ms.
   closeDelay?: number;
+  // Controlled: the host keeps the open state (to suppress shortcuts while it
+  // is open, say). Leave out to let the menu keep its own.
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
 // A toolbar button that opens a menu. The menu is not modal: a click outside
@@ -49,10 +53,17 @@ export const ToolMenu = ({
   placement = 'right-start',
   offset = 8,
   minWidth,
-  closeDelay = 500
+  closeDelay = 500,
+  open: openProp,
+  onOpenChange
 }: Props) => {
   const anchor = useRef<HTMLSpanElement>(null);
-  const [open, setOpen] = useState(false);
+  const [ownOpen, setOwnOpen] = useState(false);
+  const open = openProp ?? ownOpen;
+  const setOpen = (next: boolean) => {
+    if (openProp === undefined) setOwnOpen(next);
+    onOpenChange?.(next);
+  };
   // Opened from the keyboard or a click: move focus into the menu.
   const [focusItems, setFocusItems] = useState(false);
   const closeTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
