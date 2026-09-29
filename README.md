@@ -14,6 +14,8 @@ equipment, with one set of groups, ids and look. It also holds the
 [shared keymap](docs/keymap.md) both tools follow, and the
 [scene format](docs/scene-format.md): one file for floor plans, isometric and 2D
 diagrams, with one stable id per object (specified; not yet read by either tool).
+And it holds the [shared UI](#shared-ui): the MUI theme, menus and panels both
+tools are built from, so that switching between them needs no retraining.
 
 ## Elements
 
@@ -55,6 +57,7 @@ open source, build without registry credentials.
 | `src/palette.mjs`                | Colours and line weights.                             |
 | `src/render/plan.mjs`, `iso.mjs` | The two renderers.                                    |
 | `ITEMS.md`                       | The item list: ids, names and sizes still to build.   |
+| `packages/ui/`                   | `@accurona/ui`, the shared UI (below).                |
 
 ## An element
 
@@ -135,6 +138,24 @@ symbol: {
 
 Point directional devices (cameras, sirens, exit signs) towards the **bottom**
 of the symbol.
+
+## Shared UI
+
+`@accurona/ui` (`packages/ui/`) is what Axonometra and Reticulyne share on
+screen. Both use [MUI](https://mui.com); these are the parts that must look and
+behave the same in both:
+
+| Export                              | What                                                               |
+| ----------------------------------- | ------------------------------------------------------------------ |
+| `createLineworkTheme(mode)`         | The theme: palette, type, shadows, component defaults.             |
+| `ToolButton`, `ToolMenu`, `Surface` | Toolbar buttons, a menu that opens on hover or click, their card.  |
+| `SidePanel`, `FloatingPanel`        | A panel from the right; a non-modal panel pinned top right (help). |
+| `AppDialog`, `CloseButton`          | A modal with a titled header; every close is named "Close".        |
+| `notify()`, `NotificationHost`      | Transient messages, raised from anywhere, including plain classes. |
+
+It is built with `tsc` to `packages/ui/dist/` (JavaScript plus types) by
+`npm run build`, and takes React, MUI and Emotion as peer dependencies.
+Consumers vendor `packages/ui/dist/` the same way as `dist/`.
 
 ## House style
 

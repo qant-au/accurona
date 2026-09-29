@@ -10,10 +10,14 @@
   },
   "scripts": {
     "build": "node scripts/build.mjs",
+    "postbuild": "npm run build -w @accurona/ui",
     "sheet": "node scripts/sheet.mjs",
     "test": "node --test"
   },
   "devDependencies": {
     "playwright": "^1.63.0"
-  }
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }
