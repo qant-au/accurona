@@ -10,7 +10,7 @@
   },
   "scripts": {
     "build": "node scripts/build.mjs",
-    "postbuild": "npm run build -w @accurona/ui",
+    "postbuild": "npm run build -w @accurona/core -w @accurona/ui",
     "sheet": "node scripts/sheet.mjs",
     "test": "node --test"
   },
