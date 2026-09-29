@@ -50,10 +50,10 @@ test('imperial: fromMm and toMm work in inches, ft-in included', () => {
 });
 
 test('formatLength shows inches and feet-and-inches to the nearest 1/16 inch', () => {
-  assert.equal(formatLength(2700, 'in'), '106 5/16"');
-  assert.equal(formatLength(2700, 'in', { suffix: false }), '106 5/16');
-  assert.equal(formatLength(2700, 'ft-in'), `8' 10 5/16"`);
-  assert.equal(formatLength(2700, 'ft-in', { suffix: false }), `8' 10 5/16"`);
+  assert.equal(formatLength(2700, 'in'), '106-5/16"');
+  assert.equal(formatLength(2700, 'in', { suffix: false }), '106-5/16');
+  assert.equal(formatLength(2700, 'ft-in'), `8'10-5/16"`);
+  assert.equal(formatLength(2700, 'ft-in', { suffix: false }), `8'10-5/16"`);
   assert.equal(formatLength(2438, 'ft-in'), `8'`, '2438 mm is 7 ft 11.98 in, rounds to 8 ft');
   assert.equal(formatLength(254, 'ft-in'), '10"');
   assert.equal(formatLength(13, 'in'), '1/2"');
@@ -69,6 +69,10 @@ test('parseLength reads feet and inches in the usual spellings', () => {
     '12 in': 12,
     '12inches': 12,
     '10 1/2"': 10.5,
+    '2-1/4"': 2.25,
+    "6'2\"": 74,
+    "8'10-1/2\"": 106.5,
+    "8'-10-1/2\"": 106.5,
     '1/2 in': 0.5,
     "8'": 96,
     '8 ft': 96,
@@ -91,10 +95,12 @@ test('parseLength reads feet and inches in the usual spellings', () => {
 test('parseLength: a bare number is inches in imperial units, and metric still works', () => {
   assert.equal(parseLength('10', 'in'), 254);
   assert.equal(parseLength('10 1/2', 'ft-in'), 267);
+  assert.equal(parseLength('10-1/2', 'in'), 267);
+  assert.equal(parseLength(formatLength(2700, 'in'), 'in'), 2700, 'round-trips');
   assert.equal(parseLength('2.7 m', 'ft-in'), 2700);
   assert.equal(parseLength('270cm', 'in'), 2700);
   assert.equal(parseLength(formatLength(2700, 'ft-in'), 'ft-in'), 2700, 'round-trips');
-  for (const text of ['10 1/2', "8' 10 5", '1/0"', "'", '"', "8'' 2", 'ft']) {
+  for (const text of ['10 1/2', '2-1/4', '2--1/4"', "8' 10 5", '1/0"', "'", '"', "8'' 2", 'ft']) {
     assert.equal(parseLength(text, 'mm'), null, JSON.stringify(text));
   }
 });

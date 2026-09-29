@@ -48,14 +48,15 @@ export function toMm(value: number, unit: LengthUnit): number {
 
 const gcd = (a: number, b: number): number => (b === 0 ? a : gcd(b, a % b));
 
-// Whole inches plus a reduced fraction: 10, '10 5/16', '1/2'.
+// Whole inches plus a reduced binary fraction, a mixed number joined by a
+// dash as in standard notation: 10, '10-5/16', '1/2'.
 function inchText(sixteenths: number): string {
   const whole = Math.floor(sixteenths / INCH_DIVISIONS);
   const rest = sixteenths % INCH_DIVISIONS;
   if (rest === 0) return String(whole);
   const d = gcd(rest, INCH_DIVISIONS);
   const fraction = `${rest / d}/${INCH_DIVISIONS / d}`;
-  return whole === 0 ? fraction : `${whole} ${fraction}`;
+  return whole === 0 ? fraction : `${whole}-${fraction}`;
 }
 
 function formatImperial(
@@ -73,13 +74,15 @@ function formatImperial(
   const inches = size % perFoot;
   if (feet === 0) return `${sign}${inchText(inches)}"`;
   if (inches === 0) return `${sign}${feet}'`;
-  return `${sign}${feet}' ${inchText(inches)}"`;
+  // Standard notation: no space between feet and inches.
+  return `${sign}${feet}'${inchText(inches)}"`;
 }
 
 /**
  * Formats a stored millimetre value in `unit`: 2700 is '2.7 m', '270 cm',
- * '106 5/16"' or `8' 10 5/16"`. Metric rounds to the nearest millimetre and
- * drops trailing zeros; imperial rounds to the nearest 1/16 inch. `suffix:
+ * '106-5/16"' or `8'10-5/16"`. Metric rounds to the nearest millimetre and
+ * drops trailing zeros; imperial rounds to the nearest 1/16 inch, since a
+ * finer fraction would claim more than the stored millimetre holds. `suffix:
  * false` leaves the unit off, for an input box that shows the unit beside it;
  * feet and inches always keep their marks.
  */
@@ -95,14 +98,15 @@ export function formatLength(
 }
 
 const NUMBER = String.raw`(?:\d+\.?\d*|\.\d+)`;
-// A number of inches, with an optional fraction: '10', '10.5', '10 1/2', '1/2'.
-const INCHES = String.raw`(?:\d+\s+\d+\/\d+|\d+\/\d+|${NUMBER})`;
+// A number of inches, with an optional fraction: '10', '10.5', '10-1/2'
+// (standard notation), '10 1/2', '1/2'.
+const INCHES = String.raw`(?:\d+(?:\s*-\s*|\s+)\d+\/\d+|\d+\/\d+|${NUMBER})`;
 const FOOT = String.raw`(?:'|ft|foot|feet)`;
 const INCH = String.raw`(?:"|in|inch|inches)`;
 
 const METRIC = new RegExp(String.raw`^(${NUMBER})\s*(mm|cm|m)?$`, 'i');
 const BARE_INCHES = new RegExp(String.raw`^(${INCHES})\s*${INCH}?$`, 'i');
-// 8', 8 ft, 8' 10", 8'10", 8'-10 1/2", 8 ft 10 in, 8' 10 (a trailing number is inches).
+// 8', 8 ft, 8'10", 8'10-1/2", 8' 10", 8'-10 1/2", 8 ft 10 in, 8' 10 (a trailing number is inches).
 const FEET_INCHES = new RegExp(
   String.raw`^(${NUMBER})\s*${FOOT}(?:\s*-?\s*(${INCHES})\s*${INCH}?)?$`,
   'i'
@@ -110,7 +114,7 @@ const FEET_INCHES = new RegExp(
 const EXPLICIT_INCHES = new RegExp(String.raw`^(${INCHES})\s*${INCH}$`, 'i');
 
 function inchesOf(text: string): number {
-  const parts = text.trim().split(/\s+/);
+  const parts = text.trim().split(/\s*-\s*|\s+/);
   let total = 0;
   for (const part of parts) {
     const [n, d] = part.split('/');
@@ -122,9 +126,9 @@ function inchesOf(text: string): number {
 /**
  * Parses typed input back to whole millimetres, or null for anything that is
  * not one length. Any unit may be typed whatever the current one is: '2.7m',
- * '270 cm', '106.3"', '8 ft 10 in', `8' 10 5/16"`. A bare number is read in
+ * '270 cm', '106.3"', '8 ft 10 in', `8'10-5/16"`. A bare number is read in
  * `unit`, the one the user is working in; with 'in' or 'ft-in' a bare number
- * is inches and may carry a fraction ('10 1/2').
+ * is inches and may carry a fraction ('10-1/2').
  */
 export function parseLength(text: string, unit: LengthUnit): number | null {
   let t = text.trim().replace(/[′’‘]/g, "'").replace(/[″“”]/g, '"');
