@@ -10,8 +10,9 @@ diagrams): one source of truth for what the two tools draw, so the same thing lo
 and measures the same in both, and so other tools can build on it too.
 
 Today Accurona is the **element library**: furniture, fixtures, comms and security
-equipment, with one set of groups, ids and look. The shared data structures (a common
-scene format) and a shared keymap are planned to live here as well.
+equipment, with one set of groups, ids and look. It also holds the
+[shared keymap](docs/keymap.md) both tools follow, and a common scene format is
+planned to live here as well.
 
 ## Elements
 
