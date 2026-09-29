@@ -42,3 +42,59 @@ test('parseLength rejects anything that is not one length', () => {
     assert.equal(parseLength(text, 'mm'), null, JSON.stringify(text));
   }
 });
+
+test('imperial: fromMm and toMm work in inches, ft-in included', () => {
+  assert.equal(fromMm(25.4, 'in'), 1);
+  assert.equal(fromMm(254, 'ft-in'), 10);
+  assert.equal(toMm(12, 'in'), 305);
+});
+
+test('formatLength shows inches and feet-and-inches to the nearest 1/16 inch', () => {
+  assert.equal(formatLength(2700, 'in'), '106 5/16"');
+  assert.equal(formatLength(2700, 'in', { suffix: false }), '106 5/16');
+  assert.equal(formatLength(2700, 'ft-in'), `8' 10 5/16"`);
+  assert.equal(formatLength(2700, 'ft-in', { suffix: false }), `8' 10 5/16"`);
+  assert.equal(formatLength(2438, 'ft-in'), `8'`, '2438 mm is 7 ft 11.98 in, rounds to 8 ft');
+  assert.equal(formatLength(254, 'ft-in'), '10"');
+  assert.equal(formatLength(13, 'in'), '1/2"');
+  assert.equal(formatLength(0, 'ft-in'), '0"');
+  assert.equal(formatLength(-305, 'ft-in'), `-1'`);
+  assert.equal(formatLength(-0.4, 'in'), '0"', 'never -0');
+});
+
+test('parseLength reads feet and inches in the usual spellings', () => {
+  const inches = (n) => Math.round(n * 25.4);
+  const cases = {
+    '12"': 12,
+    '12 in': 12,
+    '12inches': 12,
+    '10 1/2"': 10.5,
+    '1/2 in': 0.5,
+    "8'": 96,
+    '8 ft': 96,
+    '8.5 feet': 102,
+    "8' 10\"": 106,
+    "8'10\"": 106,
+    "8'-10 1/2\"": 106.5,
+    '8 ft 10 in': 106,
+    "8' 10": 106,
+    '8′ 10″': 106,
+    "-1' 6\"": -18
+  };
+  for (const [text, n] of Object.entries(cases)) {
+    for (const unit of ['mm', 'm', 'in', 'ft-in']) {
+      assert.equal(parseLength(text, unit), inches(n), `${text} in ${unit}`);
+    }
+  }
+});
+
+test('parseLength: a bare number is inches in imperial units, and metric still works', () => {
+  assert.equal(parseLength('10', 'in'), 254);
+  assert.equal(parseLength('10 1/2', 'ft-in'), 267);
+  assert.equal(parseLength('2.7 m', 'ft-in'), 2700);
+  assert.equal(parseLength('270cm', 'in'), 2700);
+  assert.equal(parseLength(formatLength(2700, 'ft-in'), 'ft-in'), 2700, 'round-trips');
+  for (const text of ['10 1/2', "8' 10 5", '1/0"', "'", '"', "8'' 2", 'ft']) {
+    assert.equal(parseLength(text, 'mm'), null, JSON.stringify(text));
+  }
+});
