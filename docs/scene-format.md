@@ -597,6 +597,7 @@ plan becomes one scene with one `plan` view.
 | `attachedToLeft`, `attachedToRight` | `attach.wall` | the wall between the two nodes |
 | `zIndex` | none | derived from mount height and placement order when drawn |
 | `furnitureId`, `wallNodeId` counters | none | ids are strings; an editor keeps its own counters |
+| `units` | `units` | unchanged; absent is `mm` in both |
 
 ### Reticulyne model
 
