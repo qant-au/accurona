@@ -11,8 +11,9 @@ and measures the same in both, and so other tools can build on it too.
 
 Today Accurona is the **element library**: furniture, fixtures, comms and security
 equipment, with one set of groups, ids and look. It also holds the
-[shared keymap](docs/keymap.md) both tools follow, and a common scene format is
-planned to live here as well.
+[shared keymap](docs/keymap.md) both tools follow, and the
+[scene format](docs/scene-format.md): one file for floor plans, isometric and 2D
+diagrams, with one stable id per object (specified; not yet read by either tool).
 
 ## Elements
 
