@@ -129,7 +129,12 @@ const keysCellSx = { display: { xs: 'block', sm: 'table-cell' }, verticalAlign: 
 
 // On a phone each difference is a block, its columns one under another with
 // their headings inline: as three columns they were 80-100px wide each.
-const diffCellSx = { display: { xs: 'block', sm: 'table-cell' }, borderBottom: { xs: 0 }, p: { xs: 0 }, pb: { xs: 0.25 } };
+// Only on a phone: `{ xs: 0 }` applies from xs up, so it also took the
+// desktop table's cell padding and row dividers (sweep 2026-09-30, round 4).
+const diffCellSx = {
+  display: { xs: 'block', sm: 'table-cell' },
+  '@media (max-width: 599.95px)': { borderBottom: 0, p: 0, pb: 0.25 }
+};
 
 const DiffHeading = ({ children }: { children: string }) => (
   <Box component="span" sx={{ display: { xs: 'inline', sm: 'none' }, color: 'text.secondary' }}>
