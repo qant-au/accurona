@@ -165,6 +165,11 @@ Racks are generated in `src/elements/comms.mjs` (26 variants): wall-mount 600 ×
 | containment-door    | Aisle Containment Door           | 120×10×200       | cooling |
 | fire-suppression    | Gas Suppression Cylinder         | 40×40×170        | fire    |
 | cable-tray          | Cable Tray Section, 1 m          | 100×30×10, m 250 | network |
+| cable-tray-bend-22  | Cable Tray Bend, 22.5°           | 60×42×10, m 250  | network |
+| cable-tray-bend-45  | Cable Tray Bend, 45°             | 43×39×10, m 250  | network |
+| cable-tray-bend-90  | Cable Tray Bend, 90°             | 60×60×10, m 250  | network |
+| cable-tray-tee      | Cable Tray Tee                   | 90×60×10, m 250  | network |
+| cable-tray-cross    | Cable Tray Cross                 | 90×90×10, m 250  | network |
 | ladder-rack         | Ladder Rack Section, 1 m         | 100×45×5, m 240  | network |
 | odf-panel           | Fibre Termination Cabinet        | 60×30×60, m 120  | network |
 | kvm-console         | KVM Console Cart                 | 60×70×110        | network |

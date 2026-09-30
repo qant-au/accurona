@@ -287,6 +287,104 @@ const fire = [
   }
 ];
 
+// Cable tray fittings. They match the 1 m straight section: 30 cm wide, a
+// 1.5 cm base, 8.5 cm side rails 1.5 cm thick, mounted at 250, three dashed
+// cable runs down the middle. Every fitting's straight ends meet a section
+// flush, entering from the left.
+const TRAY = 30; // width
+const RAIL = 1.5;
+const TRAY_MOUNT = 250;
+const rr = (n) => Math.round(n * 100) / 100;
+const arcPts = (cx, cy, r, a0, a1, n = 12) =>
+  Array.from({ length: n + 1 }, (_, i) => {
+    const t = ((a0 + ((a1 - a0) * i) / n) * Math.PI) / 180;
+    return [rr(cx + r * Math.cos(t)), rr(cy + r * Math.sin(t))];
+  });
+// Plan polygons run clockwise (y down): reverse any that do not.
+const cw = (p) => {
+  let a = 0;
+  p.forEach(([x0, y0], i) => {
+    const [x1, y1] = p[(i + 1) % p.length];
+    a += x0 * y1 - x1 * y0;
+  });
+  return a > 0 ? p : p.reverse();
+};
+const trayBase = (poly, top) => ({ poly: cw(poly), z: 0, h: RAIL, role: 'metal', top });
+const trayRail = (poly) => ({ poly: cw(poly), z: RAIL, h: 10 - RAIL, role: 'metal', outline: true });
+
+// A horizontal bend turning `deg` towards the front, inner rail on a 30 cm radius.
+function trayBend(deg, id) {
+  const R = 30;
+  const [cx, cy] = [0, R + TRAY];
+  const a1 = -90 + deg;
+  const n = Math.max(4, Math.round(deg / 7.5));
+  const band = (r0, r1) => [...arcPts(cx, cy, r1, -90, a1, n), ...arcPts(cx, cy, r0, a1, -90, n)];
+  const outline = band(R, R + TRAY);
+  const extent = (k) => Math.ceil(Math.max(...outline.map((p) => p[k])));
+  return {
+    id,
+    name: `Cable Tray Bend, ${deg}°`,
+    group: 'comms',
+    tags: ['network'],
+    size: { w: extent(0), d: extent(1), h: 10 },
+    mount: TRAY_MOUNT,
+    parts: [
+      trayBase(band(R, R + TRAY), [9, 15, 21].map((v) => ({ arc: [cx, cy, R + TRAY - v, -90, a1], dash: '4 3' }))),
+      trayRail(band(R + TRAY - RAIL, R + TRAY)),
+      trayRail(band(R, R + RAIL))
+    ]
+  };
+}
+
+// A tee (branch to the front) or a cross (branches front and back): a 90 cm
+// run with a 30 cm branch, the corners filleted on a 15 cm radius.
+function trayJunction({ id, name, back }) {
+  const F = 15;
+  const L = 90;
+  const [x0, x1] = [(L - TRAY) / 2, (L + TRAY) / 2];
+  const yT = back ? TRAY : 0; // the run's back edge
+  const yB = yT + TRAY; // its front edge
+  const d = yB + TRAY;
+  // The run's edge from x = 0 to L, detouring round a branch where there is one.
+  const topEdge = back
+    ? [[0, yT], ...arcPts(x0 - F, yT - F, F, 90, 0, 6), [x0, 0], [x1, 0], ...arcPts(x1 + F, yT - F, F, 180, 90, 6), [L, yT]]
+    : [[0, 0], [L, 0]];
+  const bottomEdge = [[L, yB], ...arcPts(x1 + F, yB + F, F, 270, 180, 6), [x1, d], [x0, d], ...arcPts(x0 - F, yB + F, F, 0, -90, 6), [0, yB]];
+  // A rail following a filleted corner, `s` = +1 on the front side, -1 on the back.
+  const corner = (side, s) => {
+    const cxs = side < 0 ? x0 - F : x1 + F;
+    const cyc = s > 0 ? yB + F : yT - F;
+    const edgeY = s > 0 ? yB : yT;
+    const branchX = side < 0 ? x0 : x1;
+    const farY = s > 0 ? d : 0;
+    const farX = side < 0 ? 0 : L;
+    const aRun = s > 0 ? (side < 0 ? -90 : 270) : 90;
+    const aBr = side < 0 ? 0 : 180;
+    const outer = [[farX, edgeY], ...arcPts(cxs, cyc, F, aRun, aBr, 6), [branchX, farY]];
+    const inner = [[branchX - side * RAIL, farY], ...arcPts(cxs, cyc, F + RAIL, aBr, aRun, 6), [farX, edgeY - s * RAIL]];
+    return trayRail([...outer, ...inner]);
+  };
+  const runs = [yT + 9, yT + 15, yT + 21].map((v) => ({ line: [[4, v], [L - 4, v]], dash: '4 3' }));
+  const branches = [x0 + 9, x0 + 15, x0 + 21].flatMap((u) => [
+    { line: [[u, yB + 4], [u, d - 4]], dash: '4 3' },
+    ...(back ? [{ line: [[u, 4], [u, yT - 4]], dash: '4 3' }] : [])
+  ]);
+  return {
+    id,
+    name,
+    group: 'comms',
+    tags: ['network'],
+    size: { w: L, d, h: 10 },
+    mount: TRAY_MOUNT,
+    parts: [
+      trayBase([...topEdge, ...bottomEdge], [...runs, ...branches]),
+      corner(-1, 1),
+      corner(1, 1),
+      ...(back ? [corner(-1, -1), corner(1, -1)] : [trayRail([[0, 0], [L, 0], [L, RAIL], [0, RAIL]])])
+    ]
+  };
+}
+
 const network = [
   {
     id: 'cable-tray',
@@ -307,6 +405,11 @@ const network = [
       { x: 0, y: 28.5, z: 1.5, w: 100, d: 1.5, h: 8.5, role: 'metal', outline: true, front: [{ rect: [84, 2, 10, 2], accent: 'network' }] }
     ]
   },
+  trayBend(22.5, 'cable-tray-bend-22'),
+  trayBend(45, 'cable-tray-bend-45'),
+  trayBend(90, 'cable-tray-bend-90'),
+  trayJunction({ id: 'cable-tray-tee', name: 'Cable Tray Tee' }),
+  trayJunction({ id: 'cable-tray-cross', name: 'Cable Tray Cross', back: true }),
   {
     id: 'ladder-rack',
     name: 'Ladder Rack Section, 1 m',
