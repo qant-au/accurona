@@ -49,7 +49,15 @@ function decal(dc, map, sd) {
   }
   if (dc.arc) {
     const [cx, cy, r, a0, a1] = dc.arc;
-    const a = ellipsePts(cx, cy, r, r, 24, (a0 * Math.PI) / 180, (a1 * Math.PI) / 180);
+    const a = ellipsePts(
+      cx,
+      cy,
+      r,
+      r,
+      24,
+      (a0 * Math.PI) / 180,
+      (a1 * Math.PI) / 180
+    );
     return `<polyline points="${pts(a.map(([u, v]) => map(u, v)))}" fill="none" stroke="${colour}" stroke-width="${f(width)}"${dash}/>`;
   }
   throw new Error(`unknown decal ${JSON.stringify(dc)}`);
@@ -101,13 +109,19 @@ function wrap(vb, body) {
 export function schematicSvg(el) {
   if (el.symbol) {
     const pad = 1;
-    return wrap([-pad, -pad, SYMBOL_SIZE + 2 * pad, SYMBOL_SIZE + 2 * pad], symbolBody(el));
+    return wrap(
+      [-pad, -pad, SYMBOL_SIZE + 2 * pad, SYMBOL_SIZE + 2 * pad],
+      symbolBody(el)
+    );
   }
   if (el.schematic === 'plan') {
     const { w, d } = el.size;
     const extent = Math.max(w, d);
     const pad = extent / 30;
-    return wrap([-pad, -pad, w + 2 * pad, d + 2 * pad].map(f), planBody(el, [extent / 60, extent / 120]));
+    return wrap(
+      [-pad, -pad, w + 2 * pad, d + 2 * pad].map(f),
+      planBody(el, [extent / 60, extent / 120])
+    );
   }
   return frontSvg(el);
 }
