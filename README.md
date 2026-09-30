@@ -59,7 +59,7 @@ Three packages on npm, all MIT:
 
 | Package                                                                  | What                                                                     |
 | ------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
-| [`@accurona/elements`](https://www.npmjs.com/package/@accurona/elements) | This library, built: `manifest.json`, `models.json` and `plan/<id>.svg`. |
+| [`@accurona/elements`](https://www.npmjs.com/package/@accurona/elements) | This library, built: `manifest.json`, `models.json`, `plan/<id>.svg` and `iso/<id>.svg`. |
 | [`@accurona/core`](packages/core/)                                       | The scene format (a Zod schema and its JSON Schema) and length units.    |
 | [`@accurona/ui`](packages/ui/)                                           | The shared MUI theme, menus, panels and notifications.                   |
 
@@ -78,8 +78,7 @@ import sofaUrl from '@accurona/elements/plan/sofa-3.svg?url';
 ```sh
 npm install
 npm test                 # rules every element must meet
-npm run build            # dist/manifest.json, dist/models.json, dist/plan/<id>.svg
-npm run build -- --iso   # also dist/iso/<id>.svg (experimental)
+npm run build            # dist/manifest.json, dist/models.json, dist/plan/<id>.svg, dist/iso/<id>.svg (iso experimental)
 npm run sheet            # review/<group>.png contact sheets
 npm run sheet -- comms --iso
 ```

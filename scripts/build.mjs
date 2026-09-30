@@ -1,17 +1,18 @@
 // Writes dist/: manifest.json, models.json (each element's solids, for 3D
-// views) and one plan SVG per element (and isometric SVGs with --iso, which
-// are experimental). Consumers vendor dist/.
+// views) and one plan SVG and one isometric SVG per element. The isometric
+// view is still experimental (not yet reviewed item by item); Reticulyne
+// draws a catalogue item with it when the item cross-references the
+// element. Consumers vendor dist/.
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { GROUPS, loadElements } from '../src/index.mjs';
 import { footprint, planSvg } from '../src/render/plan.mjs';
 import { isoSvg } from '../src/render/iso.mjs';
 import { modelOf } from '../src/render/model.mjs';
 
-const withIso = process.argv.includes('--iso');
 const out = new URL('../dist/', import.meta.url);
 rmSync(out, { recursive: true, force: true });
 mkdirSync(new URL('plan/', out), { recursive: true });
-if (withIso) mkdirSync(new URL('iso/', out), { recursive: true });
+mkdirSync(new URL('iso/', out), { recursive: true });
 
 const elements = await loadElements();
 const manifest = {
@@ -19,7 +20,7 @@ const manifest = {
   groups: GROUPS,
   elements: elements.map((el) => {
     writeFileSync(new URL(`plan/${el.id}.svg`, out), planSvg(el));
-    if (withIso) writeFileSync(new URL(`iso/${el.id}.svg`, out), isoSvg(el));
+    writeFileSync(new URL(`iso/${el.id}.svg`, out), isoSvg(el));
     return {
       id: el.id,
       name: el.name,

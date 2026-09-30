@@ -23,6 +23,7 @@
     "./manifest.json": "./dist/manifest.json",
     "./models.json": "./dist/models.json",
     "./plan/*": "./dist/plan/*",
+    "./iso/*": "./dist/iso/*",
     "./package.json": "./package.json"
   },
   "files": [
