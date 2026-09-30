@@ -17,11 +17,14 @@ export {
 export { NotificationHost } from './NotificationHost.js';
 export {
   clearNotifications,
+  createNotifier,
+  defaultNotifier,
   dismissNotification,
   getNotifications,
   notify,
   subscribeNotifications,
   type Notification,
+  type Notifier,
   type NotifyOptions,
   type Severity
 } from './notifications.js';

@@ -1,18 +1,19 @@
 import { useSyncExternalStore } from 'react';
 import { Alert, AlertTitle, Stack } from '@mui/material';
-import {
-  dismissNotification,
-  getNotifications,
-  subscribeNotifications
-} from './notifications.js';
+import { defaultNotifier, type Notifier } from './notifications.js';
 
 // Shows what notify() raises, stacked at the bottom right. Render it once,
-// inside the ThemeProvider.
-export const NotificationHost = () => {
+// inside the ThemeProvider. Given a notifier (createNotifier), it shows that
+// one's instead.
+export const NotificationHost = ({
+  notifier = defaultNotifier
+}: {
+  notifier?: Notifier;
+}) => {
   const items = useSyncExternalStore(
-    subscribeNotifications,
-    getNotifications,
-    getNotifications
+    notifier.subscribe,
+    notifier.get,
+    notifier.get
   );
   return (
     <Stack
@@ -32,7 +33,7 @@ export const NotificationHost = () => {
           severity={n.severity}
           variant="outlined"
           icon={n.icon}
-          onClose={() => dismissNotification(n.id)}
+          onClose={() => notifier.dismiss(n.id)}
           slotProps={{ closeButton: { 'aria-label': 'Close' } }}
           sx={{ bgcolor: 'background.paper', boxShadow: 3 }}
         >

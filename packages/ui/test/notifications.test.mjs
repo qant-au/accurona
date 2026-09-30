@@ -3,6 +3,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   clearNotifications,
+  createNotifier,
   dismissNotification,
   getNotifications,
   notify,
@@ -48,4 +49,18 @@ test('the store keeps its identity between changes, for useSyncExternalStore', (
   notify({ message: 'x', autoHide: false });
   assert.notEqual(getNotifications(), before);
   clearNotifications();
+});
+
+test('two notifiers keep their own notifications', () => {
+  const a = createNotifier();
+  const b = createNotifier();
+  let heardB = 0;
+  const off = b.subscribe(() => heardB++);
+  a.notify({ message: 'only in a', autoHide: false });
+  assert.equal(a.get().length, 1);
+  assert.equal(b.get().length, 0);
+  assert.equal(heardB, 0);
+  assert.equal(getNotifications().length, 0);
+  a.clear();
+  off();
 });
