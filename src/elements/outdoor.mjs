@@ -224,7 +224,7 @@ export default [
   },
   {
     id: 'bbq',
-    name: 'Barbecue',
+    name: 'BBQ, Hooded',
     group: 'outdoor',
     size: { w: 140, d: 60, h: 110 },
     parts: [
@@ -242,6 +242,86 @@ export default [
         x: 108, y: 8, z: 0, w: 32, d: 50, h: 90, role: 'metal', outline: true,
         top: [{ circle: [16, 22, 10] }, { circle: [16, 22, 4] }]
       }
+    ]
+  },
+  // Kettle BBQ: a round charcoal kettle on a tripod, seen from above as the
+  // domed lid with its handle, vents and side handles.
+  {
+    id: 'bbq-kettle',
+    name: 'BBQ, Kettle',
+    group: 'outdoor',
+    size: { w: 64, d: 64, h: 100 },
+    parts: [
+      {
+        dome: [32, 32, 29], z: 70, h: 30, role: 'dark', outline: true,
+        top: [
+          { circle: [29, 29, 21], stroke: 'soft' },
+          { rect: [21, 12, 16, 4], r: 2, fill: 'wood', stroke: 'outline' },
+          ...[[29, 38], [24, 43], [34, 43]].map(([u, v]) => ({ circle: [u, v, 1.6], fill: 'soft' }))
+        ]
+      },
+      { cyl: [32, 32, 29], z: 45, h: 25, role: 'dark' },
+      { cyl: [32, 32, 12], z: 25, h: 3, role: 'metal' },
+      ...[[32, 2.5], [5, 48], [59, 48]].map(([cx, cy]) => ({ cyl: [cx, cy, 2], z: 0, h: 45, role: 'metal', outline: true }))
+    ],
+    plan: [
+      { rect: [0, 29, 4, 6], r: 1, fill: 'metal', stroke: 'outline' },
+      { rect: [60, 29, 4, 6], r: 1, fill: 'metal', stroke: 'outline' }
+    ]
+  },
+  // Built-in BBQ bench: an outdoor-kitchen run with a hooded four-burner BBQ
+  // set into a stone top and a side burner to its right.
+  {
+    id: 'bbq-built-in',
+    name: 'BBQ, Built-In',
+    group: 'outdoor',
+    size: { w: 240, d: 65, h: 115 },
+    parts: [
+      {
+        x: 0, y: 0, z: 87, w: 240, d: 65, h: 3, role: 'soft',
+        top: [
+          { circle: [197, 30, 9], stroke: 'outline' },
+          { circle: [197, 30, 4], fill: 'dark' },
+          { circle: [197, 55, 1.8], fill: 'dark' }
+        ]
+      },
+      {
+        x: 2, y: 0, z: 10, w: 236, d: 60, h: 77,
+        front: [[2, 60], [64, 30], [158, 30], [190, 42]].map(([u, w]) => ({ rect: [u, 4, w - 2, 70] }))
+      },
+      { x: 4, y: 0, z: 0, w: 232, d: 55, h: 10, role: 'soft' },
+      {
+        x: 70, y: 4, z: 90, w: 86, d: 54, h: 25, r: 3, role: 'metal', outline: true,
+        top: [
+          { line: [[6, 10], [80, 10]] },
+          { rect: [14, 46, 58, 4], r: 2, fill: 'dark', stroke: 'outline' },
+          ...[20, 34, 52, 66].map((u) => ({ circle: [u, 41, 1.8], fill: 'dark' }))
+        ]
+      }
+    ]
+  },
+  // Pellet smoker: a barrel cook chamber with the pellet hopper on its left
+  // and a chimney at the back right.
+  {
+    id: 'smoker',
+    name: 'BBQ, Pellet Smoker',
+    group: 'outdoor',
+    size: { w: 125, d: 60, h: 130 },
+    parts: [
+      {
+        x: 34, y: 6, z: 55, w: 88, d: 48, h: 50, r: 16, role: 'dark', outline: true,
+        top: [
+          { line: [[4, 30], [84, 30]], stroke: 'soft' },
+          { rect: [22, 40, 44, 4], r: 2, fill: 'metal', stroke: 'outline' }
+        ]
+      },
+      {
+        x: 0, y: 4, z: 55, w: 34, d: 44, h: 55, r: 2, role: 'dark', outline: true,
+        top: [{ rect: [5, 5, 24, 30], r: 2, stroke: 'soft' }]
+      },
+      { x: 38, y: 54, z: 80, w: 80, d: 6, h: 2, role: 'metal', outline: true },
+      { cyl: [110, 13, 5], z: 105, h: 25, role: 'metal', outline: true },
+      ...[[44, 14], [108, 14], [44, 40], [108, 40]].map(([x, y]) => ({ x, y, z: 0, w: 5, d: 5, h: 55, role: 'metal' }))
     ]
   },
   {

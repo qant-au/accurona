@@ -241,7 +241,10 @@ Racks are generated in `src/elements/comms.mjs` (26 variants): wall-mount 600 ×
 | outdoor-table    | Outdoor Table          | 180×90×75       |
 | outdoor-chair    | Outdoor Chair          | 55×60×85        |
 | sun-lounger      | Sun Lounger            | 70×195×35       |
-| bbq              | Barbecue               | 140×60×110      |
+| bbq              | BBQ, Hooded            | 140×60×110      |
+| bbq-kettle       | BBQ, Kettle            | 64×64×100       |
+| bbq-built-in     | BBQ, Built-In          | 240×65×115      |
+| smoker           | BBQ, Pellet Smoker     | 125×60×130      |
 | outdoor-sofa     | Outdoor Sofa           | 200×85×75       |
 | umbrella         | Market Umbrella        | 270×270×250     |
 | planter          | Planter Box            | 100×40×50       |
