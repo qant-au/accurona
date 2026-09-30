@@ -121,9 +121,20 @@ Reticulyne's own tools, as shipped:
 | Zoom in, out (aliases) | `=`, `-` | bare, without `Ctrl/Cmd` |
 | Toggle item highlighting | `Alt` + `I` | Reticulyne only |
 | Show the floor above, below | `Alt` + `Up`, `Alt` + `Down` | Reticulyne only; a floor is a view |
-| Add an item on an empty tile | double-click | |
+| Pan the view | `Ctrl/Cmd` + arrow keys | Reticulyne only; works read-only |
+| Select the next, previous object | `Tab`, `Shift` + `Tab` | only while the canvas has focus; works read-only |
+| Open the selected object's menu | `Shift` + `F10`, the Menu key | the right-click menu, from the keyboard |
+| Add an item on an empty tile | double-click; or pick it with the add-item tool and press `Enter` | `Enter` puts it on the free tile nearest the middle of the view |
 | Work inside a group | double-click the group | `Esc` leaves it |
-| Connect two items | drag from a port | |
+| Connect two items | drag from a port; or **Connect to** in the item's menu | the menu route asks for the other item by name |
+
+**Keyboard access.** Reticulyne reaches objects directly rather than through a cursor:
+`Tab` selects the next object in reading order (top to bottom, then left to right, as
+drawn), and the view follows it when it would be off screen. Past the last object,
+`Tab` clears the selection and lets focus leave the canvas, so the canvas is never a
+keyboard trap. Once an object is selected, the shared keys act on it: arrows nudge,
+`Enter` edits, `Delete` deletes, `Shift` + `F10` opens its menu. With the rectangle
+tool, `Enter` draws a rectangle in the middle of the view.
 
 ## Axonometra bindings
 
@@ -165,8 +176,8 @@ Excalidraw bindings that neither tool matches, and why.
 | `S`, `G` | stroke, background colour | Reticulyne: `S` selects; `G` unbound | Colour is set in the properties panel. |
 | `Shift` + `F` | font picker | unbound | |
 | `Shift` + `H`, `Shift` + `V` | flip | unbound | Isometric items are not symmetric, and a floor plan object is rotated, not mirrored. |
-| `Tab`, `Shift` + `Tab` | change shape type | unbound | |
-| `Ctrl/Cmd` + arrow, `Alt` + arrow | create and walk a flowchart | Reticulyne: `Alt` + `Up` / `Down` change floor; the rest unbound | Flowcharting. |
+| `Tab`, `Shift` + `Tab` | change shape type | Reticulyne: select the next / previous object; Axonometra: unbound | No free-form shapes; the keyboard needs a way to reach each object. |
+| `Ctrl/Cmd` + arrow, `Alt` + arrow | create and walk a flowchart | Reticulyne: `Ctrl/Cmd` + arrow pans, `Alt` + `Up` / `Down` change floor; the rest unbound | Flowcharting. |
 | `Ctrl/Cmd` + `K` | link | unbound | |
 | `Ctrl/Cmd` + `Alt` + `C` / `V` | copy and paste styles | unbound | |
 | `Alt` + `Z`, `Alt` + `R`, `Alt` + `S`, `Alt` + `/` | zen mode, view mode, snapping, stats | unbound | View mode belongs to the host (a read-only embed); the others have no equivalent yet. |

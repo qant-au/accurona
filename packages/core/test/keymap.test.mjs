@@ -90,6 +90,19 @@ test('Alt + Up / Down change floor in Reticulyne; a bare arrow still nudges', ()
   assert.equal(resolveAction(ev('ArrowUp', 'ArrowUp', { altKey: true }), axonometra), null);
 });
 
+test('keyboard access in Reticulyne: Tab walks objects, Ctrl/Cmd + arrow pans, Shift+F10 opens the menu', () => {
+  assert.equal(resolveAction(ev('Tab', 'Tab'), reticulyne), 'next-object');
+  assert.equal(resolveAction(ev('Tab', 'Tab', { shiftKey: true }), reticulyne), 'previous-object');
+  assert.equal(resolveAction(ev('Tab', 'Tab'), reticulyne, { readOnly: true }), 'next-object');
+  assert.equal(resolveAction(ev('ArrowLeft', 'ArrowLeft', { ctrlKey: true }), reticulyne), 'pan');
+  assert.equal(resolveAction(ev('ArrowLeft', 'ArrowLeft', { metaKey: true }), reticulyne, { readOnly: true }), 'pan');
+  assert.equal(resolveAction(ev('F10', 'F10', { shiftKey: true }), reticulyne), 'object-menu');
+  assert.equal(resolveAction(ev('ContextMenu', 'ContextMenu'), reticulyne), 'object-menu');
+  assert.equal(resolveAction(ev('F10', 'F10', { shiftKey: true }), reticulyne, { readOnly: true }), null);
+  assert.equal(resolveAction(ev('Tab', 'Tab'), axonometra), null, 'Reticulyne only');
+  assert.equal(formatChord({ key: 'ContextMenu' }, 'other'), 'Menu');
+});
+
 test('zoom keys and fit', () => {
   assert.equal(resolveAction(ev('=', 'Equal', { ctrlKey: true }), axonometra), 'zoom-in');
   assert.equal(resolveAction(ev('+', 'Equal', { ctrlKey: true, shiftKey: true }), axonometra), 'zoom-in');
