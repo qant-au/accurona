@@ -12,6 +12,18 @@ const splayedLeg = ([x1, y1, x2, y2], t = 2.5) => {
   };
 };
 
+// The same leg as a solid: a strut `h` cm deep under the seat (top at z1),
+// running from the seat out to the top of an upright leg, so the leg meets
+// the seat in the isometric and front views. Its ring runs clockwise.
+const legStrut = (l, t, z1, h = 3) => {
+  const ring = splayedLeg(l, t).line;
+  const area = ring.reduce((a, [x0, y0], i) => {
+    const [x1, y1] = ring[(i + 1) % ring.length];
+    return a + x0 * y1 - x1 * y0;
+  }, 0);
+  return { poly: area > 0 ? ring : ring.reverse(), z: z1 - h, h, role: 'metal', outline: true };
+};
+
 
 // A rectangular dining table: timber top on four legs, the legs and apron
 // beneath shown dashed.
@@ -107,7 +119,8 @@ export default [
       { x: 9, y: 20, z: 64, w: 3, d: 32, h: 12, role: 'soft' },
       { x: 43, y: 20, z: 64, w: 3, d: 32, h: 12, role: 'soft' },
       { x: 7, y: 53, z: 72, w: 41, d: 13, h: 3, outline: true, r: 3 },
-      ...[[0, 0], [52, 0], [0, 67], [52, 67]].map(([x, y]) => ({ x, y, z: 0, w: 3, d: 3, h: 60, role: 'metal', outline: true }))
+      ...[[0, 0], [52, 0], [0, 67], [52, 67]].map(([x, y]) => ({ x, y, z: 0, w: 3, d: 3, h: 60, role: 'metal', outline: true })),
+      ...[[9, 20, 1.5, 1.5], [46, 20, 53.5, 1.5], [9, 52, 1.5, 68.5], [46, 52, 53.5, 68.5]].map((l) => legStrut(l, 3, 60))
     ],
     plan: [[9, 20, 1.5, 1.5], [46, 20, 53.5, 1.5], [9, 52, 1.5, 68.5], [46, 52, 53.5, 68.5]].map((l) => splayedLeg(l, 3))
   },
