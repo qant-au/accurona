@@ -8,15 +8,15 @@
     "check": "node check.mjs"
   },
   "dependencies": {
-    "@accurona/core": "^0.1.0",
-    "@accurona/elements": "^0.1.0",
-    "@accurona/ui": "^0.1.0",
-    "@axonometra/editor": "^0.4.0",
+    "@accurona/core": "latest",
+    "@accurona/elements": "latest",
+    "@accurona/ui": "latest",
+    "@axonometra/editor": "latest",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^9.0.0",
     "@mui/material": "^9.0.0",
-    "@reticulyne/editor": "^0.4.0",
+    "@reticulyne/editor": "latest",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "zustand": "^5.0.13"
