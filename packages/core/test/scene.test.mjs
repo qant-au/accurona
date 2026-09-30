@@ -151,6 +151,15 @@ test('groups may not nest in a cycle', () => {
   assert.match(errorsOf(s), /inside itself/);
 });
 
+test('a group can be collapsed', () => {
+  const s = base();
+  s.views[0].groups = [{ id: 'g1', name: 'Rack', collapsed: true }];
+  const result = validateScene(s);
+  assert.equal(result.ok, true, result.ok ? '' : result.errors.join('\n'));
+  s.views[0].groups[0].collapsed = 'yes';
+  assert.match(errorsOf(s), /collapsed/);
+});
+
 test('link and icon urls are restricted', () => {
   const s = base();
   s.objects[0].links = [{ source: 'rmm', url: 'javascript:alert(1)' }];

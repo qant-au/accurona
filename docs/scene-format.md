@@ -369,6 +369,7 @@ interface Group {
   name?: string;
   color?: string;         // #rrggbb, a faint fill behind the members
   group?: Id;             // groups nest; a cycle is invalid
+  collapsed?: boolean;    // drawn as one box in place of its members; absent is expanded
 }
 ```
 
