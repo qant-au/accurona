@@ -5,6 +5,7 @@ import {
   DIFFERENCES,
   SHARED_BINDINGS,
   formatBinding,
+  formatDifferences,
   formatChord,
   isTypingTarget,
   keymapFor,
@@ -182,8 +183,40 @@ test('formatting for menus and the ? dialog', () => {
 
 test('{mod} in a key label reads as the platform modifier', () => {
   const pan = reticulyne.find((b) => b.action === 'pan');
-  assert.deepEqual(formatBinding(pan, 'other'), ['Ctrl + arrow keys']);
-  assert.deepEqual(formatBinding(pan, 'mac'), ['⌘ + arrow keys']);
+  assert.deepEqual(formatBinding(pan, 'other'), ['Ctrl + Arrow keys']);
+  assert.deepEqual(formatBinding(pan, 'mac'), ['⌘ + Arrow keys']);
+});
+
+// Sweep 2026-09-30: the pointer rows mixed glyphs and words ("Shift + click"
+// beside "⌘ + wheel") and ran alternatives together in one phrase.
+test('a gesture lists its alternatives, with the platform key names', () => {
+  const row = (action) => reticulyne.find((b) => b.action === action);
+  assert.deepEqual(formatBinding(row('shift-click'), 'mac'), ['⇧ + Click']);
+  assert.deepEqual(formatBinding(row('shift-click'), 'other'), ['Shift + Click']);
+  assert.deepEqual(formatBinding(row('alt-drag'), 'mac'), ['⌥ + Drag']);
+  assert.deepEqual(formatBinding(row('space-pan'), 'other'), ['Space + Drag', 'the hand tool']);
+  assert.deepEqual(formatBinding(row('wheel-zoom'), 'mac'), ['⌘ + Wheel', 'Pinch']);
+});
+
+test("Reticulyne's right-click row is the object menu: empty canvas has none", () => {
+  const row = reticulyne.find((b) => b.action === 'context-menu');
+  assert.equal(row.label, "Open an object's menu");
+  assert.deepEqual(formatBinding(row, 'other'), ['Right-click an object']);
+  const shared = axonometra.find((b) => b.action === 'context-menu');
+  assert.equal(shared.label, 'Context menu');
+});
+
+test('the differences use the row names and the platform key names', () => {
+  const mac = formatDifferences(DIFFERENCES.reticulyne, 'mac');
+  const other = formatDifferences(DIFFERENCES.reticulyne, 'other');
+  assert.equal(mac.find((d) => d.action === 'frame').here, 'Fit to view');
+  const flow = (list) => list.find((d) => d.action === 'create and walk a flowchart');
+  assert.equal(flow(mac).excalidraw, '⌘ + Arrow keys, ⌥ + Arrow keys');
+  assert.equal(flow(other).excalidraw, 'Ctrl + Arrow keys, Alt + Arrow keys');
+  assert.match(flow(other).here, /Ctrl \+ Arrow keys is Pan the view/);
+  for (const d of [...mac, ...other]) {
+    assert.doesNotMatch(d.excalidraw + d.here, /\{|Ctrl\/Cmd/);
+  }
 });
 
 test("a tool's own label names a shared row as its toolbar does", () => {

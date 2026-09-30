@@ -103,6 +103,10 @@ Accept both the Windows and the macOS form of the ordering keys on every platfor
 | Drag a copy | `Alt` + drag | same |
 | Context menu | right-click | same |
 
+In the `?` dialog a gesture's keys and pointer actions are drawn as keys, as the
+keyboard rows are, with the platform's key names (`Shift` + `Click`, or `⇧` + `Click`
+on macOS), and each alternative is listed on its own after "or".
+
 The plain wheel **pans**. That is what Excalidraw does, and it suits both tools: a plan
 and an isometric diagram are both maps you move around.
 
@@ -124,8 +128,9 @@ Reticulyne's own tools, as shipped:
 | Pan the view | `Ctrl/Cmd` + arrow keys | Reticulyne only; works read-only |
 | Select the next, previous object | `Tab`, `Shift` + `Tab` | only while the canvas has focus; works read-only |
 | Open the selected object's menu | `Shift` + `F10`, the Menu key | the right-click menu, from the keyboard |
+| Open an object's menu | right-click an object | the shared "Context menu" row; empty canvas has no menu |
 | Add an item on an empty tile | double-click; or pick it with the add-item tool and press `Enter` | `Enter` puts it on the free tile nearest the middle of the view |
-| Work inside a group | double-click the group | `Esc` leaves it |
+| Work inside a group | double-click the group | `Esc` leaves it (the `Esc` row) |
 | Connect two items | drag from a port; or **Connect to** in the item's menu | the menu route asks for the other item by name |
 
 **Keyboard access.** Reticulyne reaches objects directly rather than through a cursor:
@@ -168,16 +173,16 @@ Excalidraw bindings that neither tool matches, and why.
 | `P`, `7` | freedraw | unbound | No free-form shapes. |
 | `L`, `6` in Reticulyne | line | unbound in Reticulyne | Reticulyne draws connectors, not lines. |
 | `E`, `0` in Reticulyne | eraser | unbound in Reticulyne | Reticulyne deletes a selection instead. |
-| `F` | frame | Reticulyne: fit everything | No frames; `F` was already fit. |
+| `F` | frame | Reticulyne: Fit to view | No frames; `F` was already fit. |
 | `K` | laser pointer | unbound | Presentation tool. |
-| `I` | eye-dropper | Reticulyne: add item | No colour picking from the canvas. |
+| `I` | eye-dropper | Reticulyne: Add item | No colour picking from the canvas. |
 | `B` | bucket fill | unbound | Colour is set in the properties panel. |
 | `N` | sticky note | unbound | Whiteboarding. |
-| `S`, `G` | stroke, background colour | Reticulyne: `S` selects; `G` unbound | Colour is set in the properties panel. |
+| `S`, `G` | stroke, background colour | Reticulyne: `S` is Select; `G` unbound | Colour is set in the properties panel. |
 | `Shift` + `F` | font picker | unbound | |
 | `Shift` + `H`, `Shift` + `V` | flip | unbound | Isometric items are not symmetric, and a floor plan object is rotated, not mirrored. |
-| `Tab`, `Shift` + `Tab` | change shape type | Reticulyne: select the next / previous object; Axonometra: unbound | No free-form shapes; the keyboard needs a way to reach each object. |
-| `Ctrl/Cmd` + arrow, `Alt` + arrow | create and walk a flowchart | Reticulyne: `Ctrl/Cmd` + arrow pans, `Alt` + `Up` / `Down` change floor; the rest unbound | Flowcharting. |
+| `Tab`, `Shift` + `Tab` | change shape type | Reticulyne: Select the next / previous object; Axonometra: unbound | No free-form shapes; the keyboard needs a way to reach each object. |
+| `Ctrl/Cmd` + arrow, `Alt` + arrow | create and walk a flowchart | Reticulyne: `Ctrl/Cmd` + arrow keys is Pan the view, `Alt` + `Up` / `Down` is Show the floor above / below; the rest unbound | Flowcharting. |
 | `Ctrl/Cmd` + `K` | link | unbound | |
 | `Ctrl/Cmd` + `Alt` + `C` / `V` | copy and paste styles | unbound | |
 | `Alt` + `Z`, `Alt` + `R`, `Alt` + `S`, `Alt` + `/` | zen mode, view mode, snapping, stats | unbound | View mode belongs to the host (a read-only embed); the others have no equivalent yet. |

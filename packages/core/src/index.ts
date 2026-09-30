@@ -78,6 +78,8 @@ export {
   SHARED_BINDINGS,
   formatBinding,
   formatChord,
+  formatDifferences,
+  formatKeyNames,
   isTypingTarget,
   keymapFor,
   matchChord,

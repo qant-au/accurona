@@ -1,6 +1,6 @@
 import { Box, Stack, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
 import { AppDialog } from './AppDialog.js';
-import { shortcutKeys } from './shortcutKeys.js';
+import { keyNames, shortcutKeys, type ShortcutPart } from './shortcutKeys.js';
 
 // The shapes @accurona/core's shortcutSections() and DIFFERENCES produce;
 // restated here so the UI package does not depend on the core one.
@@ -49,15 +49,34 @@ const Joiner = ({ children }: { children: string }) => (
   </Box>
 );
 
+const Words = ({ children }: { children: string }) => (
+  <Box component="span" sx={{ color: 'text.secondary', fontSize: '0.8125rem' }}>
+    {children}
+  </Box>
+);
+
+// One +-joined part of a chord or gesture: a key, or a key and words.
+const Part = ({ part }: { part: ShortcutPart[] }) => (
+  <>
+    {part.map((piece, i) =>
+      'key' in piece ? <Kbd key={i}>{piece.key}</Kbd> : <Words key={i}>{piece.text}</Words>
+    )}
+  </>
+);
+
 // Each entry is one way to trigger the action, so entries are separated by
 // "or"; the keys of one chord are joined by "+". Without that, "V 1 S" and
-// "⌘ ⇧ Z" were drawn alike and read as one combination (BUG15-14).
+// "⌘ ⇧ Z" were drawn alike and read as one combination (BUG15-14). A
+// pointer gesture draws its keys as keys too ("⇧ + Click"), as the keyboard
+// rows do: they were a mix of chips and plain text (sweep 2026-09-30). The
+// alternatives stay on one line beside the label: wrapped, the second one
+// started a line with "or". On a phone they may wrap under the label.
 const Keys = ({ keys }: { keys: string[] }) => (
   <Box
     component="span"
     sx={{
       display: 'inline-flex',
-      flexWrap: 'wrap',
+      flexWrap: { xs: 'wrap', sm: 'nowrap' },
       alignItems: 'center',
       gap: 0.5,
       justifyContent: { xs: 'flex-start', sm: 'flex-end' }
@@ -65,18 +84,24 @@ const Keys = ({ keys }: { keys: string[] }) => (
   >
     {keys.map((entry, i) => {
       const parsed = shortcutKeys(entry);
+      const parts: ShortcutPart[][] =
+        parsed.kind === 'chord' ? parsed.keys.map((key) => [{ key }]) : parsed.kind === 'gesture' ? parsed.parts : [];
       return (
-        <Box component="span" key={entry} sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.5 }}>
+        <Box
+          component="span"
+          key={entry}
+          sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.5, whiteSpace: 'nowrap' }}
+        >
           {i > 0 && <Joiner>or</Joiner>}
           {parsed.kind === 'text' ? (
-            <Box component="span" sx={{ color: 'text.secondary', fontSize: '0.8125rem' }}>
+            <Box component="span" sx={{ color: 'text.secondary', fontSize: '0.8125rem', whiteSpace: 'normal' }}>
               {parsed.text}
             </Box>
           ) : (
-            parsed.keys.map((key, j) => (
-              <Box component="span" key={`${key}-${j}`} sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.5 }}>
+            parts.map((part, j) => (
+              <Box component="span" key={j} sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.5 }}>
                 {j > 0 && <Joiner>+</Joiner>}
-                <Kbd>{key}</Kbd>
+                <Part part={part} />
               </Box>
             ))
           )}
@@ -143,9 +168,9 @@ export const KeyboardShortcutsDialog = ({
               {differences.map((d) => (
                 <TableRow key={d.excalidraw + d.action}>
                   <TableCell sx={{ pl: 0 }}>
-                    {d.excalidraw} ({d.action})
+                    {keyNames(d.excalidraw)} ({d.action})
                   </TableCell>
-                  <TableCell>{d.here}</TableCell>
+                  <TableCell>{keyNames(d.here)}</TableCell>
                   <TableCell sx={{ pr: 0 }}>{d.why}</TableCell>
                 </TableRow>
               ))}

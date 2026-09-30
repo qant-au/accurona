@@ -30,7 +30,11 @@ export interface Binding {
   // Changes the drawing. Read-only embeds drop every editing binding.
   editing: boolean;
   // Shown instead of the formatted chords, for gestures and key groups.
-  // `{mod}` in it reads as the platform's modifier: Ctrl, or ⌘ on macOS.
+  // Alternatives are separated by " | "; within one, keys are joined by
+  // " + ", keys and pointer actions capitalised ("Click", "Drag", "Arrow
+  // keys") and anything after them lowercase ("Drag on empty canvas"), so
+  // the `?` dialog draws each key as a key. `{mod}`, `{shift}` and `{alt}`
+  // read as the platform's keys: Ctrl, Shift, Alt, or ⌘ ⇧ ⌥ on macOS.
   keysLabel?: string;
 }
 
@@ -106,7 +110,7 @@ export const SHARED_BINDINGS: readonly Binding[] = [
     section: 'Edit',
     chords: ARROWS.map((key) => k(key, { shift: 'any' })),
     editing: true,
-    keysLabel: 'Arrow keys; with Shift, a larger step'
+    keysLabel: 'Arrow keys | {shift} + Arrow keys for a larger step'
   },
   { action: 'edit', label: "Edit the selected object's text or properties", section: 'Edit', chords: [k('Enter')], editing: true },
   { action: 'edit-geometry', label: "Edit the selected object's geometry", section: 'Edit', chords: [mod('Enter')], editing: true },
@@ -137,12 +141,12 @@ export const SHARED_BINDINGS: readonly Binding[] = [
   { action: 'find', label: 'Find', section: 'Edit', chords: [mod('f')], editing: false },
 
   gesture('click', 'Select', 'Click'),
-  gesture('shift-click', 'Add to or remove from the selection', 'Shift + click'),
+  gesture('shift-click', 'Add to or remove from the selection', '{shift} + Click'),
   gesture('marquee', 'Select an area', 'Drag on empty canvas'),
-  gesture('space-pan', 'Pan', 'Space + drag, or the hand tool'),
-  gesture('wheel-pan', 'Pan', 'Mouse wheel; Shift + wheel pans sideways'),
-  gesture('wheel-zoom', 'Zoom', '{mod} + wheel, trackpad pinch, touch pinch'),
-  gesture('alt-drag', 'Drag a copy', 'Alt + drag', true),
+  gesture('space-pan', 'Pan', 'Space + Drag | the hand tool'),
+  gesture('wheel-pan', 'Pan', 'Wheel | {shift} + Wheel sideways'),
+  gesture('wheel-zoom', 'Zoom', '{mod} + Wheel | Pinch'),
+  gesture('alt-drag', 'Drag a copy', '{alt} + Drag', true),
   gesture('context-menu', 'Context menu', 'Right-click')
 ];
 
@@ -170,7 +174,7 @@ export const RETICULYNE_BINDINGS: readonly Binding[] = [
     section: 'View',
     chords: ARROWS.map((key) => mod(key)),
     editing: false,
-    keysLabel: '{mod} + arrow keys'
+    keysLabel: '{mod} + Arrow keys'
   },
   { action: 'next-object', label: 'Select the next object', section: 'Edit', chords: [k('Tab')], editing: false },
   { action: 'previous-object', label: 'Select the previous object', section: 'Edit', chords: [k('Tab', { shift: true })], editing: false },
@@ -181,9 +185,11 @@ export const RETICULYNE_BINDINGS: readonly Binding[] = [
     chords: [k('F10', { shift: true }), k('ContextMenu', { shift: 'any' })],
     editing: true
   },
-  gesture('add-on-tile', 'Add an item on an empty tile', 'Double-click; or pick it with the add-item tool and press Enter', true),
-  gesture('enter-group', 'Work inside a group', 'Double-click the group; Esc leaves it'),
-  gesture('connect', 'Connect two items', "Drag from a port; or Connect to in the item's menu", true)
+  // Right-click opens an object's menu; on empty canvas it does nothing.
+  gesture('context-menu', "Open an object's menu", 'Right-click an object'),
+  gesture('add-on-tile', 'Add an item on an empty tile', 'Double-click an empty tile | the add-item tool, then Enter', true),
+  gesture('enter-group', 'Work inside a group', 'Double-click the group'),
+  gesture('connect', 'Connect two items', "Drag from a port | Connect to, in the item's menu", true)
 ];
 
 export const AXONOMETRA_BINDINGS: readonly Binding[] = [
@@ -216,29 +222,29 @@ const DIFFERENCES_SHARED: readonly Difference[] = [
   { excalidraw: 'K', action: 'laser pointer', here: 'unbound', why: 'Presentation tool.' },
   { excalidraw: 'B', action: 'bucket fill', here: 'unbound', why: 'Colour is set in the properties panel.' },
   { excalidraw: 'N', action: 'sticky note', here: 'unbound', why: 'Whiteboarding.' },
-  { excalidraw: 'Shift + F', action: 'font picker', here: 'unbound', why: 'No font picker on the canvas.' },
+  { excalidraw: '{shift} + F', action: 'font picker', here: 'unbound', why: 'No font picker on the canvas.' },
   {
-    excalidraw: 'Shift + H, Shift + V',
+    excalidraw: '{shift} + H, {shift} + V',
     action: 'flip',
     here: 'unbound',
     why: 'Isometric items are not symmetric, and a floor plan object is rotated, not mirrored.'
   },
   {
-    excalidraw: 'Tab, Shift + Tab',
+    excalidraw: 'Tab, {shift} + Tab',
     action: 'change shape type',
-    here: 'Reticulyne: select the next / previous object; Axonometra: unbound',
+    here: 'Reticulyne: Select the next / previous object; Axonometra: unbound',
     why: 'No free-form shapes; the keyboard needs a way to reach each object.'
   },
   {
-    excalidraw: 'Ctrl/Cmd + arrow, Alt + arrow',
+    excalidraw: '{mod} + Arrow keys, {alt} + Arrow keys',
     action: 'create and walk a flowchart',
-    here: 'Reticulyne: Ctrl/Cmd + arrow pans, Alt + Up / Down change floor; the rest unbound',
+    here: 'Reticulyne: {mod} + Arrow keys is Pan the view, {alt} + ↑ / ↓ is Show the floor above / below; the rest unbound',
     why: 'Flowcharting.'
   },
-  { excalidraw: 'Ctrl/Cmd + K', action: 'link', here: 'unbound', why: 'No links on the canvas yet.' },
-  { excalidraw: 'Ctrl/Cmd + Alt + C / V', action: 'copy and paste styles', here: 'unbound', why: 'No style clipboard.' },
+  { excalidraw: '{mod} + K', action: 'link', here: 'unbound', why: 'No links on the canvas yet.' },
+  { excalidraw: '{mod} + {alt} + C / V', action: 'copy and paste styles', here: 'unbound', why: 'No style clipboard.' },
   {
-    excalidraw: 'Alt + Z, Alt + R, Alt + S, Alt + /',
+    excalidraw: '{alt} + Z, {alt} + R, {alt} + S, {alt} + /',
     action: 'zen mode, view mode, snapping, stats',
     here: 'unbound',
     why: 'View mode belongs to the host (a read-only embed); the others have no equivalent yet.'
@@ -251,9 +257,9 @@ export const DIFFERENCES: Record<KeymapTool, readonly Difference[]> = {
     ...DIFFERENCES_SHARED.slice(0, 2),
     { excalidraw: 'L, 6', action: 'line', here: 'unbound', why: 'Reticulyne draws connectors, not lines.' },
     { excalidraw: 'E, 0', action: 'eraser', here: 'unbound', why: 'Reticulyne deletes a selection instead.' },
-    { excalidraw: 'F', action: 'frame', here: 'fit everything', why: 'No frames; F was already fit.' },
-    { excalidraw: 'I', action: 'eye-dropper', here: 'add item', why: 'No colour picking from the canvas.' },
-    { excalidraw: 'S, G', action: 'stroke, background colour', here: 'S selects; G unbound', why: 'Colour is set in the properties panel.' },
+    { excalidraw: 'F', action: 'frame', here: 'Fit to view', why: 'No frames; F was already fit.' },
+    { excalidraw: 'I', action: 'eye-dropper', here: 'Add item', why: 'No colour picking from the canvas.' },
+    { excalidraw: 'S, G', action: 'stroke, background colour', here: 'S is Select; G unbound', why: 'Colour is set in the properties panel.' },
     ...DIFFERENCES_SHARED.slice(2)
   ],
   axonometra: [
@@ -293,6 +299,7 @@ export const keymapFor = (tool: KeymapTool, options: KeymapOptions = {}): Bindin
     if (shared) {
       shared.chords.push(...binding.chords);
       shared.label = binding.label;
+      if (binding.keysLabel) shared.keysLabel = binding.keysLabel;
     }
     else result.push({ ...binding, chords: [...binding.chords] });
   }
@@ -405,13 +412,40 @@ export const formatChord = (chord: Chord, platform: 'mac' | 'other' = isMacLike(
   return parts.join(mac ? ' ' : ' + ');
 };
 
+// `{mod}`, `{shift}` and `{alt}` in a label or a difference, as the
+// platform names them, so text reads as the chords beside it do.
+export const formatKeyNames = (
+  text: string,
+  platform: 'mac' | 'other' = isMacLike() ? 'mac' : 'other'
+): string => {
+  const mac = platform === 'mac';
+  return text
+    .split('{mod}')
+    .join(mac ? '⌘' : 'Ctrl')
+    .split('{shift}')
+    .join(mac ? '⇧' : 'Shift')
+    .split('{alt}')
+    .join(mac ? '⌥' : 'Alt');
+};
+
+// A tool's differences from Excalidraw with their key names formatted.
+export const formatDifferences = (
+  differences: readonly Difference[],
+  platform: 'mac' | 'other' = isMacLike() ? 'mac' : 'other'
+): Difference[] =>
+  differences.map((d) => ({
+    ...d,
+    excalidraw: formatKeyNames(d.excalidraw, platform),
+    here: formatKeyNames(d.here, platform)
+  }));
+
 // Every way to trigger a binding, for the `?` dialog.
 export const formatBinding = (
   binding: Binding,
   platform: 'mac' | 'other' = isMacLike() ? 'mac' : 'other'
 ): string[] => {
   if (binding.keysLabel) {
-    return [binding.keysLabel.split('{mod}').join(platform === 'mac' ? '⌘' : 'Ctrl')];
+    return binding.keysLabel.split(' | ').map((entry) => formatKeyNames(entry, platform));
   }
   const seen = new Set<string>();
   for (const chord of binding.chords) {

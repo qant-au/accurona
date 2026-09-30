@@ -1,7 +1,7 @@
 // Runs against the build: npm run build first.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { shortcutKeys } from '../dist/shortcutKeys.js';
+import { keyNames, shortcutKeys } from '../dist/shortcutKeys.js';
 
 test('a chord splits into its keys, on either platform', () => {
   assert.deepEqual(shortcutKeys('Ctrl + Shift + Z'), { kind: 'chord', keys: ['Ctrl', 'Shift', 'Z'] });
@@ -12,8 +12,32 @@ test('a chord splits into its keys, on either platform', () => {
   assert.deepEqual(shortcutKeys('Right-click'), { kind: 'chord', keys: ['Right-click'] });
 });
 
-test('a phrase stays text, so it can wrap', () => {
-  for (const phrase of ['Space + drag, or the hand tool', 'Shift + click', '⌘ + arrow keys', 'Drag on empty canvas']) {
+// Sweep 2026-09-30: pointer rows were a mix of chips and plain text.
+test('a gesture draws its keys and pointer actions as keys', () => {
+  assert.deepEqual(shortcutKeys('⇧ + Click'), { kind: 'chord', keys: ['⇧', 'Click'] });
+  assert.deepEqual(shortcutKeys('⌘ + Arrow keys'), { kind: 'chord', keys: ['⌘', 'Arrow keys'] });
+  assert.deepEqual(shortcutKeys('Arrow keys'), { kind: 'chord', keys: ['Arrow keys'] });
+  assert.deepEqual(shortcutKeys('Drag on empty canvas'), {
+    kind: 'gesture',
+    parts: [[{ key: 'Drag' }, { text: 'on empty canvas' }]]
+  });
+  assert.deepEqual(shortcutKeys('Shift + Arrow keys for a larger step'), {
+    kind: 'gesture',
+    parts: [[{ key: 'Shift' }], [{ key: 'Arrow keys' }, { text: 'for a larger step' }]]
+  });
+  assert.deepEqual(shortcutKeys('Shift + click'), {
+    kind: 'gesture',
+    parts: [[{ key: 'Shift' }], [{ text: 'click' }]]
+  });
+});
+
+test('words alone, and a phrase with punctuation, stay text', () => {
+  for (const phrase of ['the hand tool', 'Space + drag, or the hand tool', "Connect to, in the item's menu"]) {
     assert.deepEqual(shortcutKeys(phrase), { kind: 'text', text: phrase });
   }
+});
+
+test('key names in a difference read as the platform names them', () => {
+  assert.equal(keyNames('{mod} + {alt} + C', true), '⌘ + ⌥ + C');
+  assert.equal(keyNames('{shift} + F', false), 'Shift + F');
 });
