@@ -1,4 +1,4 @@
-import type { MouseEvent, ReactNode } from 'react';
+import { useState, type MouseEvent, type ReactNode } from 'react';
 import { Box, Button, Tooltip, type TooltipProps } from '@mui/material';
 
 export interface ToolButtonProps {
@@ -30,6 +30,12 @@ export const ToolButton = ({
     : disabled
       ? 'action.disabled'
       : 'text.secondary';
+  // A tap fires the browser's compatibility mouseover and never a
+  // mouseleave, so the hover tooltip opened after a tap and stayed up
+  // (Reticulyne sweep 2026-09-30, the Flat 2D view button at 390px). A
+  // touch or pen pointer gets MUI's long-press tooltip only; a mouse over
+  // the button turns hover back on.
+  const [touch, setTouch] = useState(false);
 
   return (
     <Tooltip
@@ -41,9 +47,20 @@ export const ToolButton = ({
       // The button carries its own aria-label; this stops the tooltip from
       // naming the wrapper too.
       describeChild
+      disableHoverListener={touch}
+      disableFocusListener={touch}
     >
       {/* A disabled button fires no events, so the tooltip hangs on a wrapper. */}
-      <Box component="span" sx={{ display: 'inline-flex' }}>
+      <Box
+        component="span"
+        sx={{ display: 'inline-flex' }}
+        onPointerOver={(e) => {
+          setTouch(e.pointerType !== 'mouse');
+        }}
+        onPointerDown={(e) => {
+          setTouch(e.pointerType !== 'mouse');
+        }}
+      >
         <Button
           variant="text"
           onClick={onClick}
