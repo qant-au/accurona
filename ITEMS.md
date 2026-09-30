@@ -265,7 +265,9 @@ Racks are generated in `src/elements/comms.mjs` (26 variants): wall-mount 600 ×
 | umbrella         | Market Umbrella        | 270×270×250     |
 | planter          | Planter Box            | 100×40×50       |
 | tree             | Tree                   | 400×400×600     |
+| palm-tree        | Palm Tree              | 400×400×700     |
 | shrub            | Shrub                  | 100×100×100     |
+| hedge            | Hedge, 1 m             | 100×60×150      |
 | water-tank       | Water Tank, 5000 L     | 180×180×220     |
 | hot-water-system | Hot Water System       | 60×60×170       |
 | heat-pump        | Heat Pump Water Heater | 60×60×190       |

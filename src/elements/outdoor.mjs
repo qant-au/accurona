@@ -1,4 +1,5 @@
 // Outdoor and small buildings.
+import { cloud, leaf, random, spine } from '../foliage.mjs';
 
 const r2 = (n) => Math.round(n * 100) / 100;
 
@@ -37,55 +38,114 @@ const slats = (w, d, pitch, inset = 0) =>
     line: [[inset, (i + 1) * pitch], [w - inset, (i + 1) * pitch]]
   }));
 
-// A plant canopy with a scalloped edge: `lobes` bumps round a circle.
-const scallop = (cx, cy, r, lobes, depth) =>
-  ring(cx, cy, lobes * 6, (t) => r - depth * Math.abs(Math.sin((lobes * t) / 2)) ** 0.6);
-
+// Tree, seen from above: an irregular leafy canopy, the overlapping clusters
+// of leaves inside it, a few limbs leaving the trunk, and the trunk itself.
 const tree = {
   id: 'tree',
   name: 'Tree',
   group: 'outdoor',
   size: { w: 400, d: 400, h: 600 },
   parts: [
-    {
-      cyl: [200, 200, 200], z: 250, h: 350, role: 'plant',
-      top: [
-        ...Array.from({ length: 8 }, (_, i) => {
-          const t = (i * Math.PI) / 4 + Math.PI / 8;
-          return {
-            line: [
-              [r2(200 + 45 * Math.cos(t)), r2(200 + 45 * Math.sin(t))],
-              [r2(200 + 165 * Math.cos(t)), r2(200 + 165 * Math.sin(t))]
-            ]
-          };
-        }),
-        { circle: [200, 200, 180], dash: '10 8' },
-        { circle: [200, 200, 16], fill: 'wood' }
-      ]
-    },
+    { poly: cloud(200, 200, 198, { lobes: 11, seed: 7, jitter: 0.12, depth: 0.12 }), z: 250, h: 350, role: 'plant', outline: true },
     { cyl: [200, 200, 20], z: 0, h: 250, role: 'wood' }
+  ],
+  plan: [
+    ...[[130, 150, 88, 3], [262, 140, 80, 5], [215, 262, 92, 9], [120, 262, 66, 11]].map(([cx, cy, r, seed]) => ({
+      line: cloud(cx, cy, r, { lobes: 7, seed, jitter: 0.15, depth: 0.2 }), closed: true
+    })),
+    ...[[-150, 120], [-60, 105], [30, 125], [110, 110], [190, 95]].map(([deg, len]) => {
+      const t = (deg * Math.PI) / 180;
+      const bend = t + 0.25;
+      return {
+        line: [
+          [200 + 16 * Math.cos(t), 200 + 16 * Math.sin(t)],
+          [200 + len * 0.55 * Math.cos(bend), 200 + len * 0.55 * Math.sin(bend)],
+          [200 + len * Math.cos(t), 200 + len * Math.sin(t)]
+        ].map(([x, y]) => [r2(x), r2(y)])
+      };
+    }),
+    { circle: [200, 200, 16], fill: 'wood', stroke: 'outline' }
   ]
 };
 
+// Palm tree: long feathered fronds arching out from the crown, uneven in
+// angle and length the way a real crown grows.
+const palm = (() => {
+  const c = 200;
+  const r1 = (n) => Math.round(n * 10) / 10;
+  const fronds = [[-4, 182, 24], [41, 160, -20], [92, 190, 28], [128, 168, -22], [181, 186, 18], [219, 158, -26], [266, 180, 22], [312, 170, -18]];
+  // Leaflets: a zigzag either side of the frond's arching spine.
+  const feather = ([deg, len, bend]) =>
+    spine(c, c, len, deg, bend, 7)
+      .slice(1)
+      .map(({ x, y, a }, i) => {
+        const half = 18 * Math.sin((Math.PI * (i + 1)) / 8) * (i % 2 ? 1 : -1);
+        return [r1(x - Math.sin(a) * half), r1(y + Math.cos(a) * half)];
+      });
+  return {
+    id: 'palm-tree',
+    name: 'Palm Tree',
+    group: 'outdoor',
+    size: { w: 400, d: 400, h: 700 },
+    parts: [
+      { poly: cloud(c, c, 34, { lobes: 7, seed: 4, depth: 0.25 }), z: 600, h: 100, role: 'plant', outline: true },
+      { cyl: [c, c, 18], z: 0, h: 600, role: 'wood' }
+    ],
+    plan: [
+      ...fronds.map(([deg, len, bend]) => ({ line: leaf(c, c, len, 40, deg, 6, bend), closed: true, fill: 'plant', stroke: 'outline' })),
+      ...fronds.map((f) => ({ line: feather(f) })),
+      { circle: [c, c, 14], fill: 'wood', stroke: 'outline' }
+    ]
+  };
+})();
+
+// Shrub: a smaller leafy mound, one inner cluster, the stem at the centre.
 const shrub = {
   id: 'shrub',
   name: 'Shrub',
   group: 'outdoor',
   size: { w: 100, d: 100, h: 100 },
   parts: [
-    {
-      poly: scallop(50, 50, 50, 9, 7), z: 15, h: 85, role: 'plant',
-      top: [
-        { circle: [50, 50, 3], fill: 'wood' },
-        ...Array.from({ length: 5 }, (_, i) => {
-          const t = (i * 2 * Math.PI) / 5;
-          return { line: [[r2(50 + 10 * Math.cos(t)), r2(50 + 10 * Math.sin(t))], [r2(50 + 28 * Math.cos(t)), r2(50 + 28 * Math.sin(t))]] };
-        })
-      ]
-    },
+    { poly: cloud(50, 50, 49, { lobes: 8, seed: 12, jitter: 0.14, depth: 0.2 }), z: 15, h: 85, role: 'plant', outline: true },
     { cyl: [50, 50, 5], z: 0, h: 15, role: 'wood' }
+  ],
+  plan: [
+    { line: cloud(44, 46, 26, { lobes: 6, seed: 5, depth: 0.25 }), closed: true },
+    { circle: [50, 50, 3], fill: 'wood' }
   ]
 };
+
+// Hedge, a 1 m section: a leafy strip with straight ends so sections join.
+const hedge = (() => {
+  const [w, d] = [100, 60];
+  const rand = random(21);
+  const edge = (y, out) => {
+    const pts = [];
+    let x = 0;
+    while (x < w) {
+      const span = Math.min(w - x, 14 + rand() * 12);
+      const bump = 5 + rand() * 4;
+      for (let s = 0; s < 4; s++) {
+        const t = s / 4;
+        pts.push([r2(x + t * span), r2(y + out * bump * Math.sin(Math.PI * t) ** 0.6)]);
+      }
+      x += span;
+    }
+    pts.push([w, y]);
+    return pts;
+  };
+  return {
+    id: 'hedge',
+    name: 'Hedge, 1 m',
+    group: 'outdoor',
+    size: { w, d, h: 150 },
+    parts: [{ poly: [...edge(9, -1), ...edge(d - 9, 1).reverse()], z: 0, h: 150, role: 'plant', outline: true }],
+    plan: [
+      { line: cloud(28, 30, 17, { lobes: 5, seed: 8, depth: 0.25 }), closed: true },
+      { line: cloud(72, 28, 19, { lobes: 6, seed: 9, depth: 0.25 }), closed: true }
+    ]
+  };
+})();
 
 // Market umbrella: an octagonal canopy with its ribs, over a pole and base.
 const umbrella = {
@@ -287,11 +347,15 @@ export default [
     size: { w: 100, d: 40, h: 50 },
     parts: [
       { x: 0, y: 0, z: 0, w: 100, d: 40, h: 40, role: 'wood', top: [{ rect: [4, 4, 92, 32], fill: 'ground' }] },
-      ...[20, 50, 80].map((cx) => ({ cyl: [cx, 20, 13], z: 40, h: 10, role: 'plant' }))
+      ...[[20, 20, 14, 31], [50, 19, 18, 32], [80, 21, 15, 33]].map(([cx, cy, r, seed]) => ({
+        poly: cloud(cx, cy, r, { lobes: 6, seed, depth: 0.22 }), z: 40, h: 10, role: 'plant', outline: true
+      }))
     ]
   },
   tree,
+  palm,
   shrub,
+  hedge,
   {
     id: 'water-tank',
     name: 'Water Tank, 5000 L',

@@ -1,4 +1,5 @@
 // Living room.
+import { cloud, leaf, midrib } from '../foliage.mjs';
 
 // A sofa or armchair with its back against the wall at the top: base, back,
 // two arms and one seat cushion per seat.
@@ -75,14 +76,8 @@ const cornerSofa = {
   ]
 };
 
-// A lobed leaf canopy, points clockwise on the plan.
-function canopy(cx, cy, rOut, rIn, lobes) {
-  return Array.from({ length: lobes * 2 }, (_, i) => {
-    const a = (Math.PI * i) / lobes - Math.PI / 2;
-    const r = i % 2 ? rIn : rOut;
-    return [+(cx + r * Math.cos(a)).toFixed(2), +(cy + r * Math.sin(a)).toFixed(2)];
-  });
-}
+// The indoor plant's leaves: [angle, length, width, bend], uneven on purpose.
+const PLANT_LEAVES = [[-100, 22, 11, 18], [-40, 20, 10, -14], [8, 23, 12, 20], [62, 21, 11, -16], [115, 23, 12, 22], [165, 20, 10, -12], [212, 22, 11, 16], [-150, 17, 9, -20]];
 
 export default [
   sofa({ id: 'sofa-2', name: 'Sofa, 2-Seat', w: 160, seats: 2 }),
@@ -258,7 +253,8 @@ export default [
       }
     ]
   },
-  // Indoor plant: a pot under a lobed canopy of leaves.
+  // Indoor plant: seen from above, broad pointed leaves fanning out over the pot
+  // at uneven angles and lengths, each with its midrib.
   {
     id: 'plant-pot',
     name: 'Indoor Plant',
@@ -266,13 +262,11 @@ export default [
     size: { w: 50, d: 50, h: 120 },
     parts: [
       { cyl: [25, 25, 16], z: 0, h: 40, role: 'body' },
-      {
-        poly: canopy(25, 25, 25, 19, 9), z: 40, h: 80, role: 'plant', outline: true
-      }
+      { poly: cloud(25, 25, 12, { lobes: 5, seed: 3, depth: 0.2 }), z: 40, h: 80, role: 'plant', outline: true }
     ],
-    plan: [0, 1, 2, 3, 4, 5, 6, 7, 8].map((i) => {
-      const a = (2 * Math.PI * i) / 9 - Math.PI / 2;
-      return { line: [[25, 25], [+(25 + 18 * Math.cos(a)).toFixed(2), +(25 + 18 * Math.sin(a)).toFixed(2)]] };
-    })
+    plan: [
+      ...PLANT_LEAVES.map(([deg, len, wid, bend]) => ({ line: leaf(25, 25, len, wid, deg, 5, bend), closed: true, fill: 'plant', stroke: 'outline' })),
+      ...PLANT_LEAVES.map(([deg, len, , bend]) => ({ line: midrib(25, 25, len, deg, bend) }))
+    ]
   }
 ];
