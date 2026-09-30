@@ -63,6 +63,56 @@ function tower({ id, name, w, d, h, bays, bayH = 3 }) {
   };
 }
 
+// A desktop monitor: panel on a neck and a flat foot that reaches the front.
+// `radius` curves the panel (e.g. 180 for an 1800R ultrawide): its ends come
+// towards the viewer, so the plan shows the curve.
+function monitor({ id, name, w, h, radius, foot = 24 }) {
+  const sag = radius ? radius - Math.sqrt(radius ** 2 - (w / 2) ** 2) : 0;
+  const y0 = 6;
+  const panelTop = [{ rect: [w - 11, 1.8 + sag, 4, 1.2], accent: 'network', view: 'plan' }];
+  const front = [{ rect: [1, 1, w - 2, h - 4], fill: 'outline', stroke: 'outline' }, { circle: [w - 6, h - 1.5, 0.5], accent: 'network' }];
+  let panel = { x: 0, y: y0, z: 10, w, d: 3, h, role: 'dark', r: 1, top: panelTop, front };
+  if (radius) {
+    const n = 10;
+    const back = Array.from({ length: n + 1 }, (_, i) => {
+      const x = (w * i) / n;
+      return [+x.toFixed(2), +(y0 + sag * ((x - w / 2) / (w / 2)) ** 2).toFixed(2)];
+    });
+    const frontEdge = back.map(([x, y]) => [x, +(y + 3).toFixed(2)]).reverse();
+    panel = { poly: [...back, ...frontEdge], z: 10, h, role: 'dark', top: [{ rect: [w - 11, 1.8 + sag * 0.8, 4, 1.2], accent: 'network', view: 'plan' }], front };
+  }
+  return {
+    id,
+    name,
+    group: 'network',
+    tags: ['network'],
+    size: { w, d: Math.max(20, Math.ceil(y0 + sag + 5)), h: 10 + h },
+    parts: [
+      panel,
+      { x: (w - 6) / 2, y: 2, z: 2, w: 6, d: 4, h: 28, role: 'metal' },
+      { x: (w - foot) / 2, y: 2, z: 0, w: foot, d: 16, h: 2, role: 'metal', r: 4, outline: true }
+    ]
+  };
+}
+
+// A wall-mounted display: a thin dark panel off a wall bracket, the AV mark on
+// its top edge. Sizes are the panel with bezel; the centre sits 152 cm up.
+function wallDisplay({ id, name, w, h }) {
+  return {
+    id,
+    name,
+    group: 'network',
+    tags: ['av'],
+    size: { w, d: 10, h },
+    mount: Math.round(152 - h / 2),
+    parts: [
+      { x: 0, y: 4, z: 0, w, d: 6, h, role: 'dark', r: 1, front: [{ rect: [1.5, 1.5, w - 3, h - 3], fill: 'outline', stroke: 'outline' }] },
+      { x: w / 2 - 20, y: 0, z: h / 2 - 20, w: 40, d: 4, h: 40, role: 'metal' }
+    ],
+    plan: [{ rect: [w / 2 - 10, 8.3, 20, 1.2], accent: 'av' }]
+  };
+}
+
 export default [
   // Ceiling access point: a flat disc with a status ring.
   {
@@ -226,23 +276,34 @@ export default [
 
   tower({ id: 'pc-tower', name: 'Desktop PC', w: 20, d: 45, h: 45, bays: 2 }),
 
-  // 27" monitor: panel on a neck and a flat foot that reaches the front.
+  monitor({ id: 'monitor-24', name: 'Monitor, 24"', w: 54, h: 32 }),
+  monitor({ id: 'monitor', name: 'Monitor, 27"', w: 62, h: 35 }),
+  monitor({ id: 'monitor-34-ultrawide', name: 'Monitor, Ultrawide 34"', w: 81, h: 37, radius: 180, foot: 30 }),
+  monitor({ id: 'monitor-38-ultrawide', name: 'Monitor, Ultrawide 38"', w: 90, h: 40, radius: 230, foot: 30 }),
+  monitor({ id: 'monitor-49-ultrawide', name: 'Monitor, Super-Ultrawide 49"', w: 120, h: 36, radius: 180, foot: 34 }),
+  // Two 27" monitors on a desk-clamped arm: the pole at the back, a crossbar,
+  // and a panel on each end.
   {
-    id: 'monitor',
-    name: 'Monitor, 27"',
+    id: 'monitor-arm-dual',
+    name: 'Dual Monitor Arm, 2 × 27"',
     group: 'network',
     tags: ['network'],
-    size: { w: 62, d: 20, h: 45 },
+    size: { w: 126, d: 16, h: 60 },
     parts: [
-      {
-        x: 0, y: 6, z: 10, w: 62, d: 3, h: 35, role: 'dark', r: 1,
+      ...[0, 64].map((x) => ({
+        x, y: 11, z: 22, w: 62, d: 3, h: 35, role: 'dark', r: 1, outline: true,
         top: [{ rect: [51, 1.8, 4, 1.2], accent: 'network', view: 'plan' }],
-        front: [{ rect: [1, 1, 60, 31], fill: 'outline', stroke: 'outline' }, { circle: [56, 33.5, 0.5], accent: 'network' }]
-      },
-      { x: 28, y: 2, z: 2, w: 6, d: 4, h: 28, role: 'metal' },
-      { x: 19, y: 2, z: 0, w: 24, d: 16, h: 2, role: 'metal', r: 4, outline: true }
+        front: [{ rect: [1, 1, 60, 31], fill: 'outline', stroke: 'outline' }]
+      })),
+      { x: 20, y: 5, z: 36, w: 86, d: 3, h: 3, role: 'metal', outline: true },
+      { cyl: [63, 4, 2.5], z: 3, h: 50, role: 'metal', outline: true },
+      { x: 56, y: 0, z: 0, w: 14, d: 9, h: 3, r: 1, role: 'metal' }
     ]
   },
+  wallDisplay({ id: 'display-wall-43', name: 'Wall Display, 43"', w: 97, h: 56 }),
+  wallDisplay({ id: 'display-wall-55', name: 'Wall Display, 55"', w: 124, h: 71 }),
+  wallDisplay({ id: 'display-wall-75', name: 'Wall Display, 75"', w: 168, h: 96 }),
+  wallDisplay({ id: 'display-wall-86', name: 'Wall Display, 86"', w: 193, h: 110 }),
 
   // Laptop, open: the plan shows the keyboard and trackpad below the lid.
   {

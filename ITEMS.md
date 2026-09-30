@@ -190,7 +190,16 @@ Racks are generated in `src/elements/comms.mjs` (26 variants): wall-mount 600 ×
 | speaker-ceiling  | Ceiling Speaker              | 40×40 symbol, m 270          | av                |
 | video-bar        | Video Conferencing Bar       | 90×10×10, m 150              | av                |
 | pc-tower         | Desktop PC                   | 20×45×45                     | network           |
+| monitor-24       | Monitor, 24"                 | 54×20×42                     | network           |
 | monitor          | Monitor, 27"                 | 62×20×45                     | network           |
+| monitor-34-ultrawide | Monitor, Ultrawide 34"   | 81×20×47, 1800R              | network           |
+| monitor-38-ultrawide | Monitor, Ultrawide 38"   | 90×20×50, 2300R              | network           |
+| monitor-49-ultrawide | Monitor, Super-Ultrawide 49" | 120×22×46, 1800R         | network           |
+| monitor-arm-dual | Dual Monitor Arm, 2 × 27"    | 126×16×60                    | network           |
+| display-wall-43  | Wall Display, 43"            | 97×10×56, m 124              | av                |
+| display-wall-55  | Wall Display, 55"            | 124×10×71, m 117             | av                |
+| display-wall-75  | Wall Display, 75"            | 168×10×96, m 104             | av                |
+| display-wall-86  | Wall Display, 86"            | 193×10×110, m 97             | av                |
 | laptop           | Laptop                       | 34×24×2                      | network           |
 | ip-phone         | Desk Phone                   | 22×20×15                     | network           |
 | firewall         | Firewall Appliance (Desktop) | 30×20×5                      | network, security |
