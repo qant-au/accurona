@@ -8,6 +8,21 @@ const arc = (cx, cy, rx, ry, a0, a1, n = 12) =>
     return [+(cx + rx * Math.cos(t)).toFixed(2), +(cy + ry * Math.sin(t)).toFixed(2)];
   });
 
+// A toilet pan in plan: a neck `neckW` wide running forward from y0, flaring
+// into an elongated bowl centred at (cx, cy). Clockwise, y down.
+const toiletPan = (cx, y0, cy, ry, rx = cx - 1, neckW = 24) => [
+  [cx - neckW / 2, y0], [cx + neckW / 2, y0], [cx + neckW / 2 + 1, cy - ry * 0.6],
+  ...arc(cx, cy, rx, ry, -30, 210, 20),
+  [cx - neckW / 2 - 1, cy - ry * 0.6]
+];
+// Seat ring, hinge line and water, in the pan's bounding-box coordinates:
+// (u, v) is the centre of the opening.
+const toiletSeat = (u, v) => [
+  { ellipse: [u, v, 14.5, 19], fill: 'body' },
+  { ellipse: [u, v + 1, 10, 14], fill: 'glass' },
+  { line: [[u - 9, v - 22], [u + 9, v - 22]], stroke: 'outline' }
+];
+
 // A basin seen from above: rim, water-coloured bowl, drain, and a tap behind.
 const basin = (cx, cy, rx, ry) => [
   { ellipse: [cx, cy, rx, ry], fill: 'body', stroke: 'outline' },
@@ -113,16 +128,18 @@ function machine({ id, name, kind }) {
 
 export default [
   {
+    // Close-coupled toilet: the cistern sits across the back on the pan's neck,
+    // and the pan narrows under it before flaring into an elongated bowl.
     id: 'toilet',
     name: 'Toilet',
     group: 'bathroom',
     size: { w: 40, d: 70, h: 80 },
     parts: [
-      { x: 0, y: 0, z: 0, w: 40, d: 19, h: 80, r: 2.5, top: [{ rect: [15, 6, 10, 4], r: 2 }] },
       {
-        cyl: [20, 44.5, 17, 25], z: 0, h: 40, outline: true,
-        top: [{ ellipse: [17, 27, 11, 16], fill: 'glass' }]
-      }
+        poly: toiletPan(20, 12, 46, 24), z: 0, h: 40, outline: true,
+        top: toiletSeat(19, 34)
+      },
+      { x: 0, y: 0, z: 40, w: 40, d: 18, h: 40, r: 3, outline: true, top: [{ circle: [16, 9, 2.5] }, { circle: [24, 9, 2.5] }] }
     ]
   },
   {
@@ -130,12 +147,11 @@ export default [
     name: 'Toilet, wall-hung',
     group: 'bathroom',
     size: { w: 38, d: 55, h: 40 },
-    // Cistern in the wall; the pan hangs off a short neck, seat 40 up.
+    // Cistern in the wall; the pan hangs off the wall, seat 40 up.
     parts: [
-      { x: 7, y: 0, z: 12, w: 24, d: 8, h: 28, r: 2 },
       {
-        cyl: [19, 31.5, 19, 23.5], z: 12, h: 28, outline: true,
-        top: [{ ellipse: [19, 26.5, 12.5, 16], fill: 'glass' }]
+        poly: toiletPan(19, 0, 32, 22.5), z: 12, h: 28, outline: true,
+        top: toiletSeat(18.5, 32)
       }
     ]
   },
