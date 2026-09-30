@@ -313,6 +313,7 @@ interface DiagramPlacement {
   labelHeight?: number;
   group?: Id;             // a group in this view
   layer?: Id;
+  locked?: boolean;       // default false
 }
 
 interface Connector {
@@ -329,6 +330,7 @@ interface Connector {
   animationRate?: number; // 0 to 1
   animationFlow?: 'forward' | 'reverse' | 'both';
   layer?: Id;
+  locked?: boolean;
 }
 
 // Exactly one of the three.
@@ -348,6 +350,7 @@ interface Rectangle {
   zIndex?: number;
   group?: Id;
   layer?: Id;
+  locked?: boolean;
 }
 
 interface TextBox {
@@ -358,6 +361,7 @@ interface TextBox {
   orientation?: 'X' | 'Y';
   group?: Id;
   layer?: Id;
+  locked?: boolean;
 }
 
 interface Group {
@@ -370,6 +374,10 @@ interface Group {
 
 - When a connector has a `connection`, its first and last anchors must reference that
   connection's `from` and `to` objects (in either order).
+- A `locked` placement, connector, rectangle or text box is drawn as usual but an
+  editor does not let it be selected on the canvas, so it cannot be moved, edited or
+  deleted until it is unlocked. It is a view property, like `layer`: the same object
+  can be locked in one view and not in another.
 - Group membership lives on the member, not as a list on the group, as in Reticulyne:
   "the members of G" is a filter, and two people editing one diagram never race on one
   array.

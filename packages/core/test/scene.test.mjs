@@ -84,6 +84,22 @@ test('unknown keys are refused at every level', () => {
   assert.match(errorsOf(s), /colour/);
 });
 
+test('diagram placements, connectors, rectangles and text boxes can be locked', () => {
+  const s = base();
+  s.views[0].placements[0].locked = true;
+  s.views[0].connectors[0].locked = true;
+  s.views[0].rectangles = [
+    { id: 'r', from: { x: 0, y: 0 }, to: { x: 1, y: 1 }, locked: true }
+  ];
+  s.views[0].textBoxes = [
+    { id: 't', tile: { x: 3, y: 3 }, content: 'Note', locked: false }
+  ];
+  const result = validateScene(s);
+  assert.equal(result.ok, true, result.ok ? '' : result.errors.join('\n'));
+  s.views[0].placements[0].locked = 'yes';
+  assert.match(errorsOf(s), /locked/);
+});
+
 test('ids must be safe strings', () => {
   const s = base();
   s.objects[1].id = 'has space';
