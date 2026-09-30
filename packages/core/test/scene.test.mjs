@@ -5,9 +5,11 @@ import { readFileSync } from 'node:fs';
 import {
   SCENE_SCHEMA_URL,
   emptyScene,
+  hasRedacted,
   mergeScene,
   parseJson,
   parseScene,
+  redactScene,
   serializeScene,
   validateScene
 } from '../dist/index.js';
@@ -272,4 +274,112 @@ test('merge drops connections to deleted objects and their connector links', () 
   });
   assert.equal(validateScene(merged).ok, true);
   assert.deepEqual(merged.connections, []);
+});
+
+test('merge writes the layers an editor sets', () => {
+  const merged = mergeScene(base(), {
+    viewKinds: ['iso'],
+    views: base().views,
+    objects: base().objects,
+    objectFields: ['name'],
+    set: { layers: [{ id: 'detail', name: 'Detail', visible: false }] }
+  });
+  assert.equal(validateScene(merged).ok, true);
+  assert.deepEqual(merged.layers, [
+    { id: 'detail', name: 'Detail', visible: false }
+  ]);
+});
+
+test('a scene with nothing redacted is left as it is', () => {
+  const scene = base();
+  assert.equal(hasRedacted(scene), false);
+  assert.deepEqual(redactScene(scene), scene);
+});
+
+test('redaction removes the layer and what only it held', () => {
+  const scene = base();
+  const view = scene.views[0];
+  view.placements[1].layer = 'redacted';
+  view.textBoxes = [
+    { id: 't1', tile: { x: 0, y: 1 }, content: '10.0.0.1', layer: 'redacted' },
+    { id: 't2', tile: { x: 0, y: 2 }, content: 'Office' }
+  ];
+  // A second connector that ends on the first one's anchor.
+  view.connectors.push({
+    id: 'k3',
+    anchors: [
+      { id: 'j1', ref: { anchor: 'k1' } },
+      { id: 'j2', ref: { tile: { x: 4, y: 4 } } }
+    ]
+  });
+  scene.objects.push({ id: 'spare', name: 'Unplaced' });
+  assert.equal(validateScene(scene).ok, true);
+  assert.equal(hasRedacted(scene), true);
+
+  const out = redactScene(scene);
+  assert.equal(validateScene(out).ok, true);
+  assert.deepEqual(
+    out.objects.map((o) => o.id),
+    ['a', 'spare']
+  );
+  assert.deepEqual(out.connections, []);
+  const outView = out.views[0];
+  assert.deepEqual(
+    outView.placements.map((p) => p.object),
+    ['a']
+  );
+  assert.deepEqual(outView.connectors, [], 'both connectors ended on B');
+  assert.deepEqual(
+    outView.textBoxes.map((t) => t.id),
+    ['t2']
+  );
+  assert.equal(scene.views[0].textBoxes.length, 2, 'the input is untouched');
+});
+
+test('redaction keeps an object that is still placed elsewhere', () => {
+  const scene = base();
+  scene.views.push({
+    id: 'd2',
+    kind: 'schematic',
+    name: 'Flat',
+    placements: [{ object: 'b', tile: { x: 0, y: 0 } }]
+  });
+  scene.views[0].placements[1].layer = 'redacted';
+  const out = redactScene(scene);
+  assert.equal(validateScene(out).ok, true);
+  assert.ok(out.objects.some((o) => o.id === 'b'));
+  assert.equal(out.connections.length, 1);
+});
+
+test('redaction removes plan walls and detaches what was fixed into them', () => {
+  const scene = emptyScene('p');
+  scene.objects = [{ id: 'door', element: 'door' }];
+  scene.views = [
+    {
+      id: 'plan',
+      kind: 'plan',
+      name: 'Plan',
+      floors: [
+        {
+          id: 'f',
+          nodes: [
+            { id: 'n1', x: 0, y: 0 },
+            { id: 'n2', x: 1000, y: 0 }
+          ],
+          walls: [{ id: 'w', from: 'n1', to: 'n2', layer: 'redacted' }]
+        }
+      ],
+      placements: [
+        { object: 'door', floor: 'f', x: 500, y: 0, attach: { wall: 'w' } }
+      ]
+    }
+  ];
+  assert.equal(validateScene(scene).ok, true);
+  assert.equal(hasRedacted(scene), true);
+  const out = redactScene(scene);
+  assert.equal(validateScene(out).ok, true);
+  assert.deepEqual(out.views[0].floors[0].walls, []);
+  assert.deepEqual(out.views[0].placements, [
+    { object: 'door', floor: 'f', x: 500, y: 0 }
+  ]);
 });

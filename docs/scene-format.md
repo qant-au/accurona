@@ -392,6 +392,11 @@ listed.
 out of every export (image, PDF, SVG, shared link, JSON) unless the export explicitly
 opts in. It exists so a diagram can carry addresses and other sensitive notes in
 the working copy without them leaking into the copy that gets sent out.
+`redactScene(scene)` in `@accurona/core` gives that copy, still a valid scene: an object
+whose every placement was redacted goes with it, as do the connections and connectors
+that end on it, and a placement fixed into a redacted wall loses its `attach`.
+`hasRedacted(scene)` says whether there is anything to leave out, so an editor can
+offer the opt-in only when it means something.
 
 ## Icons and colours
 

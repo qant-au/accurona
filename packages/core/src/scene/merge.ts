@@ -35,9 +35,12 @@ export interface SceneUpdate {
   objectFields: (keyof SceneObject)[];
   /** View-entity fields this editor does not model, kept by id. */
   preserve?: PreserveFields;
-  /** Top-level fields the editor sets (title, units, icons, colours...). */
+  /** Top-level fields the editor sets (title, units, icons, colours, layers...). */
   set?: Partial<
-    Pick<Scene, 'title' | 'description' | 'units' | 'icons' | 'colors'>
+    Pick<
+      Scene,
+      'title' | 'description' | 'units' | 'icons' | 'colors' | 'layers'
+    >
   >;
 }
 

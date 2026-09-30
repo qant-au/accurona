@@ -60,6 +60,7 @@ export {
   type PreserveFields,
   type SceneUpdate
 } from './scene/merge.js';
+export { hasRedacted, redactScene } from './scene/redact.js';
 export {
   AXONOMETRA_BINDINGS,
   AXONOMETRA_WALK_KEYS,
