@@ -68,8 +68,8 @@ export function placedOnlyElsewhere(
   return scene.objects.filter((o) => elsewhere.has(o.id) && !here.has(o.id));
 }
 
-/** A floor of a plan view, and how many of a diagram's objects are on it. */
-export interface DiagramLocation {
+/** A floor of a plan view, and how many of the given objects are on it. */
+export interface FloorLocation {
   planViewId: string;
   planViewName: string;
   floorId: string;
@@ -78,28 +78,16 @@ export interface DiagramLocation {
 }
 
 /**
- * Where a diagram view is on the building: the plan floors its objects are
- * placed on, most objects first (ties in plan and floor order). A diagram per
- * floor maps to that floor; a diagram of objects on no plan maps to nothing.
- * `objects` narrows it to some of the diagram's objects, such as the ones on
- * a layer.
+ * The plan floors some objects are placed on, most objects first (ties in
+ * plan and floor order). An editor passes the objects of a diagram view as it
+ * stands, saved or not.
  */
-export function diagramLocations(
+export function floorsOf(
   scene: Scene,
-  diagramViewId: string,
-  objects?: Iterable<string>
-): DiagramLocation[] {
-  const diagram = scene.views?.find(
-    (v) => v.id === diagramViewId && v.kind !== 'plan'
-  );
-  if (!diagram) return [];
-  const placed = new Set((diagram.placements ?? []).map((p) => p.object));
-  const wanted = objects
-    ? new Set([...objects].filter((id) => placed.has(id)))
-    : placed;
-
-  const out: (DiagramLocation & { order: number })[] = [];
-  let order = 0;
+  objects: Iterable<string>
+): FloorLocation[] {
+  const wanted = new Set(objects);
+  const out: FloorLocation[] = [];
   for (const view of scene.views ?? []) {
     if (view.kind !== 'plan') continue;
     for (const floor of view.floors) {
@@ -112,14 +100,31 @@ export function diagramLocations(
           planViewName: view.name,
           floorId: floor.id,
           ...(floor.name ? { floorName: floor.name } : {}),
-          count,
-          order
+          count
         });
       }
-      order++;
     }
   }
-  return out
-    .sort((a, b) => b.count - a.count || a.order - b.order)
-    .map(({ order: _order, ...location }) => location);
+  // A stable sort, so a tie keeps plan and floor order.
+  return out.sort((a, b) => b.count - a.count);
+}
+
+/**
+ * Where a diagram view is on the building: the plan floors its objects are
+ * on. A diagram per storey maps to that storey; a diagram of objects on no
+ * plan maps to nothing. Empty for a plan view or an unknown id.
+ */
+export function diagramLocations(
+  scene: Scene,
+  diagramViewId: string
+): FloorLocation[] {
+  const diagram = scene.views?.find(
+    (v) => v.id === diagramViewId && v.kind !== 'plan'
+  );
+  return diagram
+    ? floorsOf(
+        scene,
+        (diagram.placements ?? []).map((p) => p.object)
+      )
+    : [];
 }

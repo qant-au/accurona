@@ -3,6 +3,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   diagramLocations,
+  floorsOf,
   objectPlaces,
   placedOnlyElsewhere,
   validateScene
@@ -128,11 +129,21 @@ test('diagramLocations maps a diagram view to the plan floors of its objects', (
       ['l2', 1]
     ]
   );
-  // Narrowed to some of the diagram's objects; ones not in it are ignored.
+});
+
+test('floorsOf maps any set of objects, placed in a diagram or not', () => {
   assert.deepEqual(
-    diagramLocations(scene, 'net-2', ['ap-2', 'cam-2']).map((l) => l.floorId),
-    ['l2']
+    floorsOf(scene, ['ap-2', 'cam-2', 'sw-1', 'cloud']).map((l) => [
+      l.floorName,
+      l.count
+    ]),
+    [
+      ['Level 2', 2],
+      ['Ground', 1]
+    ]
   );
+  assert.deepEqual(floorsOf(scene, []), []);
+  assert.deepEqual(floorsOf(scene, ['cloud', 'nothing']), []);
 });
 
 test('diagramLocations: nothing for a plan view, an unknown view or no plan', () => {

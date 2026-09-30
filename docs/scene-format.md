@@ -596,9 +596,12 @@ placedOnlyElsewhere(scene, kinds): SceneObject[]
 // objects placed in a view of another kind and in no view of `kinds`:
 // what one editor can offer to place from the other's drawing
 
-diagramLocations(scene, diagramViewId, objects?): DiagramLocation[]
+diagramLocations(scene, diagramViewId): FloorLocation[]
 // where a diagram view is on the building: the plan floors its objects
 // are on, most objects first
+
+floorsOf(scene, objectIds): FloorLocation[]
+// the same for any set of objects, such as a diagram view not saved yet
 ```
 
 - **Placing an object from the other editor keeps its `id`.** It is the same thing,

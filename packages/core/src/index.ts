@@ -63,9 +63,10 @@ export {
 export { hasRedacted, redactScene } from './scene/redact.js';
 export {
   diagramLocations,
+  floorsOf,
   objectPlaces,
   placedOnlyElsewhere,
-  type DiagramLocation,
+  type FloorLocation,
   type ObjectPlace
 } from './scene/crossover.js';
 export {
