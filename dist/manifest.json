@@ -3942,10 +3942,9 @@
       },
       "mount": 110,
       "footprint": {
-        "w": 40,
-        "d": 40
-      },
-      "symbol": true
+        "w": 25,
+        "d": 12
+      }
     },
     {
       "id": "ev-charger-pedestal",
