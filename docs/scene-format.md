@@ -581,6 +581,37 @@ remote-management console and a network-monitoring console.
 }
 ```
 
+## Crossover: one object in both editors
+
+Axonometra draws the plan views and Reticulyne the diagram views of one scene, and
+each keeps the other's views when it saves. An object placed in both is linked by
+its `id` and by nothing else, so the links are read straight out of the scene.
+`@accurona/core` reads them for both editors:
+
+```ts
+objectPlaces(scene, objectId): ObjectPlace[]
+// every view that places the object: its plan floor and position, or its tile
+
+placedOnlyElsewhere(scene, kinds): SceneObject[]
+// objects placed in a view of another kind and in no view of `kinds`:
+// what one editor can offer to place from the other's drawing
+
+diagramLocations(scene, diagramViewId, objects?): DiagramLocation[]
+// where a diagram view is on the building: the plan floors its objects
+// are on, most objects first
+```
+
+- **Placing an object from the other editor keeps its `id`.** It is the same thing,
+  now drawn twice; a copy with a new id would be a second thing.
+- **A diagram view is not tied to a floor by a field.** Its physical location is
+  where its objects are: a diagram per storey maps to that storey, a diagram of a
+  whole site maps to several floors, and a diagram of cloud services maps to none.
+  Nothing has to be kept in step when a device moves floor.
+- **At catalogue level** the two libraries relate by the free-form cross-reference
+  (an entry in Reticulyne's catalogue linking `{ source: 'accurona', ref: '<element
+  id>' }`), so a plan object with an `element` can be drawn in a diagram with its
+  Reticulyne twin. The scene never stores that cross-reference.
+
 ## Migrating from today's formats
 
 The scene format replaces the formats each project uses today: Axonometra's plan

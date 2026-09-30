@@ -62,6 +62,13 @@ export {
 } from './scene/merge.js';
 export { hasRedacted, redactScene } from './scene/redact.js';
 export {
+  diagramLocations,
+  objectPlaces,
+  placedOnlyElsewhere,
+  type DiagramLocation,
+  type ObjectPlace
+} from './scene/crossover.js';
+export {
   AXONOMETRA_BINDINGS,
   AXONOMETRA_WALK_KEYS,
   DIFFERENCES,
