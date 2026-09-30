@@ -79,6 +79,9 @@ Note: the legacy `bed` keeps its original Axonometra footprint, 200 × 150 (leng
 | sink-double       | Sink, Double Bowl   | 120×60×90       |
 | cooktop           | Cooktop, 4 Burner   | 60×60×90        |
 | cooktop-5         | Cooktop, 5 Burner   | 90×60×90        |
+| cooktop-2         | Cooktop, 2 Burner   | 30×60×90        |
+| cooktop-grill     | Chargrill, 2 Burner | 40×60×90        |
+| cooktop-wok       | Wok Burner          | 40×60×90        |
 | oven-freestanding | Freestanding Oven   | 60×60×90        |
 | wall-oven         | Wall Oven Tower     | 60×60×220       |
 | rangehood         | Rangehood           | 90×50×60, m 160 |

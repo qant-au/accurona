@@ -85,6 +85,30 @@ const burner = (x, y, r) => [
   { circle: [x, y, r * 0.45], fill: 'dark' }
 ];
 
+// A chargrill module: a dark grate of bars over two burners, two knobs.
+const chargrill = (w, d) => [
+  { rect: [3, 3, w - 6, d - 12], r: 1, fill: 'dark', stroke: 'outline' },
+  ...Array.from({ length: Math.floor((w - 10) / 3.5) }, (_, i) => ({ line: [[6.5 + i * 3.5, 5], [6.5 + i * 3.5, d - 11]], stroke: 'metal' })),
+  ...[-3.5, 3.5].map((dx) => ({ circle: [w / 2 + dx, d - 4, 1.8], fill: 'dark' }))
+];
+
+// A wok burner module: a triple-ring burner under a heavy four-arm trivet.
+const wokPlate = (w, d) => {
+  const [cx, cy] = [w / 2, (d - 8) / 2 + 1];
+  const arm = (a) => {
+    const t = ((a + 45) * Math.PI) / 180;
+    const p = (r) => [+(cx + r * Math.cos(t)).toFixed(2), +(cy + r * Math.sin(t)).toFixed(2)];
+    return { line: [p(8), p(15.5)], stroke: 'outline', weight: 'outline' };
+  };
+  return [
+    { circle: [cx, cy, 13], stroke: 'outline' },
+    { circle: [cx, cy, 9] },
+    { circle: [cx, cy, 4.5], fill: 'dark' },
+    ...[0, 90, 180, 270].map(arm),
+    { circle: [cx, d - 4, 2.2], fill: 'dark' }
+  ];
+};
+
 // A gas hob plate: burners as [x, y, r] in plate cm, one knob per burner along the front.
 function hobPlate(w, d, burners) {
   const kx = (i) => w / 2 + (i - (burners.length - 1) / 2) * 7;
@@ -94,7 +118,8 @@ function hobPlate(w, d, burners) {
   ];
 }
 
-function cooktop({ id, name, w, burners }) {
+// `plate` replaces the gas burners, for grill and wok modules.
+function cooktop({ id, name, w, burners, plate }) {
   const pw = w - 4;
   return {
     id,
@@ -103,7 +128,7 @@ function cooktop({ id, name, w, burners }) {
     size: { w, d: 60, h: 90 },
     parts: [
       ...underBench({ w, doors: w > 60 ? 2 : 1, benchZ: 90 - TOP - 1 }),
-      { x: 2, y: 4, z: 89, w: pw, d: 52, h: 1, role: 'metal', outline: true, r: 1, top: hobPlate(pw, 52, burners) }
+      { x: 2, y: 4, z: 89, w: pw, d: 52, h: 1, role: 'metal', outline: true, r: 1, top: plate ? plate(pw, 52) : hobPlate(pw, 52, burners) }
     ]
   };
 }
@@ -166,6 +191,10 @@ export default [
   sink({ id: 'sink-double', name: 'Sink, Double Bowl', w: 120, bowls: [44, 44] }),
   sink({ id: 'butler-sink', name: "Butler's Sink", w: 80, bowls: [62], ceramic: true }),
   cooktop({ id: 'cooktop', name: 'Cooktop, 4 Burner', w: 60, burners: [[14, 14, 8], [42, 14, 6], [14, 36, 6], [42, 36, 7]] }),
+  // Domino modules: narrow cooktops set side by side along a benchtop.
+  cooktop({ id: 'cooktop-2', name: 'Cooktop, 2 Burner', w: 30, burners: [[13, 14, 7], [13, 36, 6]] }),
+  cooktop({ id: 'cooktop-grill', name: 'Chargrill, 2 Burner', w: 40, plate: chargrill }),
+  cooktop({ id: 'cooktop-wok', name: 'Wok Burner', w: 40, plate: wokPlate }),
   cooktop({ id: 'cooktop-5', name: 'Cooktop, 5 Burner', w: 90, burners: [[15, 14, 7], [15, 36, 6], [43, 25, 10], [71, 14, 6], [71, 36, 7]] }),
   {
     id: 'oven-freestanding',
