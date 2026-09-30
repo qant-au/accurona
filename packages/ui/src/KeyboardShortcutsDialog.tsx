@@ -68,22 +68,26 @@ const Part = ({ part }: { part: ShortcutPart[] }) => (
 // "or"; the keys of one chord are joined by "+". Without that, "V 1 S" and
 // "⌘ ⇧ Z" were drawn alike and read as one combination (BUG15-14). A
 // pointer gesture draws its keys as keys too ("⇧ + Click"), as the keyboard
-// rows do: they were a mix of chips and plain text (sweep 2026-09-30). The
-// alternatives stay on one line beside the label: wrapped, the second one
-// started a line with "or". On a phone they may wrap under the label.
-const Keys = ({ keys }: { keys: string[] }) => (
+// rows do: they were a mix of chips and plain text (sweep 2026-09-30). A
+// row of chords keeps its alternatives on one line beside the label: wrapped,
+// the second one started a line with "or" (on a phone they may wrap under
+// the label). A row with words in it may wrap, and then "or" ends the line
+// rather than starting the next.
+const Keys = ({ keys }: { keys: string[] }) => {
+  const entries = keys.map((entry) => ({ entry, parsed: shortcutKeys(entry) }));
+  const chordsOnly = entries.every((e) => e.parsed.kind === 'chord');
+  return (
   <Box
     component="span"
     sx={{
       display: 'inline-flex',
-      flexWrap: { xs: 'wrap', sm: 'nowrap' },
+      flexWrap: chordsOnly ? { xs: 'wrap', sm: 'nowrap' } : 'wrap',
       alignItems: 'center',
       gap: 0.5,
       justifyContent: { xs: 'flex-start', sm: 'flex-end' }
     }}
   >
-    {keys.map((entry, i) => {
-      const parsed = shortcutKeys(entry);
+    {entries.map(({ entry, parsed }, i) => {
       const parts: ShortcutPart[][] =
         parsed.kind === 'chord' ? parsed.keys.map((key) => [{ key }]) : parsed.kind === 'gesture' ? parsed.parts : [];
       return (
@@ -92,7 +96,6 @@ const Keys = ({ keys }: { keys: string[] }) => (
           key={entry}
           sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.5, whiteSpace: 'nowrap' }}
         >
-          {i > 0 && <Joiner>or</Joiner>}
           {parsed.kind === 'text' ? (
             <Box component="span" sx={{ color: 'text.secondary', fontSize: '0.8125rem', whiteSpace: 'normal' }}>
               {parsed.text}
@@ -105,11 +108,13 @@ const Keys = ({ keys }: { keys: string[] }) => (
               </Box>
             ))
           )}
+          {i < entries.length - 1 && <Joiner>or</Joiner>}
         </Box>
       );
     })}
   </Box>
-);
+  );
+};
 
 // On a phone the keys go under their label rather than beside it, where
 // they were pushed off the dialog's right edge.
