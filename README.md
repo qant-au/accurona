@@ -25,14 +25,33 @@ centimetres. Every view is generated from that model:
 
 - **Plan** (Axonometra): top-down, true to scale. _Built._
 - **Isometric** (Reticulyne): shaded 30° view. _Experimental: generated but
-  not yet reviewed item by item._
+  not yet reviewed item by item._ Needed only for the elements a Reticulyne
+  catalogue item draws with (below).
 - **3D** (Axonometra's 3D view): the same solids as meshes, from
   `dist/models.json` (solids with colours resolved; decals left out). _Built._
 - **2D schematic** (Reticulyne's planned flat view): a symbol for conventional
-  network diagrams. _Planned._
+  network diagrams, for the same elements. _Planned._
 
-So a rack is the same rack, the same size and the same colours in a floor plan
-and in a network diagram, and nobody keeps two icon sets in step.
+### What belongs in the library
+
+The library holds **physical things**: anything with a real size that can be
+placed on a floor plan. An element has no ports and knows nothing about
+connections.
+
+Reticulyne keeps its **own catalogue** of the things a network diagram connects:
+devices with their ports, and virtual things that never appear on a floor plan,
+such as a cloud service or a VPN link. Ports, media and protocols are defined
+there, not here.
+
+Many things belong in both: a switch, an access point, a smoke detector. Each
+catalogue keeps its own entry, and the two are related by a **free-form
+cross-reference**: an entry names the other catalogue's id, in the same
+`{ source, ref }` shape a scene uses for
+[links to external tools](docs/scene-format.md#links-back-to-external-tools).
+Neither schema depends on it, and a missing or stale reference breaks only
+itself. A Reticulyne item that cross-references an element can be drawn with
+that element's isometric view, so a rack is still the same rack, the same size
+and colours, on a floor plan and in a network diagram.
 
 ## Use
 

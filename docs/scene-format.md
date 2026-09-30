@@ -111,9 +111,10 @@ interface Port {
 }
 ```
 
-- **`element`** is the usual case. An [Accurona element](../README.md#elements) brings its
-  real size, its plan drawing, its isometric and 3D models and (in time) its 2D symbol,
-  so the object needs nothing else to be drawn anywhere. Element ids are never renamed
+- **`element`** is the usual case for a physical thing. An
+  [Accurona element](../README.md#elements) brings its real size, its plan drawing and
+  its 3D model, and its isometric view and 2D symbol where Reticulyne draws with it, so
+  the object needs nothing else to be drawn anywhere. Element ids are never renamed
   once shipped, which is why a scene can store them.
 - **`icon`** covers things the library does not have: a Reticulyne isopack icon or an
   uploaded image. An object with an `icon` and no `element` can be drawn in diagram
@@ -122,6 +123,13 @@ interface Port {
   name one of Axonometra's built-in wall fittings (`door`, `window` and the rest), so a
   plan can be carried in full.
 - An object with neither is drawn as a plain labelled box.
+- **Two catalogues.** Accurona's element library holds physical things; the things a
+  diagram connects, including virtual ones that never appear on a floor plan, come from
+  Reticulyne's own catalogue, which is where ports, media and protocols are defined.
+  An object on both a floor plan and a diagram is still **one object**: its `id` is what
+  links the two views. The catalogues relate their entries by a free-form
+  cross-reference ([what belongs in the library](../README.md#what-belongs-in-the-library)),
+  which a scene never needs.
 - **`props`** holds the facts about the thing: an IP address, a MAC, a serial number, a
   port count. Flat, and scalar values only, so that every tool can show and edit it as
   a table without knowing what the keys mean.
