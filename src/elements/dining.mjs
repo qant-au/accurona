@@ -1,5 +1,18 @@
 // Dining. Tables are tables only: chairs are placed separately.
 
+// A splayed leg seen from above: a tube `t` cm thick from (x1, y1) under the
+// seat to (x2, y2) at the foot, drawn as a filled strip so it reads at 1:50.
+const splayedLeg = ([x1, y1, x2, y2], t = 2.5) => {
+  const len = Math.hypot(x2 - x1, y2 - y1);
+  const [nx, ny] = [(-(y2 - y1) / len) * (t / 2), ((x2 - x1) / len) * (t / 2)];
+  const r = (v) => +v.toFixed(2);
+  return {
+    line: [[r(x1 + nx), r(y1 + ny)], [r(x2 + nx), r(y2 + ny)], [r(x2 - nx), r(y2 - ny)], [r(x1 - nx), r(y1 - ny)]],
+    closed: true, fill: 'metal', stroke: 'outline'
+  };
+};
+
+
 // A rectangular dining table: timber top on four legs, the legs and apron
 // beneath shown dashed.
 export function diningTable({ id, name, w, d, h = 75 }) {
@@ -66,7 +79,7 @@ export default [
       ...[[2, 2], [35, 2], [2, 35], [35, 35]].map(([x, y]) => ({ x, y, z: 0, w: 3, d: 3, h: 71, role: 'metal', outline: true }))
     ],
     // The splayed legs, seen from above between the seat and the feet.
-    plan: [[8, 8, 3.5, 3.5], [32, 8, 36.5, 3.5], [8, 32, 3.5, 36.5], [32, 32, 36.5, 36.5]].map(([a, b, c, d]) => ({ line: [[a, b], [c, d]], stroke: 'outline' }))
+    plan: [[8, 8, 3.5, 3.5], [32, 8, 36.5, 3.5], [8, 32, 3.5, 36.5], [32, 32, 36.5, 36.5]].map((l) => splayedLeg(l))
   },
   {
     id: 'sideboard',
@@ -96,7 +109,7 @@ export default [
       { x: 7, y: 53, z: 72, w: 41, d: 13, h: 3, outline: true, r: 3 },
       ...[[0, 0], [52, 0], [0, 67], [52, 67]].map(([x, y]) => ({ x, y, z: 0, w: 3, d: 3, h: 60, role: 'metal', outline: true }))
     ],
-    plan: [[9, 20, 1.5, 1.5], [46, 20, 53.5, 1.5], [9, 52, 1.5, 68.5], [46, 52, 53.5, 68.5]].map(([a, b, c, d]) => ({ line: [[a, b], [c, d]], stroke: 'outline' }))
+    plan: [[9, 20, 1.5, 1.5], [46, 20, 53.5, 1.5], [9, 52, 1.5, 68.5], [46, 52, 53.5, 68.5]].map((l) => splayedLeg(l, 3))
   },
   // Bench seat: a timber top of two boards on end supports.
   {
