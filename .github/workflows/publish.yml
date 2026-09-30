@@ -1,7 +1,7 @@
 # A release: push a v* tag whose version matches all three packages
 # (@accurona/elements, @accurona/core, @accurona/ui). Builds, tests, and
-# publishes them to npm with provenance. Needs an npm automation token in the
-# NPM_TOKEN secret.
+# publishes them to npm with provenance, through npm Trusted Publishing: no
+# token, each package trusts this workflow on npmjs.com.
 name: Publish
 
 on:
@@ -36,6 +36,5 @@ jobs:
               }
             }
           '
+      - run: npm install -g npm@^11.5.1
       - run: npm publish --workspaces --include-workspace-root --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
