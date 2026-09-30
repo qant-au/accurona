@@ -120,6 +120,7 @@ Reticulyne's own tools, as shipped:
 | Fit everything (alias) | `F` | kept for existing users |
 | Zoom in, out (aliases) | `=`, `-` | bare, without `Ctrl/Cmd` |
 | Toggle item highlighting | `Alt` + `I` | Reticulyne only |
+| Show the floor above, below | `Alt` + `Up`, `Alt` + `Down` | Reticulyne only; a floor is a view |
 | Add an item on an empty tile | double-click | |
 | Work inside a group | double-click the group | `Esc` leaves it |
 | Connect two items | drag from a port | |
@@ -165,7 +166,7 @@ Excalidraw bindings that neither tool matches, and why.
 | `Shift` + `F` | font picker | unbound | |
 | `Shift` + `H`, `Shift` + `V` | flip | unbound | Isometric items are not symmetric, and a floor plan object is rotated, not mirrored. |
 | `Tab`, `Shift` + `Tab` | change shape type | unbound | |
-| `Ctrl/Cmd` + arrow, `Alt` + arrow | create and walk a flowchart | unbound | Flowcharting. |
+| `Ctrl/Cmd` + arrow, `Alt` + arrow | create and walk a flowchart | Reticulyne: `Alt` + `Up` / `Down` change floor; the rest unbound | Flowcharting. |
 | `Ctrl/Cmd` + `K` | link | unbound | |
 | `Ctrl/Cmd` + `Alt` + `C` / `V` | copy and paste styles | unbound | |
 | `Alt` + `Z`, `Alt` + `R`, `Alt` + `S`, `Alt` + `/` | zen mode, view mode, snapping, stats | unbound | View mode belongs to the host (a read-only embed); the others have no equivalent yet. |

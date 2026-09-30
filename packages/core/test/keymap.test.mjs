@@ -83,6 +83,13 @@ test('Alt chords match the physical key', () => {
   assert.equal(resolveAction(ev('ˆ', 'KeyI', { altKey: true }), reticulyne), 'toggle-highlight');
 });
 
+test('Alt + Up / Down change floor in Reticulyne; a bare arrow still nudges', () => {
+  assert.equal(resolveAction(ev('ArrowUp', 'ArrowUp', { altKey: true }), reticulyne), 'floor-up');
+  assert.equal(resolveAction(ev('ArrowDown', 'ArrowDown', { altKey: true }), reticulyne), 'floor-down');
+  assert.equal(resolveAction(ev('ArrowUp', 'ArrowUp'), reticulyne), 'nudge');
+  assert.equal(resolveAction(ev('ArrowUp', 'ArrowUp', { altKey: true }), axonometra), null);
+});
+
 test('zoom keys and fit', () => {
   assert.equal(resolveAction(ev('=', 'Equal', { ctrlKey: true }), axonometra), 'zoom-in');
   assert.equal(resolveAction(ev('+', 'Equal', { ctrlKey: true, shiftKey: true }), axonometra), 'zoom-in');
