@@ -130,65 +130,6 @@ const clothesline = (() => {
   };
 })();
 
-// Car, nose to the front (bottom of the plan): body, cabin with windscreen and
-// rear window, mirrors, and the tyres showing just past the body sides.
-const car = (() => {
-  const w = 185;
-  const d = 470;
-  const body = [
-    [25, 2], [160, 2], [175, 10], [180, 30], [180, 440], [172, 461], [150, 469],
-    [35, 469], [13, 461], [5, 440], [5, 30], [10, 10]
-  ];
-  const cabin = [
-    [30, 112], [155, 112], [166, 132], [168, 338], [156, 350], [29, 350], [17, 338], [19, 132]
-  ];
-  const wheel = (x, y) => ({ x, y, z: 0, w: 20, d: 66, h: 30, role: 'dark', r: 4 });
-  return {
-    id: 'car',
-    name: 'Car',
-    group: 'outdoor',
-    size: { w, d, h: 150 },
-    parts: [
-      {
-        poly: body, z: 30, h: 65, outline: true,
-        top: [
-          { line: [[45, 352], [40, 440]] },
-          { line: [[140, 352], [145, 440]] },
-          { rect: [17, 450, 30, 8], r: 3, fill: 'glass' },
-          { rect: [138, 450, 30, 8], r: 3, fill: 'glass' }
-        ]
-      },
-      wheel(0, 48), wheel(165, 48), wheel(0, 348), wheel(165, 348),
-      {
-        poly: cabin, z: 95, h: 55, role: 'soft', outline: true,
-        top: [
-          { line: [[12, 50], [137, 50], [141, 180], [8, 180]], closed: true, fill: 'body' },
-          { line: [[3, 180], [146, 180], [148, 238], [0, 238]], closed: true, fill: 'glass' },
-          { line: [[11, 6], [136, 6], [140, 38], [7, 38]], closed: true, fill: 'glass' }
-        ]
-      },
-      { x: 0, y: 316, z: 95, w: 15, d: 9, h: 9, r: 3, outline: true },
-      { x: 170, y: 316, z: 95, w: 15, d: 9, h: 9, r: 3, outline: true }
-    ]
-  };
-})();
-
-// Bicycle, front wheel at the bottom: tyres, frame, cranks, saddle, bars.
-const bicycle = {
-  id: 'bicycle',
-  name: 'Bicycle',
-  group: 'outdoor',
-  size: { w: 60, d: 175, h: 100 },
-  parts: [
-    { x: 28, y: 0, z: 0, w: 4, d: 68, h: 68, role: 'dark', r: 2 },
-    { x: 28, y: 107, z: 0, w: 4, d: 68, h: 68, role: 'dark', r: 2, outline: true },
-    { x: 28.5, y: 68, z: 30, w: 3, d: 39, h: 40, role: 'metal' },
-    { x: 20, y: 80, z: 25, w: 20, d: 4, h: 5, role: 'metal' },
-    { poly: [[23, 24], [37, 24], [36, 32], [32, 48], [28, 48], [24, 32]], z: 88, h: 8, role: 'dark' },
-    { x: 2, y: 118, z: 95, w: 56, d: 4, h: 5, r: 2, role: 'metal', outline: true, top: [{ rect: [0, 0, 10, 4], r: 2, fill: 'dark' }, { rect: [46, 0, 10, 4], r: 2, fill: 'dark' }] }
-  ]
-};
-
 export default [
   {
     id: 'outdoor-table',
@@ -435,8 +376,6 @@ export default [
     ]
   },
   clothesline,
-  car,
-  bicycle,
   {
     id: 'workbench',
     name: 'Workbench',

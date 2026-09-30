@@ -263,11 +263,26 @@ Racks are generated in `src/elements/comms.mjs` (26 variants): wall-mount 600 ×
 | solar-inverter   | Solar Inverter         | 45×20×60, m 120 |
 | wheelie-bin      | Wheelie Bin            | 60×75×105       |
 | clothesline      | Rotary Clothesline     | 300×300×200     |
-| car              | Car                    | 185×470×150     |
-| bicycle          | Bicycle                | 60×175×100      |
 | workbench        | Workbench              | 180×70×90       |
 | garden-shed      | Garden Shed, 2.4 × 1.8 | 240×180×210     |
 | pool             | Swimming Pool          | 700×350×150     |
+
+### Vehicles and EV charging (`vehicles`)
+
+Vehicles face the front of the plan: rear at the top, nose at the bottom.
+
+| id                  | name                     | W×D×H             |
+| ------------------- | ------------------------ | ----------------- |
+| car                 | Car, Sedan               | 185×470×150       |
+| station-wagon       | Station Wagon            | 185×480×150       |
+| ute                 | Ute (Pickup)             | 186×530×180       |
+| van                 | Van                      | 170×527×200       |
+| 4wd                 | 4WD                      | 198×500×195       |
+| motorbike           | Motorbike                | 80×210×115        |
+| bicycle             | Bicycle                  | 60×175×100        |
+| trailer-box         | Box Trailer, 7 × 4       | 170×330×90        |
+| ev-charger-wall     | EV Charger, Wall-Mounted | 40×40 symbol, m 110 |
+| ev-charger-pedestal | EV Charger, Pedestal     | 40×30×140         |
 
 ### Structure (`structure`)
 

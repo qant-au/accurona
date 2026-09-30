@@ -12,5 +12,6 @@ export const GROUPS = [
   { id: 'security', name: 'Security' },
   { id: 'safety', name: 'Fire and safety' },
   { id: 'outdoor', name: 'Outdoor and small buildings' },
+  { id: 'vehicles', name: 'Vehicles and EV charging' },
   { id: 'structure', name: 'Structure' }
 ];
