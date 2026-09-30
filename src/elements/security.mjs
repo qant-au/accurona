@@ -23,7 +23,7 @@ const wallBox = (w, d, h, front, role = 'body') => [{ x: 0, y: 0, z: 0, w, d, h,
 const symbols = [
   {
     id: 'cctv-dome',
-    name: 'CCTV dome camera',
+    name: 'CCTV Dome Camera',
     group: 'security',
     tags: ['security'],
     size: { w: 14, d: 14, h: 10 },
@@ -45,7 +45,7 @@ const symbols = [
   {
     // Wall bracket at the top, barrel pointing down the symbol, lens at its tip.
     id: 'cctv-bullet',
-    name: 'CCTV bullet camera',
+    name: 'CCTV Bullet Camera',
     group: 'security',
     tags: ['security'],
     size: { w: 9, d: 30, h: 9 },
@@ -69,7 +69,7 @@ const symbols = [
   {
     // A dark body with a double-headed pan arrow round it.
     id: 'cctv-ptz',
-    name: 'CCTV PTZ camera',
+    name: 'CCTV PTZ Camera',
     group: 'security',
     tags: ['security'],
     size: { w: 22, d: 22, h: 21 },
@@ -92,7 +92,7 @@ const symbols = [
   {
     // Flat disc with a centred lens and eight ticks for the all-round view.
     id: 'cctv-fisheye',
-    name: 'CCTV 360° camera',
+    name: 'CCTV 360° Camera',
     group: 'security',
     tags: ['security'],
     size: { w: 15, d: 15, h: 5 },
@@ -112,7 +112,7 @@ const symbols = [
   },
   {
     id: 'alarm-keypad',
-    name: 'Alarm keypad',
+    name: 'Alarm Keypad',
     group: 'security',
     tags: ['security'],
     size: { w: 18, d: 3, h: 12 },
@@ -135,7 +135,7 @@ const symbols = [
   {
     // Sensor on the wall at the top, a dashed fan of detection zones below.
     id: 'pir-sensor',
-    name: 'Motion detector (PIR)',
+    name: 'Motion Detector (PIR)',
     group: 'security',
     tags: ['security'],
     size: { w: 6, d: 5, h: 11 },
@@ -156,7 +156,7 @@ const symbols = [
   {
     // Reed on the frame, magnet on the door leaf, dashed door swing.
     id: 'door-contact',
-    name: 'Door contact',
+    name: 'Door Contact',
     group: 'security',
     tags: ['security'],
     size: { w: 7, d: 1.5, h: 1.5 },
@@ -179,7 +179,7 @@ const symbols = [
   {
     // Detector above a pane with a crack running through it.
     id: 'glass-break',
-    name: 'Glass-break detector',
+    name: 'Glass-Break Detector',
     group: 'security',
     tags: ['security'],
     size: { w: 9, d: 2.5, h: 9 },
@@ -203,7 +203,7 @@ const symbols = [
   {
     // Red strobe lens on the wall, horn and sound waves below.
     id: 'siren-strobe',
-    name: 'Siren and strobe',
+    name: 'Siren and Strobe',
     group: 'security',
     tags: ['security'],
     size: { w: 20, d: 9, h: 25 },
@@ -226,7 +226,7 @@ const symbols = [
   {
     // Reader on the wall, a card held up in front of it.
     id: 'card-reader',
-    name: 'Access card reader',
+    name: 'Access Card Reader',
     group: 'security',
     tags: ['security'],
     size: { w: 5, d: 2, h: 15 },
@@ -248,7 +248,7 @@ const symbols = [
   {
     // Plate with a round push button.
     id: 'exit-button',
-    name: 'Request-to-exit button',
+    name: 'Request-to-Exit Button',
     group: 'security',
     tags: ['security'],
     size: { w: 8, d: 4, h: 12 },
@@ -269,7 +269,7 @@ const symbols = [
   {
     // Magnet under the door head, armature plate on the leaf below.
     id: 'maglock',
-    name: 'Magnetic door lock',
+    name: 'Magnetic Door Lock',
     group: 'security',
     tags: ['security'],
     size: { w: 25, d: 5, h: 10 },
@@ -292,7 +292,7 @@ const symbols = [
   {
     // Door station: camera lens at the top, speaker grille, call button.
     id: 'intercom',
-    name: 'Video intercom',
+    name: 'Video Intercom',
     group: 'security',
     tags: ['security'],
     size: { w: 12, d: 3.5, h: 25 },
@@ -319,7 +319,7 @@ const symbols = [
 const equipment = [
   {
     id: 'nvr',
-    name: 'Network video recorder',
+    name: 'Network Video Recorder',
     group: 'security',
     tags: ['security', 'network'],
     size: { w: 44, d: 40, h: 10 },
@@ -338,7 +338,7 @@ const equipment = [
   },
   {
     id: 'alarm-panel',
-    name: 'Alarm control panel',
+    name: 'Alarm Control Panel',
     group: 'security',
     tags: ['security'],
     size: { w: 40, d: 10, h: 40 },
@@ -381,7 +381,7 @@ const equipment = [
   {
     // Two pedestals with glass wings meeting in the middle of the lane.
     id: 'speed-gate',
-    name: 'Speed gate lane',
+    name: 'Speed Gate Lane',
     group: 'security',
     tags: ['security'],
     size: { w: 120, d: 150, h: 100 },
@@ -426,7 +426,7 @@ const equipment = [
   },
   {
     id: 'key-cabinet',
-    name: 'Key cabinet',
+    name: 'Key Cabinet',
     group: 'security',
     tags: ['security'],
     size: { w: 40, d: 10, h: 50 },

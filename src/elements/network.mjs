@@ -67,7 +67,7 @@ export default [
   // Ceiling access point: a flat disc with a status ring.
   {
     id: 'wifi-ap',
-    name: 'Wi-Fi access point',
+    name: 'Wi-Fi Access Point',
     group: 'network',
     tags: ['network'],
     size: { w: 22, d: 22, h: 4 },
@@ -84,15 +84,15 @@ export default [
     parts: [{ cyl: [11, 11, 11], z: 0, h: 4, top: [{ circle: [11, 11, 3], stroke: 'network' }, { circle: [11, 11, 1], accent: 'network' }] }]
   },
 
-  appliance({ id: 'network-switch', name: 'Network switch (desktop)', tags: ['network'], w: 44, d: 30, h: 5, nPorts: 16, nLeds: 4 }),
+  appliance({ id: 'network-switch', name: 'Network Switch (Desktop)', tags: ['network'], w: 44, d: 30, h: 5, nPorts: 16, nLeds: 4 }),
   appliance({ id: 'router', name: 'Router', tags: ['network'], w: 30, d: 20, h: 5, nPorts: 5 }),
-  appliance({ id: 'modem-nbn', name: 'NBN connection box', tags: ['network'], w: 30, d: 20, h: 10, mount: 30, role: 'body', nPorts: 4, nLeds: 4 }),
+  appliance({ id: 'modem-nbn', name: 'NBN Connection Box', tags: ['network'], w: 30, d: 20, h: 10, mount: 30, role: 'body', nPorts: 4, nLeds: 4 }),
 
   // Wall data outlet, double: a plate with two jacks. Plan symbol: the data
   // triangle, base against the wall (top), with the two ports.
   {
     id: 'data-outlet',
-    name: 'Data outlet',
+    name: 'Data Outlet',
     group: 'network',
     tags: ['network'],
     size: { w: 7, d: 1.5, h: 11.5 },
@@ -116,7 +116,7 @@ export default [
   // Floor box: flush lid over a recessed tub, data on the left, power on the right.
   {
     id: 'floor-box',
-    name: 'Floor box',
+    name: 'Floor Box',
     group: 'network',
     tags: ['network', 'power'],
     size: { w: 40, d: 40, h: 10 },
@@ -139,7 +139,7 @@ export default [
   // Ceiling projector on a drop pole; the lens faces the front (bottom).
   {
     id: 'projector',
-    name: 'Ceiling projector',
+    name: 'Ceiling Projector',
     group: 'network',
     tags: ['av'],
     size: { w: 35, d: 30, h: 25 },
@@ -164,7 +164,7 @@ export default [
   // Motorised roller screen: case at the top, fabric hanging to a bottom bar.
   {
     id: 'projector-screen',
-    name: 'Projector screen',
+    name: 'Projector Screen',
     group: 'network',
     tags: ['av'],
     size: { w: 240, d: 15, h: 180 },
@@ -183,7 +183,7 @@ export default [
   // Ceiling speaker: round grille flush with the ceiling, back can above.
   {
     id: 'speaker-ceiling',
-    name: 'Ceiling speaker',
+    name: 'Ceiling Speaker',
     group: 'network',
     tags: ['av'],
     size: { w: 21, d: 21, h: 12 },
@@ -206,7 +206,7 @@ export default [
   // Video bar under the display: camera in the middle, speakers either side.
   {
     id: 'video-bar',
-    name: 'Video conferencing bar',
+    name: 'Video Conferencing Bar',
     group: 'network',
     tags: ['av'],
     size: { w: 90, d: 10, h: 10 },
@@ -267,7 +267,7 @@ export default [
   // Desk phone: raised back with the display, keypad in front, handset on the left.
   {
     id: 'ip-phone',
-    name: 'Desk phone',
+    name: 'Desk Phone',
     group: 'network',
     tags: ['network'],
     size: { w: 22, d: 20, h: 15 },
@@ -284,14 +284,14 @@ export default [
     ]
   },
 
-  appliance({ id: 'firewall', name: 'Firewall appliance (desktop)', tags: ['network', 'security'], w: 30, d: 20, h: 5, accent: 'security', ledAccent: 'network', nPorts: 8 }),
+  appliance({ id: 'firewall', name: 'Firewall Appliance (Desktop)', tags: ['network', 'security'], w: 30, d: 20, h: 5, accent: 'security', ledAccent: 'network', nPorts: 8 }),
 
-  tower({ id: 'server-tower', name: 'Tower server', w: 20, d: 60, h: 45, bays: 4 }),
+  tower({ id: 'server-tower', name: 'Tower Server', w: 20, d: 60, h: 45, bays: 4 }),
 
   // NAS: two front-loading drive bays with a status LED each.
   {
     id: 'nas',
-    name: 'Network storage (NAS)',
+    name: 'Network Storage (NAS)',
     group: 'network',
     tags: ['network'],
     size: { w: 20, d: 25, h: 25 },

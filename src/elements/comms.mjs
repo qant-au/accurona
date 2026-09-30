@@ -37,18 +37,18 @@ function rack({ id, name, w, d, u, mount, sizeLabel }) {
 }
 
 const wallRacks = [6, 9, 12, 15].map((u) =>
-  rack({ id: `rack-wall-600x450-${u}u`, name: 'Wall-mount cabinet', w: 60, d: 45, u, mount: 150, sizeLabel: '600 × 450' })
+  rack({ id: `rack-wall-600x450-${u}u`, name: 'Wall-Mount Cabinet', w: 60, d: 45, u, mount: 150, sizeLabel: '600 × 450' })
 );
 const smallRacks = [18, 24, 27].map((u) =>
-  rack({ id: `rack-600x600-${u}u`, name: 'Comms cabinet', w: 60, d: 60, u, sizeLabel: '600 × 600' })
+  rack({ id: `rack-600x600-${u}u`, name: 'Comms Cabinet', w: 60, d: 60, u, sizeLabel: '600 × 600' })
 );
 const mediumRacks = [27, 32, 37, 42].map((u) =>
-  rack({ id: `rack-600x800-${u}u`, name: 'Network cabinet', w: 60, d: 80, u, sizeLabel: '600 × 800' })
+  rack({ id: `rack-600x800-${u}u`, name: 'Network Cabinet', w: 60, d: 80, u, sizeLabel: '600 × 800' })
 );
 const serverRacks = [60, 80].flatMap((w) =>
   [100, 110, 120].flatMap((d) =>
     [42, 45].map((u) =>
-      rack({ id: `rack-${w * 10}x${d * 10}-${u}u`, name: 'Server rack', w, d, u, sizeLabel: `${w * 10} × ${d * 10}` })
+      rack({ id: `rack-${w * 10}x${d * 10}-${u}u`, name: 'Server Rack', w, d, u, sizeLabel: `${w * 10} × ${d * 10}` })
     )
   )
 );
@@ -78,9 +78,9 @@ function openRack({ id, name, w, d, u, posts }) {
 }
 
 const openRacks = [
-  openRack({ id: 'rack-open-2post-24u', name: 'Open frame rack, 2-post', w: 53, d: 40, u: 24, posts: 2 }),
-  openRack({ id: 'rack-open-2post-42u', name: 'Open frame rack, 2-post', w: 53, d: 40, u: 42, posts: 2 }),
-  openRack({ id: 'rack-open-4post-42u', name: 'Open frame rack, 4-post', w: 60, d: 100, u: 42, posts: 4 })
+  openRack({ id: 'rack-open-2post-24u', name: 'Open Frame Rack, 2-Post', w: 53, d: 40, u: 24, posts: 2 }),
+  openRack({ id: 'rack-open-2post-42u', name: 'Open Frame Rack, 2-Post', w: 53, d: 40, u: 42, posts: 2 }),
+  openRack({ id: 'rack-open-4post-42u', name: 'Open Frame Rack, 4-Post', w: 60, d: 100, u: 42, posts: 4 })
 ];
 
 // A small accent strip on the front edge of the plan, as on the racks, so the
@@ -136,20 +136,20 @@ function wallPanel({ id, name, tag, w, d, h, mount, role = 'body', window: win }
 const rows = (u, v, w, n, pitch) => Array.from({ length: n }, (_, i) => ({ line: [[u, v + i * pitch], [u + w, v + i * pitch]] }));
 
 const power = [
-  cabinet({ id: 'ups-tower', name: 'UPS, tower', tag: 'power', w: 20, d: 45, h: 35, vents: 3, grille: true }),
-  cabinet({ id: 'ups-large', name: 'UPS, floor-standing', tag: 'power', w: 35, d: 80, h: 130, vents: 4, grille: true }),
-  cabinet({ id: 'battery-cabinet', name: 'Battery cabinet', tag: 'power', w: 60, d: 85, h: 200, doors: 2, display: false, vents: 4 }),
+  cabinet({ id: 'ups-tower', name: 'UPS, Tower', tag: 'power', w: 20, d: 45, h: 35, vents: 3, grille: true }),
+  cabinet({ id: 'ups-large', name: 'UPS, Floor-Standing', tag: 'power', w: 35, d: 80, h: 130, vents: 4, grille: true }),
+  cabinet({ id: 'battery-cabinet', name: 'Battery Cabinet', tag: 'power', w: 60, d: 85, h: 200, doors: 2, display: false, vents: 4 }),
   wallPanel({
-    id: 'distribution-board', name: 'Distribution board', tag: 'power', w: 60, d: 20, h: 90, mount: 110,
+    id: 'distribution-board', name: 'Distribution Board', tag: 'power', w: 60, d: 20, h: 90, mount: 110,
     window: [{ rect: [10, 15, 40, 50], fill: 'soft' }, ...rows(12, 25, 36, 3, 15)]
   }),
   wallPanel({
-    id: 'ats-panel', name: 'Transfer switch panel', tag: 'power', w: 60, d: 25, h: 80, mount: 110,
+    id: 'ats-panel', name: 'Transfer Switch Panel', tag: 'power', w: 60, d: 25, h: 80, mount: 110,
     window: [{ rect: [12, 12, 36, 30], fill: 'soft' }, { circle: [30, 27, 8], fill: 'dark' }, { line: [[30, 27], [36, 21]], stroke: 'soft', weight: 'outline' }, { rect: [12, 50, 36, 8], fill: 'glass' }]
   }),
   {
     id: 'generator',
-    name: 'Standby generator',
+    name: 'Standby Generator',
     group: 'comms',
     tags: ['power'],
     size: { w: 220, d: 110, h: 150 },
@@ -176,11 +176,11 @@ const power = [
 ];
 
 const cooling = [
-  cabinet({ id: 'crac-unit', name: 'Precision air conditioner (CRAC)', tag: 'cooling', w: 100, d: 90, h: 195, role: 'body', doors: 2, grille: true, fans: 2 }),
-  cabinet({ id: 'in-row-cooler', name: 'In-row cooler', tag: 'cooling', w: 30, d: 120, h: 200, grille: true, fans: 4 }),
+  cabinet({ id: 'crac-unit', name: 'Precision Air Conditioner (CRAC)', tag: 'cooling', w: 100, d: 90, h: 195, role: 'body', doors: 2, grille: true, fans: 2 }),
+  cabinet({ id: 'in-row-cooler', name: 'In-Row Cooler', tag: 'cooling', w: 30, d: 120, h: 200, grille: true, fans: 4 }),
   {
     id: 'ac-ceiling-cassette',
-    name: 'AC ceiling cassette',
+    name: 'AC Ceiling Cassette',
     group: 'comms',
     tags: ['cooling'],
     size: { w: 84, d: 84, h: 25 },
@@ -206,7 +206,7 @@ const cooling = [
   },
   {
     id: 'ac-condenser',
-    name: 'AC outdoor unit',
+    name: 'AC Outdoor Unit',
     group: 'comms',
     tags: ['cooling'],
     size: { w: 85, d: 35, h: 70 },
@@ -230,7 +230,7 @@ const cooling = [
   },
   {
     id: 'containment-door',
-    name: 'Aisle containment door',
+    name: 'Aisle Containment Door',
     group: 'comms',
     tags: ['cooling'],
     size: { w: 120, d: 10, h: 200 },
@@ -254,7 +254,7 @@ const cooling = [
   },
   {
     id: 'raised-floor-tile',
-    name: 'Perforated floor tile',
+    name: 'Perforated Floor Tile',
     group: 'comms',
     tags: ['cooling'],
     size: { w: 60, d: 60, h: 1 },
@@ -273,7 +273,7 @@ const cooling = [
 const fire = [
   {
     id: 'fire-suppression',
-    name: 'Gas suppression cylinder',
+    name: 'Gas Suppression Cylinder',
     group: 'comms',
     tags: ['fire'],
     size: { w: 40, d: 40, h: 170 },
@@ -290,7 +290,7 @@ const fire = [
 const network = [
   {
     id: 'cable-tray',
-    name: 'Cable tray section, 1 m',
+    name: 'Cable Tray Section, 1 m',
     group: 'comms',
     tags: ['network'],
     size: { w: 100, d: 30, h: 10 },
@@ -309,7 +309,7 @@ const network = [
   },
   {
     id: 'ladder-rack',
-    name: 'Ladder rack section, 1 m',
+    name: 'Ladder Rack Section, 1 m',
     group: 'comms',
     tags: ['network'],
     size: { w: 100, d: 45, h: 5 },
@@ -322,7 +322,7 @@ const network = [
   },
   {
     id: 'odf-panel',
-    name: 'Fibre termination cabinet',
+    name: 'Fibre Termination Cabinet',
     group: 'comms',
     tags: ['network'],
     size: { w: 60, d: 30, h: 60 },
@@ -346,7 +346,7 @@ const network = [
   },
   {
     id: 'kvm-console',
-    name: 'KVM console cart',
+    name: 'KVM Console Cart',
     group: 'comms',
     tags: ['network'],
     size: { w: 60, d: 70, h: 110 },
@@ -376,7 +376,7 @@ export default [
   ...openRacks,
   {
     id: 'split-ac-indoor',
-    name: 'Split AC, wall unit',
+    name: 'Split AC, Wall Unit',
     group: 'comms',
     tags: ['cooling'],
     size: { w: 90, d: 25, h: 30 },

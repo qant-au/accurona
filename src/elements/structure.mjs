@@ -49,7 +49,7 @@ function stairsStraight() {
   const d = n * GOING;
   return {
     id: 'stairs-straight',
-    name: 'Stairs, straight',
+    name: 'Stairs, Straight',
     group: 'structure',
     size: { w, d, h: FLOOR },
     // The top tread is listed first so its heavy edge is the upper nosing.
@@ -77,7 +77,7 @@ function stairsL() {
   ];
   return {
     id: 'stairs-l',
-    name: 'Stairs, L-shaped',
+    name: 'Stairs, L-Shaped',
     group: 'structure',
     size: { w, d, h: FLOOR },
     parts,
@@ -106,7 +106,7 @@ function stairsU() {
   ];
   return {
     id: 'stairs-u',
-    name: 'Stairs, U-shaped',
+    name: 'Stairs, U-Shaped',
     group: 'structure',
     size: { w, d, h: FLOOR },
     parts,
@@ -143,7 +143,7 @@ function stairsSpiral() {
   const arc = Array.from({ length: 13 }, (_, k) => at(ar, Math.PI / 2 + (k * 1.62 * Math.PI) / 12));
   return {
     id: 'stairs-spiral',
-    name: 'Spiral stairs',
+    name: 'Spiral Stairs',
     group: 'structure',
     size: { w: 2 * R, d: 2 * R, h: FLOOR },
     parts: [{ cyl: [c, c, col], z: 0, h: FLOOR, role: 'metal' }, ...wedges],
@@ -158,7 +158,7 @@ export default [
   stairsSpiral(),
   {
     id: 'column-square',
-    name: 'Column, square',
+    name: 'Column, Square',
     group: 'structure',
     size: { w: 40, d: 40, h: 270 },
     parts: [
@@ -176,7 +176,7 @@ export default [
   },
   {
     id: 'column-round',
-    name: 'Column, round',
+    name: 'Column, Round',
     group: 'structure',
     size: { w: 40, d: 40, h: 270 },
     parts: [
@@ -239,7 +239,7 @@ export default [
   },
   {
     id: 'ladder',
-    name: 'Fixed ladder',
+    name: 'Fixed Ladder',
     group: 'structure',
     size: { w: 50, d: 30, h: 300 },
     parts: [
@@ -270,7 +270,7 @@ export default [
   },
   {
     id: 'void',
-    name: 'Void / opening',
+    name: 'Void / Opening',
     group: 'structure',
     size: { w: 200, d: 200, h: 1 },
     parts: [{ x: 0, y: 0, z: 0, w: 200, d: 200, h: 1 }],

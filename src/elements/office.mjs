@@ -130,17 +130,17 @@ function storage({ id, name, w, d, h, cols = 1, rows = 1, casters = false, vents
 
 export default [
   desk({ id: 'desk', name: 'Desk', w: 150, d: 75 }),
-  desk({ id: 'desk-small', name: 'Desk, compact', w: 120, d: 60 }),
-  deskL({ id: 'desk-l', name: 'L-shaped desk', w: 160, d: 160 }),
-  desk({ id: 'desk-sit-stand', name: 'Sit-stand desk', w: 160, d: 80, sitStand: true }),
-  pod({ id: 'workstation-pod-2', name: 'Workstation pod, 2', cols: 1 }),
-  pod({ id: 'workstation-pod-4', name: 'Workstation pod, 4', cols: 2, screen: true }),
+  desk({ id: 'desk-small', name: 'Desk, Compact', w: 120, d: 60 }),
+  deskL({ id: 'desk-l', name: 'L-Shaped Desk', w: 160, d: 160 }),
+  desk({ id: 'desk-sit-stand', name: 'Sit-Stand Desk', w: 160, d: 80, sitStand: true }),
+  pod({ id: 'workstation-pod-2', name: 'Workstation Pod, 2', cols: 1 }),
+  pod({ id: 'workstation-pod-4', name: 'Workstation Pod, 4', cols: 2, screen: true }),
 
   // Task chair: seat and backrest as solids on a gas column; the five-star
   // base is drawn on the hub so its arms and castors show round the seat.
   {
     id: 'office-chair',
-    name: 'Office chair',
+    name: 'Office Chair',
     group: 'office',
     size: { w: 65, d: 65, h: 110 },
     parts: [
@@ -168,7 +168,7 @@ export default [
   // Visitor chair: four legs, upholstered seat and back, and armrests.
   {
     id: 'visitor-chair',
-    name: 'Visitor chair',
+    name: 'Visitor Chair',
     group: 'office',
     size: { w: 55, d: 55, h: 85 },
     parts: [
@@ -180,11 +180,11 @@ export default [
     ]
   },
 
-  table({ id: 'meeting-table-4', name: 'Meeting table, 4', w: 120, d: 120 }),
-  table({ id: 'meeting-table-8', name: 'Boardroom table, 8', w: 300, d: 120, hatch: 50 }),
+  table({ id: 'meeting-table-4', name: 'Meeting Table, 4', w: 120, d: 120 }),
+  table({ id: 'meeting-table-8', name: 'Boardroom Table, 8', w: 300, d: 120, hatch: 50 }),
   {
     id: 'meeting-table-round',
-    name: 'Round meeting table',
+    name: 'Round Meeting Table',
     group: 'office',
     size: { w: 100, d: 100, h: H },
     parts: [
@@ -198,7 +198,7 @@ export default [
   // ledge over the visitor-facing fascia at the front (bottom).
   {
     id: 'reception-desk',
-    name: 'Reception desk',
+    name: 'Reception Desk',
     group: 'office',
     size: { w: 240, d: 80, h: 110 },
     parts: [
@@ -210,17 +210,17 @@ export default [
     ]
   },
 
-  storage({ id: 'filing-cabinet', name: 'Filing cabinet, 4-drawer', w: 47, d: 62, h: 132, rows: 4 }),
-  storage({ id: 'lateral-filer', name: 'Lateral filer', w: 90, d: 45, h: 100, rows: 3 }),
-  storage({ id: 'storage-cupboard', name: 'Storage cupboard', w: 90, d: 45, h: 200, cols: 2 }),
-  storage({ id: 'lockers', name: 'Lockers, bank of 4', w: 120, d: 45, h: 180, cols: 4, vents: true }),
-  storage({ id: 'mobile-pedestal', name: 'Mobile pedestal', w: 40, d: 55, h: 60, rows: 3, casters: true }),
+  storage({ id: 'filing-cabinet', name: 'Filing Cabinet, 4-Drawer', w: 47, d: 62, h: 132, rows: 4 }),
+  storage({ id: 'lateral-filer', name: 'Lateral Filer', w: 90, d: 45, h: 100, rows: 3 }),
+  storage({ id: 'storage-cupboard', name: 'Storage Cupboard', w: 90, d: 45, h: 200, cols: 2 }),
+  storage({ id: 'lockers', name: 'Lockers, Bank of 4', w: 120, d: 45, h: 180, cols: 4, vents: true }),
+  storage({ id: 'mobile-pedestal', name: 'Mobile Pedestal', w: 40, d: 55, h: 60, rows: 3, casters: true }),
 
   // Floor-standing MFD: paper-tray base, print engine, then the scanner with
   // its document feeder on top and the control panel at the front.
   {
     id: 'printer-mfd',
-    name: 'Multifunction printer',
+    name: 'Multifunction Printer',
     group: 'office',
     size: { w: 60, d: 65, h: 115 },
     parts: [
@@ -248,7 +248,7 @@ export default [
   // Mobile whiteboard: board on two uprights, T feet with castors, pen tray.
   {
     id: 'whiteboard-mobile',
-    name: 'Mobile whiteboard',
+    name: 'Mobile Whiteboard',
     group: 'office',
     size: { w: 180, d: 60, h: 190 },
     parts: [
@@ -264,7 +264,7 @@ export default [
   // Wall-hung meeting-room display on a flat bracket; screen faces the room.
   {
     id: 'display-screen',
-    name: 'Meeting room display',
+    name: 'Meeting Room Display',
     group: 'office',
     size: { w: 170, d: 10, h: 100 },
     mount: 90,
@@ -278,7 +278,7 @@ export default [
   // The plan shows the roof with the wall line, glass front and shelf beneath.
   {
     id: 'phone-booth',
-    name: 'Phone booth',
+    name: 'Phone Booth',
     group: 'office',
     size: { w: 100, d: 100, h: 220 },
     parts: [
@@ -302,7 +302,7 @@ export default [
   // Breakout lounge chair: plinth, back and arms, seat cushion.
   {
     id: 'lounge-chair',
-    name: 'Breakout lounge chair',
+    name: 'Breakout Lounge Chair',
     group: 'office',
     size: { w: 75, d: 75, h: 80 },
     parts: [
@@ -317,7 +317,7 @@ export default [
   // Water cooler: cabinet with taps at the front, bottle on top.
   {
     id: 'water-cooler',
-    name: 'Water cooler',
+    name: 'Water Cooler',
     group: 'office',
     size: { w: 35, d: 35, h: 110 },
     parts: [

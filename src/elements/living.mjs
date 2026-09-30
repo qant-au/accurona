@@ -61,7 +61,7 @@ function cabinet({ id, name, w, d, h, role = 'body', frontRole = 'soft', front =
 // Corner sofa, L-shaped along the back and right-hand walls.
 const cornerSofa = {
   id: 'sofa-corner',
-  name: 'Corner sofa',
+  name: 'Corner Sofa',
   group: 'living',
   size: { w: 250, d: 250, h: 85 },
   parts: [
@@ -85,10 +85,10 @@ function canopy(cx, cy, rOut, rIn, lobes) {
 }
 
 export default [
-  sofa({ id: 'sofa-2', name: 'Sofa, 2-seat', w: 160, seats: 2 }),
+  sofa({ id: 'sofa-2', name: 'Sofa, 2-Seat', w: 160, seats: 2 }),
   {
     id: 'sofa-3',
-    name: 'Sofa, 3-seat',
+    name: 'Sofa, 3-Seat',
     group: 'living',
     size: { w: 210, d: 90, h: 85 },
     parts: [
@@ -134,10 +134,10 @@ export default [
       }
     ]
   },
-  lowTable({ id: 'coffee-table', name: 'Coffee table', w: 110, d: 60, h: 45 }),
+  lowTable({ id: 'coffee-table', name: 'Coffee Table', w: 110, d: 60, h: 45 }),
   {
     id: 'coffee-table-round',
-    name: 'Round coffee table',
+    name: 'Round Coffee Table',
     group: 'living',
     size: { w: 80, d: 80, h: 45 },
     parts: [
@@ -146,10 +146,10 @@ export default [
       { cyl: [40, 40, 22], z: 0, h: 3, role: 'wood' }
     ]
   },
-  lowTable({ id: 'side-table', name: 'Side table', w: 50, d: 50, h: 55 }),
+  lowTable({ id: 'side-table', name: 'Side Table', w: 50, d: 50, h: 55 }),
   cabinet({
     id: 'tv-unit',
-    name: 'TV unit',
+    name: 'TV Unit',
     w: 180,
     d: 45,
     h: 50,
@@ -159,7 +159,7 @@ export default [
   // Wall-mounted TV: a slim bracket against the wall and the screen in front.
   {
     id: 'tv-wall',
-    name: 'Wall-mounted TV, 65"',
+    name: 'Wall-Mounted TV, 65"',
     group: 'living',
     tags: ['av'],
     size: { w: 145, d: 10, h: 85 },
@@ -188,7 +188,7 @@ export default [
   // Display cabinet: glass front and sides.
   {
     id: 'display-cabinet',
-    name: 'Display cabinet',
+    name: 'Display Cabinet',
     group: 'living',
     size: { w: 100, d: 40, h: 190 },
     parts: [
@@ -202,7 +202,7 @@ export default [
   // Floor lamp: weighted base, stem and a drum shade seen from above.
   {
     id: 'floor-lamp',
-    name: 'Floor lamp',
+    name: 'Floor Lamp',
     group: 'living',
     size: { w: 40, d: 40, h: 170 },
     parts: [
@@ -228,7 +228,7 @@ export default [
   },
   {
     id: 'rug-round',
-    name: 'Round rug',
+    name: 'Round Rug',
     group: 'living',
     size: { w: 160, d: 160, h: 1 },
     parts: [
@@ -242,7 +242,7 @@ export default [
   // front between two cheeks.
   {
     id: 'piano-upright',
-    name: 'Upright piano',
+    name: 'Upright Piano',
     group: 'living',
     size: { w: 150, d: 60, h: 125 },
     parts: [
@@ -261,7 +261,7 @@ export default [
   // Indoor plant: a pot under a lobed canopy of leaves.
   {
     id: 'plant-pot',
-    name: 'Indoor plant',
+    name: 'Indoor Plant',
     group: 'living',
     size: { w: 50, d: 50, h: 120 },
     parts: [

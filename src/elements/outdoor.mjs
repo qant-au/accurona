@@ -90,7 +90,7 @@ const shrub = {
 // Market umbrella: an octagonal canopy with its ribs, over a pole and base.
 const umbrella = {
   id: 'umbrella',
-  name: 'Market umbrella',
+  name: 'Market Umbrella',
   group: 'outdoor',
   size: { w: 270, d: 270, h: 250 },
   parts: [
@@ -115,7 +115,7 @@ const clothesline = (() => {
   }));
   return {
     id: 'clothesline',
-    name: 'Rotary clothesline',
+    name: 'Rotary Clothesline',
     group: 'outdoor',
     size: { w: 300, d: 300, h: 200 },
     parts: [
@@ -192,7 +192,7 @@ const bicycle = {
 export default [
   {
     id: 'outdoor-table',
-    name: 'Outdoor table',
+    name: 'Outdoor Table',
     group: 'outdoor',
     size: { w: 180, d: 90, h: 75 },
     parts: [
@@ -202,7 +202,7 @@ export default [
   },
   {
     id: 'outdoor-chair',
-    name: 'Outdoor chair',
+    name: 'Outdoor Chair',
     group: 'outdoor',
     size: { w: 55, d: 60, h: 85 },
     parts: [
@@ -214,7 +214,7 @@ export default [
   },
   {
     id: 'sun-lounger',
-    name: 'Sun lounger',
+    name: 'Sun Lounger',
     group: 'outdoor',
     size: { w: 70, d: 195, h: 35 },
     parts: [
@@ -246,7 +246,7 @@ export default [
   },
   {
     id: 'outdoor-sofa',
-    name: 'Outdoor sofa',
+    name: 'Outdoor Sofa',
     group: 'outdoor',
     size: { w: 200, d: 85, h: 75 },
     parts: [
@@ -261,7 +261,7 @@ export default [
   umbrella,
   {
     id: 'planter',
-    name: 'Planter box',
+    name: 'Planter Box',
     group: 'outdoor',
     size: { w: 100, d: 40, h: 50 },
     parts: [
@@ -273,7 +273,7 @@ export default [
   shrub,
   {
     id: 'water-tank',
-    name: 'Water tank, 5000 L',
+    name: 'Water Tank, 5000 L',
     group: 'outdoor',
     size: { w: 180, d: 180, h: 220 },
     parts: [
@@ -289,7 +289,7 @@ export default [
   },
   {
     id: 'hot-water-system',
-    name: 'Hot water system',
+    name: 'Hot Water System',
     group: 'outdoor',
     size: { w: 60, d: 60, h: 170 },
     parts: [
@@ -305,7 +305,7 @@ export default [
   },
   {
     id: 'heat-pump',
-    name: 'Heat pump water heater',
+    name: 'Heat Pump Water Heater',
     group: 'outdoor',
     size: { w: 60, d: 60, h: 190 },
     parts: [
@@ -323,7 +323,7 @@ export default [
   },
   {
     id: 'solar-inverter',
-    name: 'Solar inverter',
+    name: 'Solar Inverter',
     group: 'outdoor',
     tags: ['power'],
     size: { w: 45, d: 20, h: 60 },
@@ -342,7 +342,7 @@ export default [
   },
   {
     id: 'wheelie-bin',
-    name: 'Wheelie bin',
+    name: 'Wheelie Bin',
     group: 'outdoor',
     size: { w: 60, d: 75, h: 105 },
     parts: [
@@ -370,7 +370,7 @@ export default [
   },
   {
     id: 'garden-shed',
-    name: 'Garden shed, 2.4 × 1.8',
+    name: 'Garden Shed, 2.4 × 1.8',
     group: 'outdoor',
     size: { w: 240, d: 180, h: 210 },
     parts: [
@@ -387,7 +387,7 @@ export default [
   },
   {
     id: 'pool',
-    name: 'Swimming pool',
+    name: 'Swimming Pool',
     group: 'outdoor',
     size: { w: 700, d: 350, h: 150 },
     parts: [

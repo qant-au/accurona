@@ -144,7 +144,7 @@ export default [
   },
   {
     id: 'toilet-wall-hung',
-    name: 'Toilet, wall-hung',
+    name: 'Toilet, Wall-Hung',
     group: 'bathroom',
     size: { w: 38, d: 55, h: 40 },
     // Cistern in the wall; the pan hangs off the wall, seat 40 up.
@@ -171,11 +171,11 @@ export default [
       }
     ]
   },
-  vanity({ id: 'basin-vanity', name: 'Vanity basin', w: 75, d: 45, basins: 1 }),
-  vanity({ id: 'basin-vanity-double', name: 'Double vanity', w: 150, d: 50, basins: 2 }),
+  vanity({ id: 'basin-vanity', name: 'Vanity Basin', w: 75, d: 45, basins: 1 }),
+  vanity({ id: 'basin-vanity-double', name: 'Double Vanity', w: 150, d: 50, basins: 2 }),
   {
     id: 'basin-wall',
-    name: 'Wall basin',
+    name: 'Wall Basin',
     group: 'bathroom',
     size: { w: 50, d: 40, h: 20 },
     mount: 80,
@@ -192,7 +192,7 @@ export default [
   },
   {
     id: 'basin-pedestal',
-    name: 'Pedestal basin',
+    name: 'Pedestal Basin',
     group: 'bathroom',
     size: { w: 55, d: 45, h: 85 },
     parts: [
@@ -227,7 +227,7 @@ export default [
   },
   {
     id: 'bath-freestanding',
-    name: 'Freestanding bath',
+    name: 'Freestanding Bath',
     group: 'bathroom',
     size: { w: 170, d: 80, h: 60 },
     parts: [
@@ -242,7 +242,7 @@ export default [
   },
   {
     id: 'bath-corner',
-    name: 'Corner bath',
+    name: 'Corner Bath',
     group: 'bathroom',
     size: { w: 140, d: 140, h: 55 },
     // Walls at the top and the left; a curved front across the corner.
@@ -257,12 +257,12 @@ export default [
       }
     ]
   },
-  shower({ id: 'shower-900', name: 'Shower, 900 square', w: 90, d: 90 }),
+  shower({ id: 'shower-900', name: 'Shower, 900 Square', w: 90, d: 90 }),
   shower({ id: 'shower-rect', name: 'Shower, 1200 × 900', w: 120, d: 90 }),
-  shower({ id: 'shower-walk-in', name: 'Walk-in shower', w: 140, d: 90, walkIn: true }),
+  shower({ id: 'shower-walk-in', name: 'Walk-In Shower', w: 140, d: 90, walkIn: true }),
   {
     id: 'towel-rail',
-    name: 'Heated towel rail',
+    name: 'Heated Towel Rail',
     group: 'bathroom',
     size: { w: 60, d: 10, h: 90 },
     mount: 60,
@@ -275,11 +275,11 @@ export default [
       { x: 56, y: 0, z: 10, w: 2, d: 3.5, h: 3, role: 'metal' }
     ]
   },
-  machine({ id: 'washing-machine', name: 'Washing machine', kind: 'washer' }),
-  machine({ id: 'dryer', name: 'Clothes dryer', kind: 'dryer' }),
+  machine({ id: 'washing-machine', name: 'Washing Machine', kind: 'washer' }),
+  machine({ id: 'dryer', name: 'Clothes Dryer', kind: 'dryer' }),
   {
     id: 'laundry-tub',
-    name: 'Laundry tub',
+    name: 'Laundry Tub',
     group: 'bathroom',
     size: { w: 60, d: 50, h: 90 },
     parts: [
@@ -295,7 +295,7 @@ export default [
     ]
   },
   tallCupboard({
-    id: 'linen-cupboard', name: 'Linen cupboard', group: 'bathroom', w: 60, d: 45, h: 200,
+    id: 'linen-cupboard', name: 'Linen Cupboard', group: 'bathroom', w: 60, d: 45, h: 200,
     front: [{ rect: [1, 1, 58, 198] }, { line: [[55, 90], [55, 115]], stroke: 'outline' }]
   })
 ];

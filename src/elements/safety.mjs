@@ -37,7 +37,7 @@ function detector({ id, name, glyph }) {
 const symbols = [
   detector({
     id: 'smoke-detector',
-    name: 'Smoke detector',
+    name: 'Smoke Detector',
     glyph: [
       { arc: [20, 16, 4, -30, -270], stroke: 'outline' },
       { arc: [20, 24, 4, -90, 150], stroke: 'outline' },
@@ -46,7 +46,7 @@ const symbols = [
   }),
   detector({
     id: 'heat-detector',
-    name: 'Heat detector',
+    name: 'Heat Detector',
     glyph: [
       { rect: [18, 10, 4, 14], r: 2, fill: 'body', stroke: 'outline' },
       { circle: [20, 26, 3.5], accent: 'fire' }
@@ -55,7 +55,7 @@ const symbols = [
   {
     // Red cylinder with a dark valve head and hose.
     id: 'fire-extinguisher',
-    name: 'Fire extinguisher',
+    name: 'Fire Extinguisher',
     group: 'safety',
     tags: ['fire'],
     size: { w: 20, d: 20, h: 60 },
@@ -78,7 +78,7 @@ const symbols = [
   {
     // Wall pouch with two pull tapes hanging below.
     id: 'fire-blanket',
-    name: 'Fire blanket',
+    name: 'Fire Blanket',
     group: 'safety',
     tags: ['fire'],
     size: { w: 26, d: 6, h: 30 },
@@ -101,7 +101,7 @@ const symbols = [
   {
     // Box with a square frangible window and a red centre.
     id: 'manual-call-point',
-    name: 'Manual call point',
+    name: 'Manual Call Point',
     group: 'safety',
     tags: ['fire'],
     size: { w: 9, d: 6, h: 9 },
@@ -122,7 +122,7 @@ const symbols = [
   {
     // Sign panel with a running figure, and an arrow out of it pointing down.
     id: 'exit-sign',
-    name: 'Exit sign',
+    name: 'Exit Sign',
     group: 'safety',
     tags: ['fire'],
     size: { w: 35, d: 5, h: 20 },
@@ -149,7 +149,7 @@ const symbols = [
   {
     // Ceiling batten with light falling from it.
     id: 'emergency-light',
-    name: 'Emergency light',
+    name: 'Emergency Light',
     group: 'safety',
     tags: ['fire'],
     size: { w: 30, d: 9, h: 5 },
@@ -172,7 +172,7 @@ const symbols = [
   {
     // Dark case with a handle and a white cross.
     id: 'first-aid',
-    name: 'First aid kit',
+    name: 'First Aid Kit',
     group: 'safety',
     size: { w: 30, d: 12, h: 22 },
     mount: 120,
@@ -222,7 +222,7 @@ const equipment = [
     // Wall reel: bracket on the wall, drum of hose in front, seen from above
     // as the coils of hose across the drum.
     id: 'hose-reel',
-    name: 'Fire hose reel',
+    name: 'Fire Hose Reel',
     group: 'safety',
     tags: ['fire'],
     size: { w: 80, d: 30, h: 80 },
@@ -247,7 +247,7 @@ const equipment = [
   },
   {
     id: 'fire-panel',
-    name: 'Fire indicator panel',
+    name: 'Fire Indicator Panel',
     group: 'safety',
     tags: ['fire'],
     size: { w: 60, d: 15, h: 80 },
@@ -268,7 +268,7 @@ const equipment = [
   {
     // Pedestal eyewash: floor flange, pipe, and a wide bowl with twin nozzles.
     id: 'eyewash',
-    name: 'Eyewash station',
+    name: 'Eyewash Station',
     group: 'safety',
     size: { w: 50, d: 40, h: 100 },
     parts: [

@@ -5,6 +5,7 @@ import { TAGS } from '../src/palette.mjs';
 import { bounds } from '../src/render/geometry.mjs';
 import { planSvg } from '../src/render/plan.mjs';
 import { isoSvg } from '../src/render/iso.mjs';
+import { titleCase } from './title-case.mjs';
 
 const elements = await loadElements();
 const groupIds = new Set(GROUPS.map((g) => g.id));
@@ -39,6 +40,7 @@ test('legacy Axonometra ids are present', () => {
 for (const el of elements) {
   test(`${el.id}: well formed`, () => {
     assert.ok(el.name, 'name');
+    assert.equal(el.name, titleCase(el.name), 'name is Title Case');
     assert.ok(groupIds.has(el.group), `group ${el.group}`);
     for (const t of el.tags ?? []) assert.ok(TAGS.includes(t), `tag ${t}`);
     const { w, d, h } = el.size;

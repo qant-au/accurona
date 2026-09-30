@@ -126,11 +126,11 @@ export function tallCupboard({ id, name, group, w, d, h, extra = [], front = [] 
 }
 
 export default [
-  baseCabinet({ id: 'base-cabinet-600', name: 'Base cabinet 600', w: 60 }),
-  baseCabinet({ id: 'base-cabinet-900', name: 'Base cabinet 900', w: 90 }),
+  baseCabinet({ id: 'base-cabinet-600', name: 'Base Cabinet 600', w: 60 }),
+  baseCabinet({ id: 'base-cabinet-900', name: 'Base Cabinet 900', w: 90 }),
   {
     id: 'corner-cabinet',
-    name: 'Corner base cabinet',
+    name: 'Corner Base Cabinet',
     group: 'kitchen',
     size: { w: 90, d: 90, h: 90 },
     // Walls at the top and the left; the L opens to the bottom right.
@@ -145,7 +145,7 @@ export default [
   },
   {
     id: 'wall-cabinet-600',
-    name: 'Wall cabinet 600',
+    name: 'Wall Cabinet 600',
     group: 'kitchen',
     size: { w: 60, d: 35, h: 70 },
     mount: 145,
@@ -159,17 +159,17 @@ export default [
     ]
   },
   tallCupboard({
-    id: 'pantry', name: 'Pantry cupboard', group: 'kitchen', w: 60, d: 60, h: 220,
+    id: 'pantry', name: 'Pantry Cupboard', group: 'kitchen', w: 60, d: 60, h: 220,
     front: [{ rect: [1, 1, 58, 218] }, { line: [[55, 100], [55, 125]], stroke: 'outline' }]
   }),
-  sink({ id: 'sink-single', name: 'Sink, single bowl', w: 60, bowls: [44] }),
-  sink({ id: 'sink-double', name: 'Sink, double bowl', w: 120, bowls: [44, 44] }),
-  sink({ id: 'butler-sink', name: "Butler's sink", w: 80, bowls: [62], ceramic: true }),
-  cooktop({ id: 'cooktop', name: 'Cooktop, 4 burner', w: 60, burners: [[14, 14, 8], [42, 14, 6], [14, 36, 6], [42, 36, 7]] }),
-  cooktop({ id: 'cooktop-5', name: 'Cooktop, 5 burner', w: 90, burners: [[15, 14, 7], [15, 36, 6], [43, 25, 10], [71, 14, 6], [71, 36, 7]] }),
+  sink({ id: 'sink-single', name: 'Sink, Single Bowl', w: 60, bowls: [44] }),
+  sink({ id: 'sink-double', name: 'Sink, Double Bowl', w: 120, bowls: [44, 44] }),
+  sink({ id: 'butler-sink', name: "Butler's Sink", w: 80, bowls: [62], ceramic: true }),
+  cooktop({ id: 'cooktop', name: 'Cooktop, 4 Burner', w: 60, burners: [[14, 14, 8], [42, 14, 6], [14, 36, 6], [42, 36, 7]] }),
+  cooktop({ id: 'cooktop-5', name: 'Cooktop, 5 Burner', w: 90, burners: [[15, 14, 7], [15, 36, 6], [43, 25, 10], [71, 14, 6], [71, 36, 7]] }),
   {
     id: 'oven-freestanding',
-    name: 'Freestanding oven',
+    name: 'Freestanding Oven',
     group: 'kitchen',
     size: { w: 60, d: 60, h: 90 },
     parts: [
@@ -183,7 +183,7 @@ export default [
     plan: [12, 24, 36, 48].map((x) => ({ circle: [x, 57, 1.8], fill: 'dark' }))
   },
   tallCupboard({
-    id: 'wall-oven', name: 'Wall oven tower', group: 'kitchen', w: 60, d: 60, h: 220,
+    id: 'wall-oven', name: 'Wall Oven Tower', group: 'kitchen', w: 60, d: 60, h: 220,
     extra: [{ line: [[4, 3], [56, 3], [56, 57], [4, 57]], closed: true, dash: '3 2', view: 'plan' }],
     front: [
       { rect: [1, 1, 58, 60] },
@@ -231,7 +231,7 @@ export default [
   },
   {
     id: 'fridge-french',
-    name: 'Fridge, French door',
+    name: 'Fridge, French Door',
     group: 'kitchen',
     size: { w: 90, d: 75, h: 180 },
     parts: [
@@ -281,7 +281,7 @@ export default [
   },
   {
     id: 'island-bench',
-    name: 'Island bench',
+    name: 'Island Bench',
     group: 'kitchen',
     size: { w: 240, d: 100, h: 90 },
     // Cupboards open to the front; the benchtop overhangs 35 at the back for stools.
@@ -296,7 +296,7 @@ export default [
   },
   {
     id: 'breakfast-bar',
-    name: 'Breakfast bar',
+    name: 'Breakfast Bar',
     group: 'kitchen',
     size: { w: 180, d: 50, h: 105 },
     // A raised top on a back panel; stools pull up at the front.
@@ -307,7 +307,7 @@ export default [
   },
   {
     id: 'kitchen-bin',
-    name: 'Kitchen bin',
+    name: 'Kitchen Bin',
     group: 'kitchen',
     size: { w: 40, d: 35, h: 65 },
     // Pedal bin: lid hinged at the back, pedal at the front.

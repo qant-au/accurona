@@ -53,13 +53,13 @@ export default [
       { x: 43, y: 44, z: 0, w: 4, d: 4, h: 41, role: 'wood' }
     ]
   },
-  diningTable({ id: 'dining-table-4', name: 'Dining table, 4-seat', w: 120, d: 80 }),
-  diningTable({ id: 'dining-table-6', name: 'Dining table, 6-seat', w: 180, d: 90 }),
-  diningTable({ id: 'dining-table-8', name: 'Dining table, 8-seat', w: 240, d: 100 }),
+  diningTable({ id: 'dining-table-4', name: 'Dining Table, 4-Seat', w: 120, d: 80 }),
+  diningTable({ id: 'dining-table-6', name: 'Dining Table, 6-Seat', w: 180, d: 90 }),
+  diningTable({ id: 'dining-table-8', name: 'Dining Table, 8-Seat', w: 240, d: 100 }),
   // Round table on a pedestal, the foot shown dashed beneath the top.
   {
     id: 'dining-table-round',
-    name: 'Round dining table',
+    name: 'Round Dining Table',
     group: 'dining',
     size: { w: 110, d: 110, h: 75 },
     parts: [
@@ -71,7 +71,7 @@ export default [
   // Bar stool: round seat on four splayed legs whose feet show at the corners.
   {
     id: 'bar-stool',
-    name: 'Bar stool',
+    name: 'Bar Stool',
     group: 'dining',
     size: { w: 40, d: 40, h: 75 },
     parts: [
@@ -98,7 +98,7 @@ export default [
   // across the front.
   {
     id: 'high-chair',
-    name: 'High chair',
+    name: 'High Chair',
     group: 'dining',
     size: { w: 55, d: 70, h: 105 },
     parts: [
@@ -114,7 +114,7 @@ export default [
   // Bench seat: a timber top of two boards on end supports.
   {
     id: 'bench-seat',
-    name: 'Bench seat',
+    name: 'Bench Seat',
     group: 'dining',
     size: { w: 150, d: 40, h: 45 },
     parts: [

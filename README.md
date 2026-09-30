@@ -65,7 +65,7 @@ open source, build without registry credentials.
 ```js
 {
   id: 'sofa-3',              // kebab-case, unique, never renamed once shipped
-  name: 'Sofa, 3-seat',
+  name: 'Sofa, 3-Seat',      // Title Case; a test enforces it
   group: 'living',
   tags: ['network'],         // optional: network, power, cooling, security, fire, av
   size: { w: 210, d: 90, h: 85 },  // cm: width (x), depth (y), height (z)

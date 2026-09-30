@@ -89,16 +89,16 @@ function wardrobe({ id, name, w, doors }) {
 }
 
 export default [
-  bed({ id: 'bed', name: 'Bed, double', w: 200, d: 150, head: 'left' }),
-  bed({ id: 'bed-single', name: 'Bed, single', w: 92, d: 188 }),
-  bed({ id: 'bed-king-single', name: 'Bed, king single', w: 107, d: 203 }),
-  bed({ id: 'bed-queen', name: 'Bed, queen', w: 153, d: 203 }),
-  bed({ id: 'bed-king', name: 'Bed, king', w: 183, d: 203 }),
+  bed({ id: 'bed', name: 'Bed, Double', w: 200, d: 150, head: 'left' }),
+  bed({ id: 'bed-single', name: 'Bed, Single', w: 92, d: 188 }),
+  bed({ id: 'bed-king-single', name: 'Bed, King Single', w: 107, d: 203 }),
+  bed({ id: 'bed-queen', name: 'Bed, Queen', w: 153, d: 203 }),
+  bed({ id: 'bed-king', name: 'Bed, King', w: 183, d: 203 }),
   // Bunk bed: four corner posts, the upper bunk with its guard rails (a gap
   // on the right for the ladder), and the lower bunk hidden beneath.
   {
     id: 'bunk-bed',
-    name: 'Bunk bed',
+    name: 'Bunk Bed',
     group: 'bedroom',
     size: { w: 97, d: 200, h: 160 },
     parts: [
@@ -144,21 +144,21 @@ export default [
   },
   cabinet({
     id: 'bedside-table',
-    name: 'Bedside table',
+    name: 'Bedside Table',
     w: 45,
     d: 40,
     h: 55,
     role: 'wood',
     front: drawers(45, 55, 2)
   }),
-  cabinet({ id: 'chest-of-drawers', name: 'Chest of drawers', w: 90, d: 45, h: 100, role: 'wood', front: drawers(90, 100, 5) }),
+  cabinet({ id: 'chest-of-drawers', name: 'Chest of Drawers', w: 90, d: 45, h: 100, role: 'wood', front: drawers(90, 100, 5) }),
   cabinet({ id: 'dresser', name: 'Dresser', w: 140, d: 50, h: 80, role: 'wood', front: drawers(140, 80, 3, 2) }),
-  wardrobe({ id: 'wardrobe-2', name: 'Wardrobe, 2-door', w: 100, doors: 2 }),
-  wardrobe({ id: 'wardrobe-3', name: 'Wardrobe, 3-door', w: 150, doors: 3 }),
+  wardrobe({ id: 'wardrobe-2', name: 'Wardrobe, 2-Door', w: 100, doors: 2 }),
+  wardrobe({ id: 'wardrobe-3', name: 'Wardrobe, 3-Door', w: 150, doors: 3 }),
   // Built-in robe: two sliding doors on staggered tracks across the front.
   {
     id: 'wardrobe-sliding',
-    name: 'Built-in robe, sliding',
+    name: 'Built-In Robe, Sliding',
     group: 'bedroom',
     size: { w: 240, d: 60, h: 240 },
     parts: [
@@ -180,7 +180,7 @@ export default [
   // between them shown dashed.
   {
     id: 'dressing-table',
-    name: 'Dressing table',
+    name: 'Dressing Table',
     group: 'bedroom',
     size: { w: 100, d: 45, h: 75 },
     parts: [
