@@ -1,0 +1,41 @@
+# A release: push a v* tag whose version matches all three packages
+# (@accurona/elements, @accurona/core, @accurona/ui). Builds, tests, and
+# publishes them to npm with provenance. Needs an npm automation token in the
+# NPM_TOKEN secret.
+name: Publish
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      - run: npm ci
+      - run: npm run build
+      - run: npm test
+      - name: The tag matches every package's version
+        run: |
+          node -e '
+            const tag = process.env.GITHUB_REF_NAME.replace(/^v/, "");
+            for (const file of ["package.json", "packages/core/package.json", "packages/ui/package.json"]) {
+              const { name, version } = require("./" + file);
+              if (version !== tag) {
+                console.error(`${name} is ${version}, the tag is ${tag}`);
+                process.exit(1);
+              }
+            }
+          '
+      - run: npm publish --workspaces --include-workspace-root --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

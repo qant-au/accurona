@@ -4,7 +4,24 @@
   "description": "Accurona's shared MUI theme, menus, panels and notifications, so Axonometra and Reticulyne look and behave the same.",
   "license": "MIT",
   "type": "module",
-  "private": true,
+  "keywords": [
+    "mui",
+    "react",
+    "theme",
+    "toolbar"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qant-au/accurona.git",
+    "directory": "packages/ui"
+  },
+  "homepage": "https://github.com/qant-au/accurona#readme",
+  "bugs": {
+    "url": "https://github.com/qant-au/accurona/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "sideEffects": false,
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -25,7 +42,8 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@mui/material": "^9.0.0",
-    "react": ">=18"
+    "react": ">=18",
+    "react-dom": ">=18"
   },
   "devDependencies": {
     "@emotion/react": "^11.14.0",

@@ -4,7 +4,34 @@
   "description": "Accurona: the shared element library for Axonometra and Reticulyne. One model per element, rendered as plan, isometric and 3D views.",
   "license": "MIT",
   "type": "module",
-  "private": true,
+  "keywords": [
+    "floor-plan",
+    "network-diagram",
+    "svg",
+    "isometric",
+    "icons"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qant-au/accurona.git"
+  },
+  "homepage": "https://github.com/qant-au/accurona#readme",
+  "bugs": {
+    "url": "https://github.com/qant-au/accurona/issues"
+  },
+  "exports": {
+    "./manifest.json": "./dist/manifest.json",
+    "./models.json": "./dist/models.json",
+    "./plan/*": "./dist/plan/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "ITEMS.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
     "node": ">=22"
   },

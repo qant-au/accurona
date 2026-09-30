@@ -53,7 +53,27 @@ itself. A Reticulyne item that cross-references an element can be drawn with
 that element's isometric view, so a rack is still the same rack, the same size
 and colours, on a floor plan and in a network diagram.
 
-## Use
+## Packages
+
+Three packages on npm, all MIT:
+
+| Package                                                                  | What                                                                     |
+| ------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
+| [`@accurona/elements`](https://www.npmjs.com/package/@accurona/elements) | This library, built: `manifest.json`, `models.json` and `plan/<id>.svg`. |
+| [`@accurona/core`](packages/core/)                                       | The scene format (a Zod schema and its JSON Schema) and length units.    |
+| [`@accurona/ui`](packages/ui/)                                           | The shared MUI theme, menus, panels and notifications.                   |
+
+```sh
+npm install @accurona/elements
+```
+
+```js
+import manifest from '@accurona/elements/manifest.json' with { type: 'json' };
+// Each element's plan drawing, e.g. with Vite:
+import sofaUrl from '@accurona/elements/plan/sofa-3.svg?url';
+```
+
+## Develop
 
 ```sh
 npm install
@@ -64,9 +84,8 @@ npm run sheet            # review/<group>.png contact sheets
 npm run sheet -- comms --iso
 ```
 
-Consumers **vendor `dist/`** (copy it into their repo with a sync script)
-rather than installing a package, so that Axonometra and Reticulyne, which are
-open source, build without registry credentials.
+A release (a `v*` tag) runs the tests and the build and publishes all three
+packages to npm (`.github/workflows/publish.yml`).
 
 ## Layout
 
@@ -165,16 +184,16 @@ of the symbol.
 screen. Both use [MUI](https://mui.com); these are the parts that must look and
 behave the same in both:
 
-| Export                                 | What                                                               |
-| -------------------------------------- | ------------------------------------------------------------------ |
-| `createLineworkTheme(mode)`            | The theme: palette, type, shadows, component defaults.             |
-| `ToolButton`, `ToolMenu`, `Surface`    | Toolbar buttons, a menu that opens on hover or click, their card.  |
-| `SidePanel`, `FloatingPanel`           | A panel from the right; a non-modal panel pinned top right (help). |
-| `AppDialog`, `CloseButton`             | A modal with a titled header; every close is named "Close".        |
-| `notify()`, `NotificationHost`         | Transient messages, raised from anywhere, including plain classes. |
-| `ContextMenu`                          | The right-click menu on the drawing.                               |
+| Export                                 | What                                                                   |
+| -------------------------------------- | ---------------------------------------------------------------------- |
+| `createLineworkTheme(mode)`            | The theme: palette, type, shadows, component defaults.                 |
+| `ToolButton`, `ToolMenu`, `Surface`    | Toolbar buttons, a menu that opens on hover or click, their card.      |
+| `SidePanel`, `FloatingPanel`           | A panel from the right; a non-modal panel pinned top right (help).     |
+| `AppDialog`, `CloseButton`             | A modal with a titled header; every close is named "Close".            |
+| `notify()`, `NotificationHost`         | Transient messages, raised from anywhere, including plain classes.     |
+| `ContextMenu`                          | The right-click menu on the drawing.                                   |
 | `KeyboardShortcutsDialog`              | The `?` list, from the shared keymap, with its Excalidraw differences. |
-| `Panel`, `PanelSection`, `PanelHeader` | A properties panel: sticky header, titled sections.                |
+| `Panel`, `PanelSection`, `PanelHeader` | A properties panel: sticky header, titled sections.                    |
 
 `createLineworkTheme(mode, { cssVariables })` leaves MUI's CSS variables off
 unless asked: MUI writes them to `:root`, which an embedded editor must not do
@@ -183,7 +202,6 @@ the same theme as options, for a host that builds its own.
 
 It is built with `tsc` to `packages/ui/dist/` (JavaScript plus types) by
 `npm run build`, and takes React, MUI and Emotion as peer dependencies.
-Consumers vendor `packages/ui/dist/` the same way as `dist/`.
 
 ## House style
 

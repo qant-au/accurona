@@ -4,7 +4,25 @@
   "description": "Accurona's shared, framework-free core for Axonometra and Reticulyne: the scene format (a Zod schema, with a generated JSON Schema) and length units.",
   "license": "MIT",
   "type": "module",
-  "private": true,
+  "keywords": [
+    "scene-format",
+    "floor-plan",
+    "network-diagram",
+    "units",
+    "zod"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qant-au/accurona.git",
+    "directory": "packages/core"
+  },
+  "homepage": "https://github.com/qant-au/accurona#readme",
+  "bugs": {
+    "url": "https://github.com/qant-au/accurona/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "sideEffects": false,
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
