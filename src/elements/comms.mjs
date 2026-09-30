@@ -290,7 +290,10 @@ const fire = [
 // Cable tray fittings. They match the 1 m straight section: 30 cm wide, a
 // 1.5 cm base, 8.5 cm side rails 1.5 cm thick, mounted at 250, three dashed
 // cable runs down the middle. Every fitting's straight ends meet a section
-// flush, entering from the left.
+// flush, entering from the left. The bends and junctions draw their top
+// view as the 2D schematic: from the front each is only a length of rail
+// (a cross is two stubs either side of its branch opening), so the shape
+// that tells them apart is the one seen from above.
 const TRAY = 30; // width
 const RAIL = 1.5;
 const TRAY_MOUNT = 250;
@@ -328,6 +331,7 @@ function trayBend(deg, id) {
     tags: ['network'],
     size: { w: extent(0), d: extent(1), h: 10 },
     mount: TRAY_MOUNT,
+    schematic: 'plan',
     parts: [
       trayBase(band(R, R + TRAY), [9, 15, 21].map((v) => ({ arc: [cx, cy, R + TRAY - v, -90, a1], dash: '4 3' }))),
       trayRail(band(R + TRAY - RAIL, R + TRAY)),
@@ -376,6 +380,7 @@ function trayJunction({ id, name, back }) {
     tags: ['network'],
     size: { w: L, d, h: 10 },
     mount: TRAY_MOUNT,
+    schematic: 'plan',
     parts: [
       trayBase([...topEdge, ...bottomEdge], [...runs, ...branches]),
       corner(-1, 1),
