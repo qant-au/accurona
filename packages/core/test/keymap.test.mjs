@@ -171,7 +171,7 @@ test('no two bindings in a tool share a chord', () => {
 
 test('formatting for menus and the ? dialog', () => {
   assert.equal(formatChord({ key: 'z', mod: true, shift: true }, 'other'), 'Ctrl + Shift + Z');
-  assert.equal(formatChord({ key: 'z', mod: true, shift: true }, 'mac'), '⌘ ⇧ Z');
+  assert.equal(formatChord({ key: 'z', mod: true, shift: true }, 'mac'), '⌘ + ⇧ + Z');
   assert.equal(formatChord({ code: 'KeyD', alt: true, shift: true }, 'other'), 'Alt + Shift + D');
   assert.equal(formatChord({ code: 'BracketRight', mod: true }, 'other'), 'Ctrl + ]');
   assert.equal(formatChord({ key: 'Escape' }, 'other'), 'Esc');
@@ -179,6 +179,8 @@ test('formatting for menus and the ? dialog', () => {
   assert.deepEqual(formatBinding(zoomIn, 'other'), ['Ctrl + =']);
   assert.equal(shortcutHint(axonometra, 'wall', 'other'), 'L');
   assert.equal(shortcutHint(reticulyne, 'select', 'other'), 'V');
+  // A hint reads as the dialog draws the chord, + between keys everywhere.
+  assert.equal(shortcutHint(reticulyne, 'group', 'mac'), '⌘ + G');
 });
 
 test('{mod} in a key label reads as the platform modifier', () => {

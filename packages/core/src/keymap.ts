@@ -399,8 +399,10 @@ const keyName = (chord: Chord): string => {
   return KEY_LABELS[key] ?? (key.length === 1 ? key.toUpperCase() : key);
 };
 
-// A chord as it reads in a menu or the `?` dialog: "Ctrl + Shift + Z", or
-// "⌘ ⇧ Z" on macOS.
+// A chord as it reads in a menu, a hint or the `?` dialog: "Ctrl + Shift +
+// Z", or "⌘ + ⇧ + Z" on macOS. Joined by + on every platform, as the dialog
+// draws it: hints read "⌘ G" while the dialog read "⌘ + G" (sweep
+// 2026-09-30, round 4).
 export const formatChord = (chord: Chord, platform: 'mac' | 'other' = isMacLike() ? 'mac' : 'other'): string => {
   const mac = platform === 'mac';
   const parts: string[] = [];
@@ -409,7 +411,7 @@ export const formatChord = (chord: Chord, platform: 'mac' | 'other' = isMacLike(
   if (chord.alt) parts.push(mac ? '⌥' : 'Alt');
   if (chord.shift === true) parts.push(mac ? '⇧' : 'Shift');
   parts.push(keyName(chord));
-  return parts.join(mac ? ' ' : ' + ');
+  return parts.join(' + ');
 };
 
 // `{mod}`, `{shift}` and `{alt}` in a label or a difference, as the
