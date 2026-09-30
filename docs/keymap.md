@@ -97,8 +97,8 @@ Accept both the Windows and the macOS form of the ordering keys on every platfor
 | Select | click | same |
 | Add to or remove from the selection | `Shift` + click | same |
 | Select an area | drag on empty canvas | same |
-| Pan | `Space` + drag, or the hand tool | same |
-| Pan | mouse wheel; `Shift` + wheel pans sideways | same |
+| Pan by dragging | `Space` + drag, or the hand tool | same |
+| Pan with the wheel | mouse wheel; `Shift` + wheel pans sideways | same |
 | Zoom | `Ctrl/Cmd` + wheel, trackpad pinch, touch pinch | same |
 | Drag a copy | `Alt` + drag | same |
 | Context menu | right-click | same |
@@ -129,7 +129,7 @@ Reticulyne's own tools, as shipped:
 | Select the next, previous object | `Tab`, `Shift` + `Tab` | only while the canvas has focus; works read-only |
 | Open the selected object's menu | `Shift` + `F10`, the Menu key | the right-click menu, from the keyboard |
 | Open an object's menu | right-click an object | the shared "Context menu" row; empty canvas has no menu |
-| Add an item on an empty tile | double-click; or pick it with the add-item tool and press `Enter` | `Enter` puts it on the free tile nearest the middle of the view |
+| Add an item on an empty tile | double-click; or `I` (the add-item tool) then `Enter` | `Enter` puts it on the free tile nearest the middle of the view |
 | Work inside a group | double-click the group | `Esc` leaves it (the `Esc` row) |
 | Connect two items | drag from a port; or **Connect to** in the item's menu | the menu route asks for the other item by name |
 

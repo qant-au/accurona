@@ -31,6 +31,18 @@ test('a gesture draws its keys and pointer actions as keys', () => {
   });
 });
 
+// Sweep 2026-09-30 (round 3): "the add-item tool, then Enter" was plain text.
+test('keys between words are keys', () => {
+  assert.deepEqual(shortcutKeys('I then Enter'), {
+    kind: 'gesture',
+    parts: [[{ key: 'I' }, { text: 'then' }, { key: 'Enter' }]]
+  });
+  assert.deepEqual(shortcutKeys('Double-click an empty tile'), {
+    kind: 'gesture',
+    parts: [[{ key: 'Double-click' }, { text: 'an empty tile' }]]
+  });
+});
+
 test('words alone, and a phrase with punctuation, stay text', () => {
   for (const phrase of ['the hand tool', 'Space + drag, or the hand tool', "Connect to, in the item's menu"]) {
     assert.deepEqual(shortcutKeys(phrase), { kind: 'text', text: phrase });

@@ -198,6 +198,21 @@ test('a gesture lists its alternatives, with the platform key names', () => {
   assert.deepEqual(formatBinding(row('wheel-zoom'), 'mac'), ['⌘ + Wheel', 'Pinch']);
 });
 
+// Sweep 2026-09-30 (round 3): two pointer rows were both labelled "Pan", and
+// the add-item alternative was a phrase rather than keys.
+test('every pointer row has its own label, and add-on-tile names its keys', () => {
+  const row = (action) => reticulyne.find((b) => b.action === action);
+  assert.equal(row('space-pan').label, 'Pan by dragging');
+  assert.equal(row('wheel-pan').label, 'Pan with the wheel');
+  assert.deepEqual(formatBinding(row('add-on-tile'), 'other'), ['Double-click an empty tile', 'I then Enter']);
+  for (const tool of ['reticulyne', 'axonometra']) {
+    const labels = keymapFor(tool)
+      .filter((b) => b.section === 'Pointer and touch')
+      .map((b) => b.label);
+    assert.equal(new Set(labels).size, labels.length, tool + ': ' + labels.join(', '));
+  }
+});
+
 test("Reticulyne's right-click row is the object menu: empty canvas has none", () => {
   const row = reticulyne.find((b) => b.action === 'context-menu');
   assert.equal(row.label, "Open an object's menu");

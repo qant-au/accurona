@@ -71,8 +71,9 @@ const Part = ({ part }: { part: ShortcutPart[] }) => (
 // rows do: they were a mix of chips and plain text (sweep 2026-09-30). A
 // row of chords keeps its alternatives on one line beside the label: wrapped,
 // the second one started a line with "or" (on a phone they may wrap under
-// the label). A row with words in it may wrap, and then "or" ends the line
-// rather than starting the next.
+// the label). A row with words in it may wrap, and then "or" starts the
+// line with the alternative it introduces: ending the line, it dangled
+// there with the label centred between the two (sweep 2026-09-30, round 3).
 const Keys = ({ keys }: { keys: string[] }) => {
   const entries = keys.map((entry) => ({ entry, parsed: shortcutKeys(entry) }));
   const chordsOnly = entries.every((e) => e.parsed.kind === 'chord');
@@ -96,6 +97,7 @@ const Keys = ({ keys }: { keys: string[] }) => {
           key={entry}
           sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.5, whiteSpace: 'nowrap' }}
         >
+          {i > 0 && <Joiner>or</Joiner>}
           {parsed.kind === 'text' ? (
             <Box component="span" sx={{ color: 'text.secondary', fontSize: '0.8125rem', whiteSpace: 'normal' }}>
               {parsed.text}
@@ -108,7 +110,6 @@ const Keys = ({ keys }: { keys: string[] }) => {
               </Box>
             ))
           )}
-          {i < entries.length - 1 && <Joiner>or</Joiner>}
         </Box>
       );
     })}
@@ -119,10 +120,22 @@ const Keys = ({ keys }: { keys: string[] }) => {
 // On a phone the keys go under their label rather than beside it, where
 // they were pushed off the dialog's right edge.
 const rowSx = { display: { xs: 'block', sm: 'table-row' }, borderBottom: { xs: 1, sm: 0 }, borderColor: 'divider', py: { xs: 0.75, sm: 0 } };
-const labelCellSx = { display: { xs: 'block', sm: 'table-cell' }, borderBottom: { xs: 0 }, p: { xs: 0 }, pb: { xs: 0.5 } };
+// Top-aligned, so a label beside keys that wrap stays level with their
+// first line instead of sitting between the two.
+const labelCellSx = { display: { xs: 'block', sm: 'table-cell' }, verticalAlign: 'top', borderBottom: { xs: 0 }, p: { xs: 0 }, pb: { xs: 0.5 } };
 // Up to half the width beside the label, so a long phrase wraps instead of
 // squeezing the label to a word a line.
-const keysCellSx = { display: { xs: 'block', sm: 'table-cell' }, borderBottom: { xs: 0 }, p: { xs: 0 }, width: { sm: '50%' }, textAlign: { xs: 'left', sm: 'right' } };
+const keysCellSx = { display: { xs: 'block', sm: 'table-cell' }, verticalAlign: 'top', borderBottom: { xs: 0 }, p: { xs: 0 }, width: { sm: '50%' }, textAlign: { xs: 'left', sm: 'right' } };
+
+// On a phone each difference is a block, its columns one under another with
+// their headings inline: as three columns they were 80-100px wide each.
+const diffCellSx = { display: { xs: 'block', sm: 'table-cell' }, borderBottom: { xs: 0 }, p: { xs: 0 }, pb: { xs: 0.25 } };
+
+const DiffHeading = ({ children }: { children: string }) => (
+  <Box component="span" sx={{ display: { xs: 'inline', sm: 'none' }, color: 'text.secondary' }}>
+    {children}
+  </Box>
+);
 
 // The `?` dialog: every binding a tool has, from the shared keymap, and the
 // Excalidraw bindings it deliberately does not match.
@@ -162,7 +175,7 @@ export const KeyboardShortcutsDialog = ({
             Differences from Excalidraw
           </Typography>
           <Table size="small">
-            <TableHead>
+            <TableHead sx={{ display: { xs: 'none', sm: 'table-header-group' } }}>
               <TableRow>
                 <TableCell sx={{ pl: 0 }}>Excalidraw</TableCell>
                 <TableCell>Here</TableCell>
@@ -171,12 +184,18 @@ export const KeyboardShortcutsDialog = ({
             </TableHead>
             <TableBody>
               {differences.map((d) => (
-                <TableRow key={d.excalidraw + d.action}>
-                  <TableCell sx={{ pl: 0 }}>
+                <TableRow key={d.excalidraw + d.action} sx={rowSx}>
+                  <TableCell sx={{ pl: 0, ...diffCellSx, fontWeight: { xs: 500, sm: 'inherit' } }}>
                     {keyNames(d.excalidraw)} ({d.action})
                   </TableCell>
-                  <TableCell>{keyNames(d.here)}</TableCell>
-                  <TableCell sx={{ pr: 0 }}>{d.why}</TableCell>
+                  <TableCell sx={diffCellSx}>
+                    <DiffHeading>Here: </DiffHeading>
+                    {keyNames(d.here)}
+                  </TableCell>
+                  <TableCell sx={{ pr: 0, ...diffCellSx }}>
+                    <DiffHeading>Why: </DiffHeading>
+                    {d.why}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
