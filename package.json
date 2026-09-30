@@ -24,6 +24,7 @@
     "./models.json": "./dist/models.json",
     "./plan/*": "./dist/plan/*",
     "./iso/*": "./dist/iso/*",
+    "./schematic/*": "./dist/schematic/*",
     "./package.json": "./package.json"
   },
   "files": [

@@ -1,14 +1,17 @@
 // Review sheets: one PNG per group in review/, each element drawn at plan scale
 // on a 10 cm grid plus as a drawer-sized thumbnail. `--iso` adds the
-// isometric view. Usage: node scripts/sheet.mjs [group...] [--iso]
+// isometric view, `--schematic` the 2D schematic view.
+// Usage: node scripts/sheet.mjs [group...] [--iso] [--schematic]
 import { mkdirSync } from 'node:fs';
 import { chromium } from 'playwright';
 import { GROUPS, loadElements } from '../src/index.mjs';
 import { footprint, planSvg } from '../src/render/plan.mjs';
 import { isoSvg } from '../src/render/iso.mjs';
+import { schematicSvg } from '../src/render/schematic.mjs';
 
 const args = process.argv.slice(2);
 const withIso = args.includes('--iso');
+const withSchematic = args.includes('--schematic');
 const only = args.filter((a) => !a.startsWith('--'));
 const elements = await loadElements();
 const out = new URL('../review/', import.meta.url);
@@ -34,7 +37,7 @@ for (const group of GROUPS) {
   const thumbs = items
     .map(
       (e) =>
-        `<div style="width:130px;background:#fff;border-radius:8px;box-shadow:0 1px 3px #0002;padding:6px;text-align:center;font-size:10px"><img src="${uri(planSvg(e))}" style="width:110px;height:100px;object-fit:contain"><div>${e.name}</div>${withIso ? `<img src="${uri(isoSvg(e))}" style="width:110px;height:100px;object-fit:contain">` : ''}</div>`
+        `<div style="width:130px;background:#fff;border-radius:8px;box-shadow:0 1px 3px #0002;padding:6px;text-align:center;font-size:10px"><img src="${uri(planSvg(e))}" style="width:110px;height:100px;object-fit:contain"><div>${e.name}</div>${withIso ? `<img src="${uri(isoSvg(e))}" style="width:110px;height:100px;object-fit:contain">` : ''}${withSchematic ? `<img src="${uri(schematicSvg(e))}" style="width:110px;height:100px;object-fit:contain">` : ''}</div>`
     )
     .join('');
   await page.setContent(`<html><body style="margin:0;padding:16px;font:12px system-ui;background:#fafafa">

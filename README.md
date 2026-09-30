@@ -29,8 +29,13 @@ centimetres. Every view is generated from that model:
   catalogue item draws with (below).
 - **3D** (Axonometra's 3D view): the same solids as meshes, from
   `dist/models.json` (solids with colours resolved; decals left out). _Built._
-- **2D schematic** (Reticulyne's planned flat view): a symbol for conventional
-  network diagrams, for the same elements. _Planned._
+- **2D schematic** (Reticulyne's flat, Visio-style view): not to scale, one
+  line weight for every symbol. A ceiling or wall device draws its plan
+  pictogram (see Symbols); anything else is seen from the front, with the
+  ports, LEDs and bezels on its front face. An element whose telling face is
+  its top (a desk phone's keypad) sets `schematic: 'plan'` to draw its
+  top-down view instead. _Built; reviewed for the elements a Reticulyne
+  catalogue item cross-references._
 
 ### What belongs in the library
 
@@ -50,7 +55,7 @@ cross-reference**: an entry names the other catalogue's id, in the same
 [links to external tools](docs/scene-format.md#links-back-to-external-tools).
 Neither schema depends on it, and a missing or stale reference breaks only
 itself. A Reticulyne item that cross-references an element can be drawn with
-that element's isometric view, so a rack is still the same rack, the same size
+that element's isometric view (and, in the flat view, its schematic), so a rack is still the same rack, the same size
 and colours, on a floor plan and in a network diagram.
 
 ## Packages
@@ -59,7 +64,7 @@ Three packages on npm, all MIT:
 
 | Package                                                                  | What                                                                     |
 | ------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
-| [`@accurona/elements`](https://www.npmjs.com/package/@accurona/elements) | This library, built: `manifest.json`, `models.json`, `plan/<id>.svg` and `iso/<id>.svg`. |
+| [`@accurona/elements`](https://www.npmjs.com/package/@accurona/elements) | This library, built: `manifest.json`, `models.json`, `plan/<id>.svg`, `iso/<id>.svg` and `schematic/<id>.svg`. |
 | [`@accurona/core`](packages/core/)                                       | The scene format (a Zod schema and its JSON Schema) and length units.    |
 | [`@accurona/ui`](packages/ui/)                                           | The shared MUI theme, menus, panels and notifications.                   |
 
@@ -78,9 +83,9 @@ import sofaUrl from '@accurona/elements/plan/sofa-3.svg?url';
 ```sh
 npm install
 npm test                 # rules every element must meet
-npm run build            # dist/manifest.json, dist/models.json, dist/plan/<id>.svg, dist/iso/<id>.svg (iso experimental)
+npm run build            # dist/manifest.json, dist/models.json, dist/plan/<id>.svg, dist/iso/<id>.svg (iso experimental), dist/schematic/<id>.svg
 npm run sheet            # review/<group>.png contact sheets
-npm run sheet -- comms --iso
+npm run sheet -- comms --iso --schematic
 ```
 
 A release (a `v*` tag) runs the tests and the build and publishes all three
@@ -93,7 +98,7 @@ packages to npm (`.github/workflows/publish.yml`).
 | `src/groups.mjs`                 | The groups, in display order.                         |
 | `src/elements/<group>.mjs`       | The elements of one group (default export: an array). |
 | `src/palette.mjs`                | Colours and line weights.                             |
-| `src/render/plan.mjs`, `iso.mjs` | The two renderers.                                    |
+| `src/render/plan.mjs`, `iso.mjs`, `schematic.mjs` | The three renderers.                   |
 | `ITEMS.md`                       | The item list: ids, names and sizes still to build.   |
 | `packages/ui/`                   | `@accurona/ui`, the shared UI (below).                |
 

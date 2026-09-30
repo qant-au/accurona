@@ -5,6 +5,7 @@ import { TAGS } from '../src/palette.mjs';
 import { bounds } from '../src/render/geometry.mjs';
 import { planSvg } from '../src/render/plan.mjs';
 import { isoSvg } from '../src/render/iso.mjs';
+import { schematicSvg } from '../src/render/schematic.mjs';
 import { titleCase } from './title-case.mjs';
 
 const elements = await loadElements();
@@ -94,5 +95,15 @@ for (const el of elements) {
     assert.ok(plan.length < 4096, `plan SVG is ${plan.length} bytes`);
     const iso = isoSvg(el);
     assert.ok(!/NaN|undefined|Infinity/.test(iso), 'iso has a bad number');
+    assert.ok(
+      el.schematic === undefined || el.schematic === 'plan',
+      `schematic ${el.schematic}`
+    );
+    const schematic = schematicSvg(el);
+    assert.ok(
+      !/NaN|undefined|Infinity/.test(schematic),
+      'schematic has a bad number'
+    );
+    assert.match(schematic, /^<svg [^>]*viewBox="[-\d. ]+"/);
   });
 }

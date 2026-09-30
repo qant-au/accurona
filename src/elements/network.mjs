@@ -332,6 +332,7 @@ export default [
     group: 'network',
     tags: ['network'],
     size: { w: 22, d: 20, h: 15 },
+    schematic: 'plan',
     parts: [
       {
         x: 0, y: 0, z: 0, w: 22, d: 8, h: 15, role: 'dark', r: 1,

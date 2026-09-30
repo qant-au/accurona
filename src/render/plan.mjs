@@ -82,9 +82,9 @@ function svg(w, d, body) {
 }
 
 // Ceiling and wall devices: a 40 cm frame with a pictogram, so they read on a
-// plan at any zoom. Pictogram coordinates are in the 40 × 40 symbol box.
-function symbolSvg(el) {
-  const s = SYMBOL_SIZE;
+// plan at any zoom. Pictogram coordinates are in the 40 × 40 symbol box. The
+// 2D schematic view draws the same pictogram (see schematic.mjs).
+export function symbolBody(el) {
   const { frame = 'circle', glyph = [] } = el.symbol;
   const edge =
     frame === 'circle'
@@ -100,13 +100,15 @@ function symbolSvg(el) {
         1.5
       )
     );
-  return svg(s, s, [edge, ...marks]);
+  return [edge, ...marks];
 }
 
-export function planSvg(el) {
-  if (el.symbol) return symbolSvg(el);
-  const { w, d } = el.size;
-  const [so, sd] = planStrokes(w, d);
+function symbolSvg(el) {
+  return svg(SYMBOL_SIZE, SYMBOL_SIZE, symbolBody(el));
+}
+
+/** The top-down drawing of a modelled element, with strokes [outline, detail]. */
+export function planBody(el, [so, sd]) {
   // Lower parts first, so what is on top is drawn over what is beneath.
   const parts = el.parts
     .map((p, i) => ({ p, i }))
@@ -132,5 +134,11 @@ export function planSvg(el) {
   }
   for (const dc of (el.plan ?? []).filter(forPlan))
     body.push(decal(dc, 0, 0, sd));
-  return svg(w, d, body);
+  return body;
+}
+
+export function planSvg(el) {
+  if (el.symbol) return symbolSvg(el);
+  const { w, d } = el.size;
+  return svg(w, d, planBody(el, planStrokes(w, d)));
 }
