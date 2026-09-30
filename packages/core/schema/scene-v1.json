@@ -652,6 +652,15 @@
                                   "object": {
                                     "type": "string",
                                     "pattern": "^[A-Za-z0-9_-]{1,64}$"
+                                  },
+                                  "side": {
+                                    "type": "string",
+                                    "enum": [
+                                      "+X",
+                                      "-X",
+                                      "+Y",
+                                      "-Y"
+                                    ]
                                   }
                                 },
                                 "required": [

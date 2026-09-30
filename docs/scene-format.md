@@ -336,7 +336,7 @@ interface Connector {
 // Exactly one of the three.
 interface Anchor {
   id: Id;
-  ref: { object: Id } | { anchor: Id } | { tile: Tile };
+  ref: { object: Id; side?: '+X' | '-X' | '+Y' | '-Y' } | { anchor: Id } | { tile: Tile };
 }
 
 interface Rectangle {
@@ -374,6 +374,10 @@ interface Group {
 
 - When a connector has a `connection`, its first and last anchors must reference that
   connection's `from` and `to` objects (in either order).
+- An anchor on an object may name the `side` of the object's tile the connector leaves
+  by: the edge facing the named grid direction (`+X` is the edge towards the tile at
+  x + 1). It means the same edge in the iso and the flat view. Without it the end docks
+  on the tile's centre and the route picks its own way out.
 - A `locked` placement, connector, rectangle or text box is drawn as usual but an
   editor does not let it be selected on the canvas, so it cannot be moved, edited or
   deleted until it is unlocked. It is a view property, like `layer`: the same object

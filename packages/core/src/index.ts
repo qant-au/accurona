@@ -11,6 +11,7 @@ export {
   type MetricUnit
 } from './units.js';
 export {
+  ANCHOR_SIDES,
   CONNECTOR_GLYPHS,
   REDACTED_LAYER,
   SCENE_FORMAT,

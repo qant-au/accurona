@@ -84,6 +84,19 @@ test('unknown keys are refused at every level', () => {
   assert.match(errorsOf(s), /colour/);
 });
 
+test('an object anchor can name the side of the tile it leaves by', () => {
+  const s = base();
+  s.views[0].connectors[0].anchors[0].ref.side = '+X';
+  s.views[0].connectors[0].anchors[1].ref.side = '-Y';
+  const result = validateScene(s);
+  assert.equal(result.ok, true, result.ok ? '' : result.errors.join('\n'));
+  s.views[0].connectors[0].anchors[0].ref.side = 'NORTH';
+  assert.match(errorsOf(s), /side|ref/);
+  const t = base();
+  t.views[0].connectors[0].anchors[0].ref = { tile: { x: 1, y: 1 }, side: '+X' };
+  errorsOf(t);
+});
+
 test('diagram placements, connectors, rectangles and text boxes can be locked', () => {
   const s = base();
   s.views[0].placements[0].locked = true;
