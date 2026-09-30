@@ -292,7 +292,7 @@ Vehicles face the front of the plan: rear at the top, nose at the bottom.
 | motorbike           | Motorbike                | 80×210×115        |
 | bicycle             | Bicycle                  | 60×175×100        |
 | trailer-box         | Box Trailer, 7 × 4       | 170×330×90        |
-| ev-charger-wall     | EV Charger, Wall-Mounted | 40×40 symbol, m 110 |
+| ev-charger-wall     | EV Charger, Wall-Mounted | 25×12×35, m 110   |
 | ev-charger-pedestal | EV Charger, Pedestal     | 40×30×140         |
 
 ### Structure (`structure`)

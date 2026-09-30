@@ -147,8 +147,9 @@ const trailer = {
   ]
 };
 
-// EV charger, wall-mounted: a home wallbox bolted to a garage wall, too
-// small to see at plan scale, so a symbol: the unit with its plug and a bolt.
+// EV charger, wall-mounted: a home wallbox bolted to a garage wall. On a
+// plan it is its own footprint off the wall, with the power strip on its front
+// edge like the wall panels in comms.mjs.
 const evChargerWall = {
   id: 'ev-charger-wall',
   name: 'EV Charger, Wall-Mounted',
@@ -156,17 +157,12 @@ const evChargerWall = {
   tags: ['power'],
   size: { w: 25, d: 12, h: 35 },
   mount: 110,
-  symbol: {
-    frame: 'square',
-    glyph: [
-      { rect: [8, 6, 16, 22], r: 3, fill: 'body', stroke: 'outline' },
-      { line: [[18, 11], [14, 17.5], [18, 17.5], [14, 24]], stroke: 'power', weight: 'outline' },
-      { line: [[24, 20], [30, 22], [31, 30], [26, 34]], stroke: 'outline' },
-      { rect: [22, 32, 7, 4], r: 1.5, fill: 'dark' }
-    ]
-  },
   parts: [
-    { x: 0, y: 0, z: 0, w: 25, d: 12, h: 35, r: 3, front: [{ rect: [4, 4, 17, 6], r: 1, fill: 'dark' }, { rect: [11, 14, 3, 3], accent: 'power' }] }
+    {
+      x: 0, y: 0, z: 0, w: 25, d: 12, h: 35, r: 3,
+      top: [{ rect: [6.5, 8.5, 12, 2.5], r: 1, accent: 'power', view: 'plan' }],
+      front: [{ rect: [4, 4, 17, 6], r: 1, fill: 'dark' }, { rect: [11, 14, 3, 3], accent: 'power' }]
+    }
   ]
 };
 
