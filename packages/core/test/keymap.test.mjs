@@ -180,6 +180,21 @@ test('formatting for menus and the ? dialog', () => {
   assert.equal(shortcutHint(reticulyne, 'select', 'other'), 'V');
 });
 
+test('{mod} in a key label reads as the platform modifier', () => {
+  const pan = reticulyne.find((b) => b.action === 'pan');
+  assert.deepEqual(formatBinding(pan, 'other'), ['Ctrl + arrow keys']);
+  assert.deepEqual(formatBinding(pan, 'mac'), ['⌘ + arrow keys']);
+});
+
+test("a tool's own label names a shared row as its toolbar does", () => {
+  const label = (bindings, action) => bindings.find((b) => b.action === action).label;
+  assert.equal(label(reticulyne, 'hand'), 'Pan');
+  assert.equal(label(reticulyne, 'fit-all'), 'Fit to view');
+  assert.deepEqual(reticulyne.find((b) => b.action === 'hand').chords, [{ key: 'h' }]);
+  assert.equal(label(axonometra, 'hand'), 'Hand (pan)');
+  assert.equal(label(axonometra, 'fit-all'), 'Fit everything');
+});
+
 test('each tool has a differences list', () => {
   assert.ok(DIFFERENCES.reticulyne.some((d) => d.action === 'eraser'));
   assert.ok(DIFFERENCES.axonometra.some((d) => d.here.includes('door')));
