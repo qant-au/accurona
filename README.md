@@ -67,7 +67,7 @@ open source, build without registry credentials.
   id: 'sofa-3',              // kebab-case, unique, never renamed once shipped
   name: 'Sofa, 3-Seat',      // Title Case; a test enforces it
   group: 'living',
-  tags: ['network'],         // optional: network, power, cooling, security, fire, av
+  tags: ['network'],         // optional: network, power, cooling, security, fire, av, safe
   size: { w: 210, d: 90, h: 85 },  // cm: width (x), depth (y), height (z)
   mount: 210,                // optional: cm from floor to the underside (wall and ceiling gear)
   parts: [ /* solids, below */ ],
@@ -173,7 +173,7 @@ Consumers vendor `packages/ui/dist/` the same way as `dist/`.
   4 KB (a test enforces it).
 - **Colour carries meaning, sparingly.** Bodies are off-white or grey; accent
   colours mark a device's kind (blue network, orange power, teal cooling, red
-  security and fire, purple AV) in one small place: a status strip, a lens, a
+  security and fire, purple AV, green safe: first aid and evacuation) in one small place: a status strip, a lens, a
   panel. Never a whole body.
 - **Model real sizes.** Take dimensions from common Australian products; the
   sizes in `ITEMS.md` are the brief.

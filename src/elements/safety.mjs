@@ -3,7 +3,8 @@
 // devices (mounted at 260 cm or higher), a rounded square for wall and floor
 // devices. One small fire-red mark per glyph; the extinguisher body is red
 // because that is how an extinguisher is recognised. First aid and the AED
-// carry no tag, so they have no accent.
+// carry no tag, so they have no accent; the emergency shower and the assembly
+// point carry the green `safe` accent of safety signs.
 
 const pointsOnArc = (cx, cy, r, from, to, n = 8) =>
   Array.from({ length: n + 1 }, (_, i) => {
@@ -283,6 +284,60 @@ const equipment = [
       },
       { cyl: [25, 20, 3], z: 3, h: 82, role: 'metal' },
       { cyl: [25, 20, 10], z: 0, h: 3, role: 'metal' }
+    ]
+  },
+  {
+    // Combination emergency shower: a drench head overhead (dashed) on an arm
+    // from the back post, the eyewash bowl in front with a green push plate,
+    // and the pull rod beside the head.
+    id: 'emergency-shower',
+    name: 'Emergency Shower',
+    group: 'safety',
+    tags: ['safe'],
+    size: { w: 60, d: 70, h: 225 },
+    parts: [
+      { cyl: [30, 10, 10], z: 0, h: 3, role: 'metal', outline: true },
+      { cyl: [30, 10, 3], z: 3, h: 216, role: 'metal' },
+      {
+        cyl: [30, 54, 20, 14], z: 88, h: 12, role: 'body', outline: true,
+        top: [
+          { ellipse: [20, 13, 15, 10], fill: 'soft' },
+          { circle: [15, 12, 2], fill: 'metal', stroke: 'outline' },
+          { circle: [25, 12, 2], fill: 'metal', stroke: 'outline' },
+          { rect: [16, 24, 8, 3], r: 1, accent: 'safe' }
+        ]
+      },
+      { x: 28.5, y: 10, z: 216, w: 3, d: 18, h: 3, role: 'metal' },
+      { dome: [30, 28, 13], z: 205, h: 20, role: 'body', dash: '5 3', outline: true, top: [{ circle: [13, 13, 7] }, ...[[13, 13], [9, 11], [17, 11], [11, 16.5], [15, 16.5]].map(([u, v]) => ({ circle: [u, v, 1], fill: 'detail' }))] },
+      { x: 48, y: 27, z: 140, w: 2, d: 2, h: 70, role: 'metal', outline: true },
+      { x: 45, y: 25, z: 130, w: 8, d: 6, h: 10, role: 'metal', outline: true, top: [{ rect: [1, 1, 6, 4], accent: 'safe' }] }
+    ]
+  },
+  {
+    // Emergency assembly point: the green sign on its post. On a plan it is
+    // the sign's pictogram, four arrows closing on a group of people.
+    id: 'assembly-point',
+    name: 'Emergency Assembly Point',
+    group: 'safety',
+    tags: ['safe'],
+    size: { w: 45, d: 8, h: 240 },
+    symbol: {
+      frame: 'square',
+      glyph: [
+        { rect: [4, 4, 32, 32], r: 3, accent: 'safe' },
+        ...[[17, 17.5], [23, 17.5], [20, 22.5]].map(([u, v]) => ({ circle: [u, v, 2.4], fill: 'body', stroke: 'body' })),
+        ...[[[8, 8], [13, 13]], [[32, 8], [27, 13]], [[8, 32], [13, 27]], [[32, 32], [27, 27]]].flatMap(([[x0, y0], [x1, y1]]) => {
+          const [dx, dy] = [Math.sign(x1 - x0), Math.sign(y1 - y0)];
+          return [
+            { line: [[x0, y0], [x1, y1]], stroke: 'body', weight: 'outline' },
+            { line: [[x1, y1], [x1 - 3.5 * dx, y1], [x1, y1 - 3.5 * dy]], closed: true, fill: 'body', stroke: 'body' }
+          ];
+        })
+      ]
+    },
+    parts: [
+      { x: 0, y: 0, z: 180, w: 45, d: 3, h: 60, role: 'body', front: [{ rect: [2, 2, 41, 56], r: 2, accent: 'safe' }] },
+      { x: 20.5, y: 3, z: 0, w: 4, d: 5, h: 240, role: 'metal' }
     ]
   }
 ];

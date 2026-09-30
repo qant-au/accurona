@@ -165,7 +165,7 @@ Racks are generated in `src/elements/comms.mjs` (26 variants): wall-mount 600 ×
 | containment-door    | Aisle Containment Door           | 120×10×200       | cooling |
 | fire-suppression    | Gas Suppression Cylinder         | 40×40×170        | fire    |
 | cable-tray          | Cable Tray Section, 1 m          | 100×30×10, m 250 | network |
-| cable-tray-bend-22  | Cable Tray Bend, 22.5°           | 60×42×10, m 250  | network |
+| cable-tray-bend-22  | Cable Tray Bend, 22.5°           | 23×33×10, m 250  | network |
 | cable-tray-bend-45  | Cable Tray Bend, 45°             | 43×39×10, m 250  | network |
 | cable-tray-bend-90  | Cable Tray Bend, 90°             | 60×60×10, m 250  | network |
 | cable-tray-tee      | Cable Tray Tee                   | 90×60×10, m 250  | network |
@@ -238,6 +238,8 @@ Racks are generated in `src/elements/comms.mjs` (26 variants): wall-mount 600 ×
 | first-aid         | First Aid Kit        | 40×40 symbol, m 120    |      |
 | aed               | Defibrillator (AED)  | 40×40 symbol, m 110    |      |
 | eyewash           | Eyewash Station      | 50×40×100              |      |
+| emergency-shower  | Emergency Shower     | 60×70×225              | safe |
+| assembly-point    | Emergency Assembly Point | 40×40 symbol (sign 45×8×240) | safe |
 
 ### Outdoor and small buildings (`outdoor`)
 

@@ -22,7 +22,8 @@ export const ACCENTS = {
   cooling: '#2a9d8f',
   security: '#c0392b',
   fire: '#c0392b',
-  av: '#7b5ea7'
+  av: '#7b5ea7',
+  safe: '#2e8540' // first aid and evacuation: the green of safety signs
 };
 
 export const TAGS = Object.keys(ACCENTS);
