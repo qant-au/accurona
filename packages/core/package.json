@@ -1,6 +1,6 @@
 {
   "name": "@accurona/core",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Accurona's shared, framework-free core for Axonometra and Reticulyne: the scene format (a Zod schema, with a generated JSON Schema) and length units.",
   "license": "MIT",
   "type": "module",
