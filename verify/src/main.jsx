@@ -1,5 +1,5 @@
-// Every linework package, installed from npm as a third party would, on one
-// page. scripts in ../verify check it (check.mjs); the Docker image serves it.
+// Every Accurona, Axonometra and Reticulyne package, installed from npm as a
+// third party would, on one page. scripts in ../verify check it (check.mjs); the Docker image serves it.
 import { StrictMode, useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Box, Stack, ThemeProvider, Typography } from '@mui/material';
@@ -100,7 +100,7 @@ function App() {
       <NotificationHost />
       <Stack spacing={2} sx={{ p: 2 }}>
         <Typography variant="h4" component="h1">
-          Linework packages from npm
+          Accurona packages from npm
         </Typography>
 
         <Section id="core" title="@accurona/core">

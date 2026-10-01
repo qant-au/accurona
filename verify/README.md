@@ -1,7 +1,7 @@
 # Verification
 
-Every linework package, installed from the public npm registry as a third party
-would, on one page:
+Every Accurona, Axonometra and Reticulyne package, installed from the public npm
+registry as a third party would, on one page:
 
 - `@accurona/core` validates a scene and formats lengths,
 - `@accurona/ui` draws a tool button that raises a notification,

@@ -2,7 +2,7 @@
   "name": "linework-verify",
   "private": true,
   "type": "module",
-  "description": "Every linework package, installed from npm, on one page (see README.md).",
+  "description": "Every Accurona, Axonometra and Reticulyne package, installed from npm, on one page (see README.md).",
   "scripts": {
     "build": "vite build",
     "check": "node check.mjs"

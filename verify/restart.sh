@@ -16,7 +16,7 @@ docker run -d --name "$NAME" -p "$PORT:8080" "$NAME" >/dev/null
 
 for _ in $(seq 1 60); do
   if curl --silent --fail --output /dev/null "http://localhost:$PORT/"; then
-    echo "==> Linework packages from npm: http://localhost:$PORT/"
+    echo "==> Accurona packages from npm: http://localhost:$PORT/"
     exit 0
   fi
   sleep 1
