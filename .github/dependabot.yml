@@ -14,6 +14,15 @@ updates:
     commit-message:
       prefix: "build(deps)"
       prefix-development: "build(deps-dev)"
+    ignore:
+      # This repo runs Node 22 (CI, publish). @types/node tracks the RUNTIME
+      # major, not the newest published types. Capped, not frozen.
+      - dependency-name: "@types/node"
+        versions: [">=23"]
+      # TypeScript majors are toolchain decisions taken deliberately, in step
+      # with Axonometra and Reticulyne, never per-repo by a bot.
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
     groups:
       npm-minor-and-patch:
         patterns: ["*"]
