@@ -1,6 +1,6 @@
 {
   "name": "@accurona/ui",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Accurona's shared MUI theme, menus, panels and notifications, so Axonometra and Reticulyne look and behave the same.",
   "license": "MIT",
   "type": "module",
