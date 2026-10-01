@@ -13,7 +13,7 @@ React, MUI and Emotion are peer dependencies: your app provides one copy of each
 
 | Export                                 | What                                                               |
 | -------------------------------------- | ------------------------------------------------------------------ |
-| `createLineworkTheme(mode)`            | The theme: palette, type, shadows, component defaults.             |
+| `createAccuronaTheme(mode)`            | The theme: palette, type, shadows, component defaults.             |
 | `ToolButton`, `ToolMenu`, `Surface`    | Toolbar buttons, a menu that opens on hover or click, their card.  |
 | `SidePanel`, `FloatingPanel`           | A panel from the right; a non-modal panel pinned top right.        |
 | `AppDialog`, `CloseButton`             | A modal with a titled header; every close is named "Close".        |
@@ -25,11 +25,11 @@ React, MUI and Emotion are peer dependencies: your app provides one copy of each
 
 ```tsx
 import { ThemeProvider } from '@mui/material';
-import { createLineworkTheme, NotificationHost, notify } from '@accurona/ui';
+import { createAccuronaTheme, NotificationHost, notify } from '@accurona/ui';
 
 export function App() {
   return (
-    <ThemeProvider theme={createLineworkTheme('light')}>
+    <ThemeProvider theme={createAccuronaTheme('light')}>
       <NotificationHost />
       <button onClick={() => notify({ message: 'Saved' })}>Save</button>
     </ThemeProvider>
@@ -37,7 +37,7 @@ export function App() {
 }
 ```
 
-`createLineworkTheme(mode, { cssVariables })` leaves MUI's CSS variables off
+`createAccuronaTheme(mode, { cssVariables })` leaves MUI's CSS variables off
 unless asked: MUI writes them to `:root`, which an embedded editor must not do to
 its host page.
 

@@ -23,7 +23,7 @@ declare module '@mui/material/styles' {
   }
 }
 
-export const lineworkVars = (mode: PaletteMode = 'light'): CustomThemeVars => {
+export const accuronaVars = (mode: PaletteMode = 'light'): CustomThemeVars => {
   const isDark = mode === 'dark';
   return {
     appPadding: { x: 40, y: 40 },
@@ -46,13 +46,13 @@ const createShadows = (mode: PaletteMode) => {
 };
 
 // The theme as options, for a host that builds its own theme on top.
-export const lineworkThemeOptions = (
+export const accuronaThemeOptions = (
   mode: PaletteMode = 'light'
 ): ThemeOptions => {
   const isDark = mode === 'dark';
 
   return {
-    customVars: lineworkVars(mode),
+    customVars: accuronaVars(mode),
     shadows: createShadows(mode),
     typography: {
       h2: { fontSize: '4em', fontWeight: 'bold', lineHeight: 1.2 },
@@ -100,14 +100,14 @@ export const lineworkThemeOptions = (
   };
 };
 
-export interface LineworkThemeSettings {
+export interface AccuronaThemeSettings {
   // Expose the palette as --mui-* CSS variables, for plain CSS modules. Off
   // by default: MUI writes them to :root, which an embedded component must
   // not do to its host page.
   cssVariables?: boolean;
 }
 
-export const createLineworkTheme = (
+export const createAccuronaTheme = (
   mode: PaletteMode = 'light',
-  { cssVariables = false }: LineworkThemeSettings = {}
-) => createTheme({ ...lineworkThemeOptions(mode), cssVariables });
+  { cssVariables = false }: AccuronaThemeSettings = {}
+) => createTheme({ ...accuronaThemeOptions(mode), cssVariables });

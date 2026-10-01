@@ -11,7 +11,7 @@ import {
   validateScene
 } from '@accurona/core';
 import {
-  createLineworkTheme,
+  createAccuronaTheme,
   NotificationHost,
   notify,
   ToolButton
@@ -96,7 +96,7 @@ function App() {
   }, []);
 
   return (
-    <ThemeProvider theme={createLineworkTheme('light')}>
+    <ThemeProvider theme={createAccuronaTheme('light')}>
       <NotificationHost />
       <Stack spacing={2} sx={{ p: 2 }}>
         <Typography variant="h4" component="h1">
