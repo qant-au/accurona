@@ -7,8 +7,8 @@ latest release receives security fixes.
 
 | Version | Supported |
 | ------- | --------- |
-| 0.1.x   | Yes       |
-| < 0.1   | No        |
+| 0.2.x   | Yes       |
+| < 0.2   | No        |
 
 ## Reporting a vulnerability
 
@@ -31,12 +31,13 @@ Please include:
 ## In scope
 
 - The element definitions and build scripts (`src/`, `scripts/`).
-- The generated files other projects consume (`dist/manifest.json`, `dist/models.json`, `dist/plan/*.svg`): for example SVG content that could run script when inlined, or JSON that could break a consumer's parser.
+- The published packages `@accurona/core` and `@accurona/ui` (`packages/`), including scene parsing and validation.
+- The generated files other projects consume (`dist/manifest.json`, `dist/models.json`, `dist/plan/*.svg`, `dist/iso/*.svg`, `dist/schematic/*.svg`): for example SVG content that could run script when inlined, or JSON that could break a consumer's parser.
 
 ## Out of scope
 
 - How a consuming application renders these files; report that to the application's own repository.
-- Vulnerabilities in development-only dependencies that do not ship in the build; these are tracked with `npm audit`, which also runs in CI.
+- Vulnerabilities in development-only dependencies that do not ship in the build; these are tracked with `npm audit` and Dependabot.
 - Self-XSS, for example pasting script into the browser's developer tools, or a file the user wrote themselves.
 
 ## Disclosure
