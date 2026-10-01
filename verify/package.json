@@ -1,5 +1,5 @@
 {
-  "name": "linework-verify",
+  "name": "accurona-verify",
   "private": true,
   "type": "module",
   "description": "Every Accurona, Axonometra and Reticulyne package, installed from npm, on one page (see README.md).",

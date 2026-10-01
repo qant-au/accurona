@@ -7,7 +7,7 @@
 set -euo pipefail
 
 PORT="${PORT:-2224}"
-NAME="${NAME:-linework-verify}"
+NAME="${NAME:-accurona-verify}"
 cd "$(dirname "$0")"
 
 docker rm -f "$NAME" >/dev/null 2>&1 || true
