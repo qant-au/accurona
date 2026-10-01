@@ -55,6 +55,13 @@ Units: `mm`, `cm`, `m`, `in` and `ft-in`.
 `keymapFor(tool)` and `resolveAction()`: the keyboard shortcuts both editors share
 ([docs/keymap.md](https://github.com/qant-au/accurona/blob/main/docs/keymap.md)).
 
+`mergeScene()`: saves one editor's views and objects back into the scene it opened,
+keeping the other editor's views and the fields it does not show. `redactScene()` and
+`hasRedacted()`: the copy of a scene without its `redacted` layer. `objectPlaces()`,
+`placedOnlyElsewhere()`, `diagramLocations()` and `floorsOf()`: where one object is
+drawn in each editor. All but `mergeScene()` are described in the
+[scene format](https://github.com/qant-au/accurona/blob/main/docs/scene-format.md).
+
 ## License
 
 MIT

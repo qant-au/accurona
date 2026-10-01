@@ -65,7 +65,7 @@ Three packages on npm, all MIT:
 | Package                                                                  | What                                                                     |
 | ------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
 | [`@accurona/elements`](https://www.npmjs.com/package/@accurona/elements) | This library, built: `manifest.json`, `models.json`, `plan/<id>.svg`, `iso/<id>.svg` and `schematic/<id>.svg`. |
-| [`@accurona/core`](packages/core/)                                       | The scene format (a Zod schema and its JSON Schema) and length units.    |
+| [`@accurona/core`](packages/core/)                                       | The scene format (a Zod schema and its JSON Schema), length units and the shared keymap. |
 | [`@accurona/ui`](packages/ui/)                                           | The shared MUI theme, menus, panels and notifications.                   |
 
 ```sh
@@ -100,6 +100,7 @@ packages to npm (`.github/workflows/publish.yml`).
 | `src/palette.mjs`                | Colours and line weights.                             |
 | `src/render/plan.mjs`, `iso.mjs`, `schematic.mjs` | The three renderers.                   |
 | `ITEMS.md`                       | The item list: the ids, names and sizes built from.   |
+| `packages/core/`                 | `@accurona/core`: scene format, units, keymap.        |
 | `packages/ui/`                   | `@accurona/ui`, the shared UI (below).                |
 
 ## An element

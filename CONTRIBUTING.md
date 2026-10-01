@@ -19,7 +19,7 @@ changes between minor versions.
 git clone https://github.com/qant-au/accurona.git
 cd accurona
 npm ci
-npm run build            # dist/manifest.json, dist/models.json, dist/plan/<id>.svg
+npm run build            # dist/manifest.json, dist/models.json, dist/plan/, dist/iso/ and dist/schematic/ SVGs
 npm run sheet            # review/<group>.png contact sheets for checking your change
 ```
 
@@ -59,8 +59,9 @@ Keep each commit to one logical change.
 
 - `src/elements/<group>.mjs` - the elements of one group.
 - `src/groups.mjs` - the groups, in display order; `src/palette.mjs` - colours and line weights.
-- `src/render/` - the plan and isometric renderers.
+- `src/render/` - the plan, isometric and schematic renderers, and the 3D model.
 - `ITEMS.md` - the item list: ids, names and sizes to build from.
+- `packages/core/`, `packages/ui/` - `@accurona/core` and `@accurona/ui`, each with its own tests.
 - `test/` - the rules every element must meet; `dist/` - the generated output, committed for consumers.
 
 ## Adding or changing an element

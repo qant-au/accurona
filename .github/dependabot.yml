@@ -1,4 +1,4 @@
-# Dependabot version updates: npm only (the one dependency is playwright, dev).
+# Dependabot version updates: npm only (the root lockfile covers every workspace).
 # Public registry only. Security updates need no config.
 version: 2
 
