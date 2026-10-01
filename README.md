@@ -99,7 +99,7 @@ packages to npm (`.github/workflows/publish.yml`).
 | `src/elements/<group>.mjs`       | The elements of one group (default export: an array). |
 | `src/palette.mjs`                | Colours and line weights.                             |
 | `src/render/plan.mjs`, `iso.mjs`, `schematic.mjs` | The three renderers.                   |
-| `ITEMS.md`                       | The item list: ids, names and sizes still to build.   |
+| `ITEMS.md`                       | The item list: the ids, names and sizes built from.   |
 | `packages/ui/`                   | `@accurona/ui`, the shared UI (below).                |
 
 ## An element

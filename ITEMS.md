@@ -5,14 +5,15 @@ height in cm (`m` = mount height in cm). "symbol" means the element is drawn on
 plans as a 40 cm symbol; see the README. Beds are 100 cm tall to the top of the
 headboard.
 
-A row marked "(done)" or covered by a note already exists in `src/elements/`.
+Every row below, and every rack the comms note describes, is built in
+`src/elements/`.
 
 ### Living (`living`)
 
 | id                 | name                 | W×D×H            |
 | ------------------ | -------------------- | ---------------- |
 | sofa-2             | Sofa, 2-Seat         | 160×90×85        |
-| sofa-3             | Sofa, 3-Seat (done)  | 210×90×85        |
+| sofa-3             | Sofa, 3-Seat         | 210×90×85        |
 | sofa-corner        | Corner Sofa          | 250×250×85       |
 | armchair           | Armchair             | 85×85×85         |
 | recliner           | Recliner             | 90×95×100        |
@@ -37,7 +38,7 @@ A row marked "(done)" or covered by a note already exists in `src/elements/`.
 | bed              | Bed, Double (Legacy Id, Head At Left) | 200×150×100 |
 | bed-single       | Bed, Single                           | 92×188×100  |
 | bed-king-single  | Bed, King Single                      | 107×203×100 |
-| bed-queen        | Bed, Queen (done)                     | 153×203×100 |
+| bed-queen        | Bed, Queen                            | 153×203×100 |
 | bed-king         | Bed, King                             | 183×203×100 |
 | bunk-bed         | Bunk Bed                              | 97×200×160  |
 | cot              | Cot                                   | 75×135×90   |
@@ -98,7 +99,7 @@ Note: the legacy `bed` keeps its original Axonometra footprint, 200 × 150 (leng
 
 | id                  | name               | W×D×H          |
 | ------------------- | ------------------ | -------------- |
-| toilet              | Toilet (done)      | 40×70×80       |
+| toilet              | Toilet             | 40×70×80       |
 | toilet-wall-hung    | Toilet, Wall-Hung  | 38×55×40       |
 | urinal              | Urinal             | 40×35×60, m 50 |
 | basin-vanity        | Vanity Basin       | 75×45×85       |
@@ -210,7 +211,7 @@ Racks are generated in `src/elements/comms.mjs` (26 variants): wall-mount 600 ×
 
 | id           | name                    | W×D×H               | tags              |
 | ------------ | ----------------------- | ------------------- | ----------------- |
-| cctv-dome    | CCTV Dome Camera (done) | 40×40 symbol, m 270 | security          |
+| cctv-dome    | CCTV Dome Camera        | 40×40 symbol, m 270 | security          |
 | cctv-bullet  | CCTV Bullet Camera      | 40×40 symbol, m 250 | security          |
 | cctv-ptz     | CCTV PTZ Camera         | 40×40 symbol, m 300 | security          |
 | cctv-fisheye | CCTV 360° Camera        | 40×40 symbol, m 270 | security          |
