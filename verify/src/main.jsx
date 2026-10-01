@@ -124,7 +124,7 @@ function App() {
             {report.elements.count} elements, {report.elements.images} plan
             drawings.
           </Typography>
-          <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
+          <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: 'wrap' }}>
             {manifest.elements.slice(0, 12).map((e) => (
               <img
                 key={e.id}
