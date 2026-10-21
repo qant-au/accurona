@@ -15,8 +15,8 @@ import pytest
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 import voluptuous as vol
 
-from custom_components.neonplan3d import packs
-from custom_components.neonplan3d.const import DOMAIN
+from custom_components.accurona import packs
+from custom_components.accurona.const import DOMAIN
 
 PAYLOAD = {
     "format": "fp3dpack",
@@ -145,7 +145,7 @@ async def test_import_list_and_remove(hass: HomeAssistant, hass_ws_client, monke
     client = await hass_ws_client(hass)
 
     await client.send_json_auto_id(
-        {"type": "neonplan3d/packs/import", "pack": _sign(private, keys, {**PAYLOAD, "licensee": "Anna"})}
+        {"type": "accurona/packs/import", "pack": _sign(private, keys, {**PAYLOAD, "licensee": "Anna"})}
     )
     result = await client.receive_json()
     assert result["success"]
@@ -157,18 +157,18 @@ async def test_import_list_and_remove(hass: HomeAssistant, hass_ws_client, monke
         "items": 1,
     }
 
-    await client.send_json_auto_id({"type": "neonplan3d/packs/import", "pack": "{}"})
+    await client.send_json_auto_id({"type": "accurona/packs/import", "pack": "{}"})
     result = await client.receive_json()
     assert not result["success"] and result["error"]["code"] == "not_a_pack"
 
-    await client.send_json_auto_id({"type": "neonplan3d/packs/list"})
+    await client.send_json_auto_id({"type": "accurona/packs/list"})
     listed = (await client.receive_json())["result"]["packs"]
     assert [p["id"] for p in listed] == ["test.starter"]
     assert listed[0]["items"][0]["name"]["de"] == "Würfelsessel"
 
-    await client.send_json_auto_id({"type": "neonplan3d/packs/remove", "pack_id": "test.starter"})
+    await client.send_json_auto_id({"type": "accurona/packs/remove", "pack_id": "test.starter"})
     assert (await client.receive_json())["success"]
-    await client.send_json_auto_id({"type": "neonplan3d/packs/list"})
+    await client.send_json_auto_id({"type": "accurona/packs/list"})
     assert (await client.receive_json())["result"]["packs"] == []
 
 
@@ -270,7 +270,7 @@ def test_a_module_pack_needs_no_furniture_and_its_code_is_served_apart() -> None
         packs.validate_payload({**module, "module": {"api": 1, "kind": "editor", "code": "x"}})
     assert err.value.code == "needs_update"
     # the pack list leaves the code out, the code command returns it
-    from custom_components.neonplan3d.websocket import _without_code
+    from custom_components.accurona.websocket import _without_code
 
     slim = _without_code({**clean, "source": clean})
     assert "code" not in slim["module"] and "code" not in slim["source"]["module"]

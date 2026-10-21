@@ -1,6 +1,6 @@
 // Walking through a floor at eye height: walls stop you, doors and passages let you through, a tap on the
 // floor walks there (around walls, through doors), dragging looks around, keys and a stick move.
-// The geometry part (walls, doors, paths) is plain maths; WalkCamera drives NeonPlan's 3D view.
+// The geometry part (walls, doors, paths) is plain maths; WalkCamera drives Accurona's 3D view.
 import { generateWalls, locateOpening, openingHost, type Wall } from "../geometry/walls.ts";
 import { centroid, pointInPolygon, type Building, type Floor, type Room, type Vec2 } from "../model.ts";
 
@@ -291,7 +291,7 @@ function area(r: Room): number {
 
 // ------------------------------------------------------------------ the camera
 
-/** The parts of NeonPlan's viewer the walk takes over (private there, reached at run time). */
+/** The parts of Accurona's viewer the walk takes over (private there, reached at run time). */
 interface ViewerInternals {
   camera: { position: { set(x: number, y: number, z: number): void; x: number; y: number; z: number }; lookAt(x: number, y: number, z: number): void; fov: number; near: number; updateProjectionMatrix(): void; aspect: number };
   controls: { update(now: number): boolean; view: { target: { x: number; y: number; z: number; set(x: number, y: number, z: number): void }; radius: number; theta: number; phi: number } };
@@ -345,7 +345,7 @@ export class WalkCamera {
     this.origWalls = v.updateWalls;
     this.origFov = v.camera.fov;
     this.origNear = v.camera.near;
-    // NeonPlan's frame calls these: the walk owns the camera, walls stand whole and opaque
+    // Accurona's frame calls these: the walk owns the camera, walls stand whole and opaque
     v.controls.update = () => this.apply();
     v.updateWalls = () => {
       for (const fv of v.floors) {

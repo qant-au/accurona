@@ -1,8 +1,8 @@
-# NeonPlan 3D – Manual
+# Accurona – Manual
 
 🇬🇧 English · [🇩🇪 Deutsch](anleitung.md)
 
-NeonPlan 3D draws your home right inside Home Assistant and shows it as a 3D model in a neon look. Lights glow in their colours, blinds move, windows tilt, doors swing open, cameras look into the room and the TV shows what is playing. Everything runs locally in Home Assistant, without a cloud or external programs, and it is built for wall tablets.
+Accurona draws your home right inside Home Assistant and shows it as a 3D model in a neon look. Lights glow in their colours, blinds move, windows tilt, doors swing open, cameras look into the room and the TV shows what is playing. Everything runs locally in Home Assistant, without a cloud or external programs, and it is built for wall tablets.
 
 This manual describes every feature of the current version. What changed in which version is in the [changelog](../CHANGELOG.md) and on the [releases page](https://github.com/Mastershort/neonplan3d/releases). The pictures come from the demo with invented data. The app follows the language of your Home Assistant user (profile → language); the labels below are the English ones. German and English are built in; French, Spanish, Dutch, Italian, Hungarian, Danish, Swedish, Norwegian (Bokmål and Nynorsk), Finnish, Czech, Polish, Romanian, Slovenian, Portuguese and Chinese (Simplified) are fetched when needed, so the bundles stay small for wall tablets. A text missing in a language shows in English.
 
@@ -20,7 +20,7 @@ This manual describes every feature of the current version. What changed in whic
 6. [Pro add-ons](#6-pro-add-ons)
 7. [Extensions, shop and furniture packs](#7-extensions-shop-and-furniture-packs)
 8. [The dashboard card](#8-the-dashboard-card)
-9. [NeonPlan 3D on a wall tablet](#9-neonplan-3d-on-a-wall-tablet)
+9. [Accurona on a wall tablet](#9-accurona-3d-on-a-wall-tablet)
 10. [Backup and moving](#10-backup-and-moving)
 11. [Data and privacy](#11-data-and-privacy)
 12. [FAQ and troubleshooting](#12-faq-and-troubleshooting)
@@ -37,34 +37,34 @@ This manual describes every feature of the current version. What changed in whic
 
 ### With HACS
 
-[![Open your Home Assistant instance and open the NeonPlan 3D repository inside HACS.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Mastershort&repository=neonplan3d&category=integration)
+[![Open your Home Assistant instance and open the Accurona repository inside HACS.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Mastershort&repository=accurona&category=integration)
 
-The button opens NeonPlan 3D straight in the HACS of your installation. By hand:
+The button opens Accurona straight in the HACS of your installation. By hand:
 
 1. Open **HACS** in Home Assistant.
 2. Choose **⋮ → Custom repositories** at the top right.
 3. Enter `https://github.com/Mastershort/neonplan3d`, type **Integration**, and add it.
-4. Search for **NeonPlan 3D**, install it and restart Home Assistant.
-5. **Settings → Devices & services → Add integration → NeonPlan 3D**, or straight with this button:
+4. Search for **Accurona**, install it and restart Home Assistant.
+5. **Settings → Devices & services → Add integration → Accurona**, or straight with this button:
 
-   [![Open your Home Assistant instance and start setting up NeonPlan 3D.](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=neonplan3d)
+   [![Open your Home Assistant instance and start setting up Accurona.](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=accurona)
 
-**NeonPlan 3D** now appears in the sidebar. The dashboard card is available right away, no resource needed.
+**Accurona** now appears in the sidebar. The dashboard card is available right away, no resource needed.
 
 ### By hand
 
-Copy the folder `custom_components/neonplan3d` from the repository into `config/custom_components/`, restart Home Assistant and add the integration as above.
+Copy the folder `custom_components/accurona` from the repository into `config/custom_components/`, restart Home Assistant and add the integration as above.
 
 ### Updates
 
-HACS reports new versions by itself. Restart Home Assistant after every update. Until then NeonPlan 3D shows a note at the top that a restart is pending. Your plan always stays, even if you remove the integration and add it again.
+HACS reports new versions by itself. Restart Home Assistant after every update. Until then Accurona shows a note at the top that a restart is pending. Your plan always stays, even if you remove the integration and add it again.
 
 ---
 
 ## 2. Your first 3D plan in ten minutes
 
-1. Open **NeonPlan 3D** in the sidebar and switch to **Editor** at the top.
-2. Choose **Add floor** on the right. If you have floors in Home Assistant, NeonPlan 3D offers them directly.
+1. Open **Accurona** in the sidebar and switch to **Editor** at the top.
+2. Choose **Add floor** on the right. If you have floors in Home Assistant, Accurona offers them directly.
 3. If the floor has areas, **"Add … rooms from HA areas"** creates a room for each area. Drag the rooms into place and adjust the corners. Or draw under **Build → Room** with **Rectangle**, **Free shape** or **By measure**.
 4. Tap a wall with **Doors & windows** to add doors and windows.
 5. Tap a room and tap **Place** under **Devices** on the right for the devices you want, e.g. the lights, covers, thermostats, media players and sensors of the area. Below the list, **Place all …** puts all main devices in at once after asking.
@@ -152,7 +152,7 @@ On the far left of the toolbar is **Floor: Ground floor ▾** – the floor you 
 
 A selected room shows on the right:
 
-- **Name** and **Area**: The link to a Home Assistant area matters most. Through it NeonPlan 3D finds the room's lights, covers, sensors and scenes.
+- **Name** and **Area**: The link to a Home Assistant area matters most. Through it Accurona finds the room's lights, covers, sensors and scenes.
 - **Floor**: wood, oak, tiles, carpet, stone or concrete show as a subtle pattern in 3D.
 - **View as this room's start**: turn on **3D beside**, turn and zoom the room the way it should show, then tap the button. When you tap the room in 3D later, the camera flies right there – angle, zoom and framing. ↺ removes it, and the room is shown from above again.
 - The room's **ID** for the card option `room:` (a tap copies it).
@@ -228,7 +228,7 @@ Every opening has:
 - **Highlight in 3D:** *When open* (default) makes open windows and doors glow warm. *When closed* turns this round, e.g. for the WC or a child's room door: it glows while it is shut. This needs a contact; without a sensor nothing is highlighted.
 - **Show closed without a sensor:** a door without a contact stands half open in 3D, so it is seen as a door. The checkbox draws it closed, e.g. for a front door or a carport without a sensor.
 - **Smart lock:** the door's lock (Nuki, Aqara, `lock.*`). A pin stands at the door in 3D: 🔒 locked, glowing red while it is unlocked; a tap locks or unlocks. The voice asks it ("Is the front door locked?").
-- **Invert contact:** for sensors that report open and closed the other way round. NeonPlan then shows open when the sensor reports closed, and vice versa (default: off).
+- **Invert contact:** for sensors that report open and closed the other way round. Accurona then shows open when the sensor reports closed, and vice versa (default: off).
 
 Doors and windows can also be tapped in a wide band around the opening in the plan; a selected room lists its doors and windows in its form.
 
@@ -247,13 +247,13 @@ Doors and windows can also be tapped in a wide band around the opening in the pl
 | **Contact second leaf** | For double windows and doors |
 | **Garage door** | A garage door follows a cover entity or a contact (on = open; sensors reporting “open”/“closed” work too). A **switch or input_boolean** that drives the door works as the contact too: on = open, a tap in 3D switches it. Its open part lies under the ceiling. A gate or garage-door cover on a **door** (e.g. a sliding gate) moves the door leaf instead of a roller shutter |
 
-NeonPlan 3D matches covers and contacts through the area automatically. You can change them by hand at any time.
+Accurona matches covers and contacts through the area automatically. You can change them by hand at any time.
 
 ### 4.8 Furniture
 
 ![The furniture library](images/editor-library.jpg)
 
-The **Furniture** tool opens the library: the 80 built-in models and everything from your installed furniture packs, sorted together by **what** it is – Sofas, Seating, Tables, Cabinets & shelves, Beds, Kitchen, Appliances, Bathroom, Lights, TV & audio, Office, Tech & smart home, Heating & climate, Energy, Household, Decoration, Plants, Garden & outdoors, Kids, Fitness, Pets, Vehicles, Stairs & railings, Architecture. Every card shows a **picture**, the size (width × depth) and where the item comes from ("Basic" or the pack's name). NeonPlan draws the pictures the first time a section opens and keeps them in the browser; on very weak devices the cards stay without pictures, the hover preview still works.
+The **Furniture** tool opens the library: the 80 built-in models and everything from your installed furniture packs, sorted together by **what** it is – Sofas, Seating, Tables, Cabinets & shelves, Beds, Kitchen, Appliances, Bathroom, Lights, TV & audio, Office, Tech & smart home, Heating & climate, Energy, Household, Decoration, Plants, Garden & outdoors, Kids, Fitness, Pets, Vehicles, Stairs & railings, Architecture. Every card shows a **picture**, the size (width × depth) and where the item comes from ("Basic" or the pack's name). Accurona draws the pictures the first time a section opens and keeps them in the browser; on very weak devices the cards stay without pictures, the hover preview still works.
 
 - **Room chips** at the top: when you open a room, its room kind is preselected (a "Living room" shows Living, a "Kitchen" Kitchen) – the library then shows only what fits that room, plus everything that fits anywhere (lights, tech). **All rooms** lifts the filter, any other chip switches it.
 - **Filter chips:** ⚡ **Linkable** (takes an entity), 💡 **Lights up** (links a light), 🌳 **Outdoors**.
@@ -290,7 +290,7 @@ The **Worktop** (Kitchen) is a free top without a base, for gaps in the kitchen 
 - Several selected pieces move, turn (**R**, ↺/↻ 90° – about their common centre), copy (**Ctrl+D**), fix or delete together. **Join into a block** makes them a lasting block (orange frame labelled "Furniture block").
 - From then on, a click on any part selects the **whole block**; dragging moves it, in **3D beside** too. Edit a **single part** with a **double click** (double tap on a tablet) or by its name in the list on the right – a wall cabinet 2 cm higher, say. **Select the whole block** goes back, **Break up block** makes single pieces again. If a part is fixed, the whole block stays put – a note says so, **Release all** frees it.
 - **In the wall view** blocks work the same way – in **Wall from the front** and in **3D in the room**: **Shift + click** (*Select several* on a tablet) or **Shift + drag** (a frame, front view only) selects several parts, **Join into a block** at the bottom. Dragging slides the whole block along the wall (it snaps with its outer sides); at the bottom you switch between **Whole block** and **This part only** – to line up a single cabinet without breaking up the block. A double click on a part of a block selects just that part too.
-- **Onto the wall** (side bar on the left of the wall view): a few symbols instead of a long list – base cabinets & boards, hanging, tall cabinets, seating & beds, lights, your packs (and energy with Energie Pro) – plus a search and **Recently used**. **Tap a free spot on the wall:** NeonPlan measures the gap (low: standing, high: hanging) and shows only what fits – what fills it best first. Cabinets built to measure (kitchen unit, wall cabinet, tall cabinet, sideboard, shelf …) take the gap's width (↔), anything else goes to the gap's left end in its own size. Every piece shows a small picture. **Resize** in *Wall from the front*: on the chosen piece the handles **left and right** change its width, the **top** one its height and, for hanging pieces, the **bottom** one its lower edge – the other side stays put, edges snap to neighbours, the wall's ends, doors and windows (**Alt** freely), and the size shows live above it. Below, **Width** and **Height** can be typed in too (in *3D in the room* as well). Delete a chosen part (or several) with **Delete** at the bottom or the **Del** key.
+- **Onto the wall** (side bar on the left of the wall view): a few symbols instead of a long list – base cabinets & boards, hanging, tall cabinets, seating & beds, lights, your packs (and energy with Energie Pro) – plus a search and **Recently used**. **Tap a free spot on the wall:** Accurona measures the gap (low: standing, high: hanging) and shows only what fits – what fills it best first. Cabinets built to measure (kitchen unit, wall cabinet, tall cabinet, sideboard, shelf …) take the gap's width (↔), anything else goes to the gap's left end in its own size. Every piece shows a small picture. **Resize** in *Wall from the front*: on the chosen piece the handles **left and right** change its width, the **top** one its height and, for hanging pieces, the **bottom** one its lower edge – the other side stays put, edges snap to neighbours, the wall's ends, doors and windows (**Alt** freely), and the size shows live above it. Below, **Width** and **Height** can be typed in too (in *3D in the room* as well). Delete a chosen part (or several) with **Delete** at the bottom or the **Del** key.
 
 ![A furniture block: the kitchen](images/editor-block.jpg)
 
@@ -359,7 +359,7 @@ TVs, media walls, the wall unit with a TV (the wall unit without a TV is a lamp:
 - **Ask before switching** and **Marker in 3D** as with devices.
 - **Pictures by state** on screens: a Pro add-on, see [6.3](#63-live-screens).
 
-"Automatic" means NeonPlan 3D finds the matching entity in the area by itself.
+"Automatic" means Accurona finds the matching entity in the area by itself.
 
 ### 4.13 Cameras
 
@@ -391,7 +391,7 @@ The item **Parking spot** in the Parking group marks where a car stands: in the 
 
 The robot vacuum item – and the **robot vacuum with dock** from the Smart Home pack just the same – links to the `vacuum` entity. While the robot cleans, it drives lanes through the room of its dock in 3D and then returns. The lanes are simulated because Home Assistant usually does not know the real position.
 
-Many robots do report the room they are cleaning, for example Roborock and Dreame with a "current room" sensor. NeonPlan 3D finds this sensor on the robot's device by itself; the **Current room (sensor)** field lets you pick another one. The reported name is compared with the room name and the Home Assistant area, ignoring case and the spelling of umlauts ("Kueche" matches "Küche"). When the robot changes rooms it appears there in 3D and drives its lanes. If no room matches, it stays in the room of its dock.
+Many robots do report the room they are cleaning, for example Roborock and Dreame with a "current room" sensor. Accurona finds this sensor on the robot's device by itself; the **Current room (sensor)** field lets you pick another one. The reported name is compared with the room name and the Home Assistant area, ignoring case and the spelling of umlauts ("Kueche" matches "Küche"). When the robot changes rooms it appears there in 3D and drives its lanes. If no room matches, it stays in the room of its dock.
 
 Its lanes keep clear of furniture standing on the floor: cabinets, sofas, beds, kitchen units and appliances. It drives under tables, desks, chairs, stools and benches, over rugs and under anything hung on the wall, such as wall cabinets.
 
@@ -427,7 +427,7 @@ With **Outside → Outdoor** you draw lawn, terrace, path, driveway, flower bed,
 
 A simple house gets a flat or gable roof over the whole top floor under **Build → Roof** at **Roof shape**, with the ridge (along the long or the short side, e.g. a terraced house), pitch and overhang. For everything else – an L- or T-shaped house, a house with a barn, an extension with a pent roof, a roof that reaches far down on one side – you build the roof from **roof sections**.
 
-- Choose **Roof sections (custom)** under **Roof**, or the **Roof** tool. The first time, NeonPlan 3D proposes the sections from your rooms: per floor the parts no higher floor covers, each with a gable roof. Then you adjust them.
+- Choose **Roof sections (custom)** under **Roof**, or the **Roof** tool. The first time, Accurona proposes the sections from your rooms: per floor the parts no higher floor covers, each with a gable roof. Then you adjust them.
 - In the **Roof** tool you drag a new section in the plan. Tap selects one, dragging moves it, the corners resize it. At the top you choose the floor whose rooms the plan shows. The 3D view opens beside it with the whole house, so you see every change at once.
 - With the lock **🔓 Fix** (or the key **L**) a finished section stays put and no longer slips when you tap it; **Lock floor plan** locks all sections too.
 - Each section has a **shape** – gable, hip, half-hip (a gable hipped at the top), pyramid (four slopes to a point), mansard (steep below, flatter above), pent, flat and parapet (a flat roof with a wall ring) – and a **ridge direction** (↔ or ↕).
@@ -481,7 +481,7 @@ Below the field you see its power, counted with 400 W per module. The plan lock 
 
 **Meter and grid connection:** The **electricity meter** is the fourth energy device; it takes the grid sensor (W, + = import) and shows "Grid import 420 W" or "Export 900 W". The **grid connection** marks where the cable to the utility leaves the plot, e.g. at the end of the driveway; it is added where the cable would end by itself and can be dragged in the plan. Every device has a **Name** field in its form ("Inverter north") that shows in the list, the form and on the pins in 3D, and inverters and batteries a **Model**: wall unit, slim and tall or hybrid; tower, wall battery or compact balcony battery. Several inverters and batteries work, e.g. a big plant and a balcony plant: each gets its own sensor.
 
-**Energy balance:** NeonPlan takes grid, solar and battery from the devices in the plan (meter, inverters, batteries; several add up, charges are averaged). In the **Energy balance** section you choose other sensors, flip signs and set the house consumption. **Take over from the energy dashboard** fetches the sensors you set up in Home Assistant's energy dashboard: for every energy statistic the power sensor of the same device, plus the gas and water meters. Check the signs afterwards. **Gas meter** and **water meter** are counters (a meter reading, e.g. in m³); with Energy Pro the house card shows how much was used today.
+**Energy balance:** Accurona takes grid, solar and battery from the devices in the plan (meter, inverters, batteries; several add up, charges are averaged). In the **Energy balance** section you choose other sensors, flip signs and set the house consumption. **Take over from the energy dashboard** fetches the sensors you set up in Home Assistant's energy dashboard: for every energy statistic the power sensor of the same device, plus the gas and water meters. Check the signs afterwards. **Gas meter** and **water meter** are counters (a meter reading, e.g. in m³); with Energy Pro the house card shows how much was used today.
 
 At the bottom, a card announces the coming Pro add-on **Energy Pro**. Everything you set up here stays free and is used by it directly.
 
@@ -649,7 +649,7 @@ With north set, sunlight from `sun.sun` falls through the windows facing the sun
 
 ![A warning](images/view-alert-banner.jpg)
 
-NeonPlan 3D warns for free and without setup:
+Accurona warns for free and without setup:
 
 | Warning | Trigger |
 |---|---|
@@ -674,7 +674,7 @@ A tap on the camera or on its wedge opens the snapshot, which refreshes every fe
 
 > **New in 1.20 and still in development.** Voice control is switched on for everyone, free, and already works well. It will grow over the next versions. If a sentence is not understood the way you mean it, send us the sentence on Discord or in a GitHub issue.
 
-Talk to your house. A **microphone button** 🎙️ appears at the bottom left of the 3D view. Tap it: it turns red and "Listening …" shows above it. Say your sentence and pause briefly, and NeonPlan responds.
+Talk to your house. A **microphone button** 🎙️ appears at the bottom left of the 3D view. Tap it: it turns red and "Listening …" shows above it. Say your sentence and pause briefly, and Accurona responds.
 
 **What you can say:**
 
@@ -690,9 +690,9 @@ Talk to your house. A **microphone button** 🎙️ appears at the bottom left o
 | "What is open?", "Where is it cold?", "Is the washing machine running?", "What is drawing power?", "Who is home?", "What is the weather like?", "Is everything OK?", "What is on today?", "Good morning", "Good night" … | With the module **The house answers** (free in the shop, see below): the answer shows as a speech bubble, is spoken through Assist's text-to-speech, and the house shows it – open windows flash, the coldest room opens, the view flies to the washing machine. The full list is below. |
 | "Turn on the hall light", "Lower the blinds" | Commands go to Home Assistant's **Assist**. The answer shows as a speech bubble. |
 
-Compounds work too: "driveway camera" said as one word finds the camera "Driveway". Under **⚙ Settings → Voice control** the list **What NeonPlan understands** shows the sentences, with those of the installed modules.
+Compounds work too: "driveway camera" said as one word finds the camera "Driveway". Under **⚙ Settings → Voice control** the list **What Accurona understands** shows the sentences, with those of the installed modules.
 
-NeonPlan knows the names from **your plan**: rooms, outdoor areas, floors, devices and furniture. A room also answers to the name of its Home Assistant area. Devices need a "show" or "where is", so "turn on the living room light" stays a command for Assist and switches the light instead of flying there.
+Accurona knows the names from **your plan**: rooms, outdoor areas, floors, devices and furniture. A room also answers to the name of its Home Assistant area. Devices need a "show" or "where is", so "turn on the living room light" stays a command for Assist and switches the light instead of flying there.
 
 **Further names.** Your TV is called "Smart TV Pro" in Home Assistant, but you say "living room TV" or "telly": every room, piece of furniture and placed device has the field **Further names for the voice** below its name in the editor (comma separated, up to twelve). They count for voice control and the search.
 
@@ -719,34 +719,34 @@ NeonPlan knows the names from **your plan**: rooms, outdoor areas, floors, devic
 
 Commands ("turn on the light", "set the heating to 22 degrees") still go to Assist. The answers come in your user's language (German or English).
 
-**Modules.** Some abilities come as a **module** from the shop: a signed pack that carries code NeonPlan loads – checked and bound to your installation like a furniture pack. The first module is **The house answers** (free with a customer account). You import the .fp3dpack file under **⚙ Settings → 🧩 Modules → Import a module …** (or on the Extensions page in the **Modules** section); it is then listed there as "Module by Mastershort", and its sentences show under 🎙 Voice control. Speaking needs text-to-speech in the Assist pipeline (Settings → Voice assistants → Text-to-speech); without it the speech bubble stays.
+**Modules.** Some abilities come as a **module** from the shop: a signed pack that carries code Accurona loads – checked and bound to your installation like a furniture pack. The first module is **The house answers** (free with a customer account). You import the .fp3dpack file under **⚙ Settings → 🧩 Modules → Import a module …** (or on the Extensions page in the **Modules** section); it is then listed there as "Module by Mastershort", and its sentences show under 🎙 Voice control. Speaking needs text-to-speech in the Assist pipeline (Settings → Voice assistants → Text-to-speech); without it the speech bubble stays.
 
 **Switching it on.** Voice control is off by default. You switch it on where you want to speak:
 
-- **NeonPlan page (panel):** editor → **⚙ Settings → 🎙 Voice control** → **Switch on on this device**. This only applies to this browser, e.g. the wall tablet but not the phone.
-- **Dashboard card:** edit the dashboard → NeonPlan card → **Features** → **Voice control (microphone button)**, or `voice: true` in YAML. The card setting applies on every device that shows this dashboard, so you can set it on the PC even when it is meant for the tablet.
+- **Accurona page (panel):** editor → **⚙ Settings → 🎙 Voice control** → **Switch on on this device**. This only applies to this browser, e.g. the wall tablet but not the phone.
+- **Dashboard card:** edit the dashboard → Accurona card → **Features** → **Voice control (microphone button)**, or `voice: true` in YAML. The card setting applies on every device that shows this dashboard, so you can set it on the PC even when it is meant for the tablet.
 
 **What you need:**
 
-1. **An Assist pipeline with speech to text** in Home Assistant: Settings → Voice assistants. Home Assistant Cloud, Whisper or **Speech-to-Phrase** (local and fast, even on a Raspberry Pi) all work well. NeonPlan uses the **preferred** pipeline, the starred one. Under **Assist pipeline on this device** you can choose another one per device.
+1. **An Assist pipeline with speech to text** in Home Assistant: Settings → Voice assistants. Home Assistant Cloud, Whisper or **Speech-to-Phrase** (local and fast, even on a Raspberry Pi) all work well. Accurona uses the **preferred** pipeline, the starred one. Under **Assist pipeline on this device** you can choose another one per device.
 2. **https:** browsers only give out the microphone on secure pages. It does not work over `http://192.168…`, but it does over Nabu Casa, your own certificate or a reverse proxy.
 3. **The microphone allowed:**
    - in the browser, "Allow" on the first tap;
    - in **Fully Kiosk**: Settings → Web Content Settings → enable microphone access (Plus licence), plus Fully's microphone permission in Android.
 
-**Asking through Assist – without a microphone on the tablet.** Everything NeonPlan understands you can also say to Assist: a voice satellite (Home Assistant Voice, ESPHome), the Assist dialog or the app. On start NeonPlan writes the sentences `custom_sentences/en/neonplan3d.yaml` and `…/de/…` into your configuration folder (only when they are missing or changed). Say "Show the living room" or "What is open?" to Assist and the sentence goes to **every open NeonPlan view** – the wall tablet shows the room or the open windows, and Assist speaks the answer where you asked. The tablet itself stays quiet. Which sentences stand there you choose under **⚙ Settings → 🎙 Voice control → Sentences for Assist**: **Only distinct ones** (default: "show …", "go to …", "ask the house …", "NeonPlan, …", "good morning", "good night" – nobody says those to Home Assistant itself), **All questions** (adds "which windows are open", "where is …", "is the washer running" – careful, some of these Home Assistant answers itself otherwise) or **None** (the file is removed). "Ask the house which windows are open" reaches NeonPlan in every mode. Your own sentences go into a further file under `custom_sentences` for the intent `NeonPlanAsk`.
+**Asking through Assist – without a microphone on the tablet.** Everything Accurona understands you can also say to Assist: a voice satellite (Home Assistant Voice, ESPHome), the Assist dialog or the app. On start Accurona writes the sentences `custom_sentences/en/accurona.yaml` and `…/de/…` into your configuration folder (only when they are missing or changed). Say "Show the living room" or "What is open?" to Assist and the sentence goes to **every open Accurona view** – the wall tablet shows the room or the open windows, and Assist speaks the answer where you asked. The tablet itself stays quiet. Which sentences stand there you choose under **⚙ Settings → 🎙 Voice control → Sentences for Assist**: **Only distinct ones** (default: "show …", "go to …", "ask the house …", "Accurona, …", "good morning", "good night" – nobody says those to Home Assistant itself), **All questions** (adds "which windows are open", "where is …", "is the washer running" – careful, some of these Home Assistant answers itself otherwise) or **None** (the file is removed). "Ask the house which windows are open" reaches Accurona in every mode. Your own sentences go into a further file under `custom_sentences` for the intent `AccuronaAsk`.
 
-**The service `neonplan3d.ask`.** For automations and scripts: fields **Sentence** (`text`), **Screen** (`screen`, optional) and **Speak** (`speak`, off by default). The service returns the answer (`answer`, `answered`, `screen_open`), e.g. for a notification. With `speak: true` the view speaks the answer itself through its Assist pipeline's text-to-speech. Example – the night check on the wall tablet every evening at 10 pm:
+**The service `accurona.ask`.** For automations and scripts: fields **Sentence** (`text`), **Screen** (`screen`, optional) and **Speak** (`speak`, off by default). The service returns the answer (`answer`, `answered`, `screen_open`), e.g. for a notification. With `speak: true` the view speaks the answer itself through its Assist pipeline's text-to-speech. Example – the night check on the wall tablet every evening at 10 pm:
 
 ```yaml
-action: neonplan3d.ask
+action: accurona.ask
 data:
   text: "Good night"
   screen: "Hall"
   speak: true
 ```
 
-**Screen names.** With several tablets, give each view a name: in the editor under **⚙ Settings → 🎙 Voice control → Screen name** (for this device) or on the card with the option `screen: Kitchen`. When the service names a screen, only the view with that name reacts; without one, all of them do. With no view open, Assist answers "No NeonPlan screen is open right now".
+**Screen names.** With several tablets, give each view a name: in the editor under **⚙ Settings → 🎙 Voice control → Screen name** (for this device) or on the card with the option `screen: Kitchen`. When the service names a screen, only the view with that name reacts; without one, all of them do. With no view open, Assist answers "No Accurona screen is open right now".
 
 **Testing:** in the **🎙️ Voice control** section, **🎙️ Test the microphone** starts a probe. It checks https, the microphone, the level and Assist one after the other. It also shows which room a spoken sentence would open, and switches nothing while doing so. Wherever there is a ✖, the fix stands next to it.
 
@@ -781,14 +781,14 @@ Pro add-ons are paid extra features, sold singly in the shop. Without an add-on,
 **Live director:** a screen, usually the wall tablet, shows by itself what happens in the house. When the doorbell rings, the view flies to the front door and looks through the camera there. When a camera sees someone, the washer is done or a warning comes up, it flies there too. Afterwards it goes back to where it was. Everything is **off** until you switch it on, in two places:
 
 1. **Which events:** editor → **⚙ Settings → 🎬 Live director**. Every event has its own switch:
-   - **Doorbell rings:** NeonPlan finds the doorbell itself, as an event entity of the class "doorbell" (Ring, UniFi Protect …) or a sensor like Reolink's "Visitor". You can also choose it yourself, and the camera at the door too. Without a choice NeonPlan takes the camera of the same device, or one in the same area. The camera has to be placed in the plan; otherwise the view only flies to the doorbell.
+   - **Doorbell rings:** Accurona finds the doorbell itself, as an event entity of the class "doorbell" (Ring, UniFi Protect …) or a sensor like Reolink's "Visitor". You can also choose it yourself, and the camera at the door too. Without a choice Accurona takes the camera of the same device, or one in the same area. The camera has to be placed in the plan; otherwise the view only flies to the doorbell.
    - **A camera sees someone:** "People only" or "Any motion", for all placed cameras.
    - **Washer, dryer or dishwasher finished:** the appliance has to be furniture linked to a power sensor or a status. It counts as finished once it rests for 3 minutes after its run, so a pause in the programme does not count.
    - **New warning:** smoke, water, alarm, a window in the rain and so on.
    - **Back after:** the seconds before the view goes back (default 30). The doorbell stays twice as long.
    - **Own triggers:** further entities, each with a camera. When one goes on or open, e.g. a second doorbell, the garage door or the garden gate, the view flies there and looks through that camera. Without a camera it flies to the device.
    - **Live picture when looking through:** instead of a still every few seconds the camera's video runs, also for "Look through the camera" by hand. Needs more power; better leave it off on very old tablets.
-2. **On which screen:** in the same section, **Switch on on this device**. This only applies to this browser, e.g. the wall tablet with the NeonPlan panel. On a dashboard card you switch on **Live director** in the card settings instead (`director: true`).
+2. **On which screen:** in the same section, **Switch on on this device**. This only applies to this browser, e.g. the wall tablet with the Accurona panel. On a dashboard card you switch on **Live director** in the card settings instead (`director: true`).
 
 Someone using the tablet is only interrupted by the doorbell and by warnings. If you touch the screen while the director shows something, the view stays where it is. Part of the camera cockpit.
 
@@ -808,7 +808,7 @@ The weather around the house follows your weather entity:
 | windy | Wind drives rain and snow at an angle |
 | sunny, clear-night | Sun by day, moon by night |
 
-If the entity provides `cloud_coverage` and `wind_speed`, NeonPlan 3D uses them.
+If the entity provides `cloud_coverage` and `wind_speed`, Accurona uses them.
 
 ![Snow](images/view-weather-snow.jpg)
 
@@ -842,7 +842,7 @@ At the top of the **Energy** tool sits the **Setup** list: it ticks off what is 
 
 1. **Solar field:** + Solar field puts modules on the sunniest roof face (4.20).
 2. **Devices:** add the meter, inverter, home battery, wallbox and grid connection. They land in the garage or utility room by themselves and can be dragged in the plan.
-3. **Sensors:** easiest with **Take over from the energy dashboard** (Energy balance section): NeonPlan takes the statistics of your energy dashboard, finds the power sensor of the same device for each and puts it on the meter (grid), the inverter (PV) and the battery (power, charge). Missing devices are created. Otherwise pick the sensors in each device's form by hand: meter = grid power in watts (+ = import), inverter = PV power, battery = power (+ = discharging) and charge in percent, wallbox = power and status.
+3. **Sensors:** easiest with **Take over from the energy dashboard** (Energy balance section): Accurona takes the statistics of your energy dashboard, finds the power sensor of the same device for each and puts it on the meter (grid), the inverter (PV) and the battery (power, charge). Missing devices are created. Otherwise pick the sensors in each device's form by hand: meter = grid power in watts (+ = import), inverter = PV power, battery = power (+ = discharging) and charge in percent, wallbox = power and status.
 4. **Check the signs:** if the meter reports "export" at night or the battery charges without sun, a sensor counts the other way round. The energy balance says so and offers **Flip the sign**.
 5. **Grid connection** (optional): the grid cable runs there, e.g. to the end of the driveway. Without it the cable ends at the edge of your outdoor areas.
 
@@ -890,7 +890,7 @@ Sound & Cinema brings the music into the 3D house. It needs a speaker in the pla
 
 **Wall tablet:** on the tablet level the rings run at half the frame rate, the cards without the glass effect.
 
-**Which speakers fit?** NeonPlan uses Home Assistant's standard media player interface: what works in Home Assistant's media player dialog works here too. This is an assessment from documentation and experience, not a guarantee for every model:
+**Which speakers fit?** Accurona uses Home Assistant's standard media player interface: what works in Home Assistant's media player dialog works here too. This is an assessment from documentation and experience, not a guarantee for every model:
 
 | Integration | Cover and title | Volume | Multiroom lines |
 |---|---|---|---|
@@ -906,7 +906,7 @@ What a player should bring: the state `playing`/`paused`, `media_title` and `med
 
 **One device, one player:** every media player has exactly one card. Furniture you linked to the player by hand wins over the player placed as a device. If the same speaker exists twice in Home Assistant (e.g. an Echo through Alexa Media Player **and** through Music Assistant, recognisable by "_2" at the end), pick the one you really play through – the other never reports "playing".
 
-**Echo devices (Alexa Media Player):** play, pause and track change work. The **volume** cannot be set on some devices and versions of Alexa Media Player, or only with a delay, and the new value often comes back minutes later. This is down to the unofficial Amazon interface, not NeonPlan; Home Assistant's own media player dialog has the same limit. Echos controlled through Music Assistant usually follow the volume more reliably.
+**Echo devices (Alexa Media Player):** play, pause and track change work. The **volume** cannot be set on some devices and versions of Alexa Media Player, or only with a delay, and the new value often comes back minutes later. This is down to the unofficial Amazon interface, not Accurona; Home Assistant's own media player dialog has the same limit. Echos controlled through Music Assistant usually follow the volume more reliably.
 
 ### 6.6 Car Pro
 
@@ -914,7 +914,7 @@ Car Pro brings the car into the plan the way its integration reports it (Tesla, 
 
 Car Pro lives on the **parking spot**, not on the vehicle furniture. If your car stands in the plan as plain furniture, **Turn into a parking spot** in its form makes it a parking spot with this vehicle.
 
-**Setup:** at the bottom of the parking spot form, the **Car Pro** section. Under **Car** choose any entity of the car – NeonPlan finds the others on the same device: charge, range, charging power or state, cable, lock, climate or preheating, location. Every role can be set by hand or switched off with "None". The lock can also be a text sensor that reports `locked`/`secured` or `unlocked` (as BMW does). A "car present" sensor on the spot serves as the starting point of the search as well.
+**Setup:** at the bottom of the parking spot form, the **Car Pro** section. Under **Car** choose any entity of the car – Accurona finds the others on the same device: charge, range, charging power or state, cable, lock, climate or preheating, location. Every role can be set by hand or switched off with "None". The lock can also be a text sensor that reports `locked`/`secured` or `unlocked` (as BMW does). A "car present" sensor on the spot serves as the starting point of the search as well.
 
 **In the house:** the vehicle wears a **light band** in the colour of its charge (green above 50 %, yellow down to 20 %, red below), stronger while it charges. While the climate or preheating runs, the car glows warm. The **pin at the spot** reads "78 % · 312 km · ⚡ 7.4 kW · 🔒". When the car is out, the spot stays empty and the pin says **away**, with the tracker's zone when there is one ("away · Work").
 
@@ -993,20 +993,20 @@ Not included are camera pictures (the recorder keeps none) and people and their 
 
 Household Pro shows what is due in the household, right where it happens. The waste bins and mailboxes themselves are for everyone (chapter 4.23); Household Pro brings them and other appliances to life. Its fields are in the item's form under **🏠 Household Pro**.
 
-- **Waste bins:** under **Waste calendar or sensor** pick a calendar (e.g. from *Waste Collection Schedule*) or a sensor. In a calendar NeonPlan finds the entries by the words of the bin's waste (paper, food, packaging, PMD, recycling … in many languages); if that does not fit, enter a **word** of your own. A sensor may report the days to the pickup, a date or "tomorrow"/"in 3 days". Every bin with a pickup wears a small **tag** on its lid – "Today", "Tomorrow", "in 3 days" – in its colour; today and tomorrow stand out. A tap on the bin shows its next pickups. **Glow from / until** sets from when the day before until when on pickup day a bin counts as due (for all bins).
+- **Waste bins:** under **Waste calendar or sensor** pick a calendar (e.g. from *Waste Collection Schedule*) or a sensor. In a calendar Accurona finds the entries by the words of the bin's waste (paper, food, packaging, PMD, recycling … in many languages); if that does not fit, enter a **word** of your own. A sensor may report the days to the pickup, a date or "tomorrow"/"in 3 days". Every bin with a pickup wears a small **tag** on its lid – "Today", "Tomorrow", "in 3 days" – in its colour; today and tomorrow stand out. A tap on the bin shows its next pickups. **Glow from / until** sets from when the day before until when on pickup day a bin counts as due (for all bins).
 - **Mailbox:** a **post sensor** – a flag (e.g. an input_boolean "post" set by an automation) or the letter flap – and optionally the **sensor of the emptying door**. While post is in it, the mailbox glows and shows "Post" until it is emptied.
 - **Plants:** a plant (plant.*) or a moisture sensor; below the set value (default 20 %) it shows "Thirsty".
 - **Pinboard:** under **⚙ Settings → House → Pinboard (text helper)** pick a text helper (`input_text`) or sensor. Its text stands at the top of "Today in the household", several lines separated by `|` – automations write into it ("parcel for Alla is in the garage", "plumber tomorrow at 10"), the card shows it.
-- **Washer, dryer, dishwasher:** with a **time-left sensor** the pin shows "23 min left"; afterwards "Done!" until the door opens (**door sensor**) or it runs again. NeonPlan tells "done" from the appliance's state (finished, done …) or from it having stopped running.
+- **Washer, dryer, dishwasher:** with a **time-left sensor** the pin shows "23 min left"; afterwards "Done!" until the door opens (**door sensor**) or it runs again. Accurona tells "done" from the appliance's state (finished, done …) or from it having stopped running.
 - **Service and consumables:** any electric item can have a sensor for a filter, salt or rinse aid – a binary sensor (on = due), a number (percent or days left, due at the set value) or a date. When due the item glows yellow.
-- **Fridge:** when a door stands open longer than set (default 2 minutes), NeonPlan warns at the top of the view. The **smart fridge** (side-by-side with moving doors) in the furniture library comes with it.
+- **Fridge:** when a door stands open longer than set (default 2 minutes), Accurona warns at the top of the view. The **smart fridge** (side-by-side with moving doors) in the furniture library comes with it.
 - **Today in the household:** a glass card at the top right lists what is due – bins today and tomorrow, post, finished appliances, thirsty plants, services due, open fridge doors. A tap opens the device, its header folds it. In the dashboard card `household_card: false` switches it off.
 
 ## 7. Extensions, shop and furniture packs
 
 ![Extensions](images/extensions.jpg)
 
-The **✦ Extensions** tab gathers everything you can add to NeonPlan 3D.
+The **✦ Extensions** tab gathers everything you can add to Accurona.
 
 ### 7.1 Shop connection
 
@@ -1018,13 +1018,13 @@ With your first purchase at mastershort.de you get a **licence key** in the form
 
 After that:
 
-- **Updates come by themselves.** Once a day NeonPlan 3D asks whether there are new purchases or newer versions and installs them. **Check now** asks right away.
+- **Updates come by themselves.** Once a day Accurona asks whether there are new purchases or newer versions and installs them. **Check now** asks right away.
 - **Everything keeps working offline.** Installed packs are checked locally, the shop is never needed for that.
 - **Disconnect** removes the key. Installed packs stay.
 - **Pack updates:** When a bought pack grows, the page shows once what was added.
-- **New in the shop:** With a shop connection the page shows the packs and Pro add-ons you do not have yet at the top, with **NEW** for fresh ones. A badge on the **✦ Extensions** tab shows what is waiting: **"2 ready"** for bought or given packs that can be installed or updated, **"3 new"** for new offers in the shop (only once you have bought something; the offers are always here anyway). When a pack newly belongs to you (bought or a gift), Home Assistant also announces it once under **Notifications** (several packs at once in one notice); it is dismissed when the pack is installed. Without a key NeonPlan 3D never contacts the shop.
+- **New in the shop:** With a shop connection the page shows the packs and Pro add-ons you do not have yet at the top, with **NEW** for fresh ones. A badge on the **✦ Extensions** tab shows what is waiting: **"2 ready"** for bought or given packs that can be installed or updated, **"3 new"** for new offers in the shop (only once you have bought something; the offers are always here anyway). When a pack newly belongs to you (bought or a gift), Home Assistant also announces it once under **Notifications** (several packs at once in one notice); it is dismissed when the pack is installed. Without a key Accurona never contacts the shop.
 - **Loyalty discount:** With your first purchase you get a personal discount code for every further pack and Pro add-on (not for bundles). It is in the order e-mail, in your account and at the top under **New in the shop**; tapping an offer puts it straight into the cart.
-- **4 furniture packs as a gift:** With a shop connection, if you have not subscribed to the NeonPlan newsletter yet, a small box shows here. After signing up and confirming by mail, the taster packs living room, kitchen, bedroom and bathroom (4 items each) appear under Extensions by themselves – at the next daily check at the latest, at once with **Check now**. **Don't show again** hides the box on this device.
+- **4 furniture packs as a gift:** With a shop connection, if you have not subscribed to the Accurona newsletter yet, a small box shows here. After signing up and confirming by mail, the taster packs living room, kitchen, bedroom and bathroom (4 items each) appear under Extensions by themselves – at the next daily check at the latest, at once with **Check now**. **Don't show again** hides the box on this device.
 
 **Several installations:** A key is connected to at most three installations at a time. If you move to new hardware, simply connect the new installation, the oldest one then drops out. Up to five new connections are possible per year. The **Installation id** at the top is an anonymous fingerprint of your installation.
 
@@ -1082,21 +1082,21 @@ Switch them on and off under **🎈 Fun packs** afterwards.
 
 ### 7.5 Modules
 
-A **module** is a pack that carries code: NeonPlan loads it and runs it in the house – checked, signed and bound to your installation like a furniture pack. Modules come only from the shop (with a customer account, many of them free); their code is not in the public repository.
+A **module** is a pack that carries code: Accurona loads it and runs it in the house – checked, signed and bound to your installation like a furniture pack. Modules come only from the shop (with a customer account, many of them free); their code is not in the public repository.
 
 **How a module works – step by step:**
 
 1. **Get it:** put the module into the shop's basket (free ones too), order, done. It then lies in your customer account like every pack.
-2. **Install it:** with NeonPlan connected to the shop (7.1) it stands under Extensions → **Install/update all** – one tap. Without the connection download the `.fp3dpack` file from the account and import it: **⚙ Settings → 🧩 Modules → Import a module …** or here in the **Modules** section. Nothing more to do – no restart, no reload.
-3. **See it:** the module stands in both lists as "Module by Mastershort · v2". What it does is in its shop description; the sentences of a voice module show at once under **🎙 Voice control → What NeonPlan understands**, a module's warnings in the warning bar, its cards over the house.
+2. **Install it:** with Accurona connected to the shop (7.1) it stands under Extensions → **Install/update all** – one tap. Without the connection download the `.fp3dpack` file from the account and import it: **⚙ Settings → 🧩 Modules → Import a module …** or here in the **Modules** section. Nothing more to do – no restart, no reload.
+3. **See it:** the module stands in both lists as "Module by Mastershort · v2". What it does is in its shop description; the sentences of a voice module show at once under **🎙 Voice control → What Accurona understands**, a module's warnings in the warning bar, its cards over the house.
 4. **Updates:** a new release is fetched by the daily shop check by itself; without the connection import the new file – the same id replaces the old one.
 5. **Remove:** **Remove** in the list, like a pack. Your plan stays untouched.
 
 Security: a module runs only with a valid signature and on the installation it was bought for. You can read the code in the file (it is not obfuscated) but not pass it on – the Elastic License 2.0 applies.
 
-**Why modules?** The Pro add-ons move over to this form one by one (on the extensions page they already stand under Modules, "becomes a module"). Nothing changes in how you use them. A lot changes in how they are built: each extension gets its updates through the shop without waiting for the next NeonPlan release; several extensions can be built and tested at once, each with its own supporter beta; and the core stays small and fast – a wall tablet only loads what it uses.
+**Why modules?** The Pro add-ons move over to this form one by one (on the extensions page they already stand under Modules, "becomes a module"). Nothing changes in how you use them. A lot changes in how they are built: each extension gets its updates through the shop without waiting for the next Accurona release; several extensions can be built and tested at once, each with its own supporter beta; and the core stays small and fast – a wall tablet only loads what it uses.
 
-> **Beta: The house answers.** Supporters test the voice module first: with the [Supporter Pass](https://mastershort.de/en/neonplan3d/supporters/) it lies in your account – **Install all** or import the file (step 2). Then open **⚙ Settings → 🎙 Voice control**: under "What NeonPlan understands" every question is listed. Try "What is open?", "Good morning", "Good night", "What is the weather like?" – at the microphone or in the Assist dialog. Speaking needs text-to-speech in the Assist pipeline (Settings → Voice assistants → Text-to-speech). Whatever is not understood or answered wrongly: post the exact sentence on Discord in **#beta-feedback** – that is what the next release is made of. After the beta the module is free for everyone.
+> **Beta: The house answers.** Supporters test the voice module first: with the [Supporter Pass](https://mastershort.de/en/neonplan3d/supporters/) it lies in your account – **Install all** or import the file (step 2). Then open **⚙ Settings → 🎙 Voice control**: under "What Accurona understands" every question is listed. Try "What is open?", "Good morning", "Good night", "What is the weather like?" – at the microphone or in the Assist dialog. Speaking needs text-to-speech in the Assist pipeline (Settings → Voice assistants → Text-to-speech). Whatever is not understood or answered wrongly: post the exact sentence on Discord in **#beta-feedback** – that is what the next release is made of. After the beta the module is free for everyone.
 
 Modules today:
 
@@ -1109,9 +1109,9 @@ Modules today:
 
 ![The card in a dashboard](images/card-og-dim.jpg)
 
-The card `custom:neonplan3d-card` brings the 3D view into any dashboard. It loads automatically.
+The card `custom:accurona-card` brings the 3D view into any dashboard. It loads automatically.
 
-**Adding it:** Edit the dashboard, **Add card**, search for "NeonPlan". Set every option in the card's visual editor:
+**Adding it:** Edit the dashboard, **Add card**, search for "Accurona". Set every option in the card's visual editor:
 
 | Section | Options |
 |---|---|
@@ -1125,7 +1125,7 @@ The card `custom:neonplan3d-card` brings the 3D view into any dashboard. It load
 In YAML a card looks like this. Every line except the first is optional:
 
 ```yaml
-type: custom:neonplan3d-card
+type: custom:accurona-card
 floor: floor_ab12cd34   # show one floor (id from the editor)
 room: room_ab12cd34     # start in this room (the id is in the editor's room form), e.g. a display for the kids' room
 height: 420             # height in pixels
@@ -1180,11 +1180,11 @@ idle_orbit: false
 
 ---
 
-## 9. NeonPlan 3D on a wall tablet
+## 9. Accurona on a wall tablet
 
 ![Tablet](images/tablet.jpg)
 
-NeonPlan 3D is built for wall tablets such as the Amazon Fire:
+Accurona is built for wall tablets such as the Amazon Fire:
 
 - **No work while idle.** If nothing changes, the view draws not a single frame. The FPS display then reads "At rest (0 fps)".
 - **Tablet quality level:** "Auto" picks it by itself on Fire tablets. Patterns, shadows, halos and particles are left out, animations run at half rate.
@@ -1198,7 +1198,7 @@ NeonPlan 3D is built for wall tablets such as the Amazon Fire:
 
 **Tips for Fire tablets:** Use Fully Kiosk Browser with hardware acceleration, show the card full screen with `fill: true` and keep `quality: auto`.
 
-**Voice control:** on the wall tablet you talk to NeonPlan with a microphone button, e.g. "Show the living room". Everything about it is in [5.10 Voice control](#510-voice-control-new).
+**Voice control:** on the wall tablet you talk to Accurona with a microphone button, e.g. "Show the living room". Everything about it is in [5.10 Voice control](#510-voice-control-new).
 
 ---
 
@@ -1213,16 +1213,16 @@ Under **Backup** in the editor:
 - **Share as template** exports without areas, devices, sensors and pictures. Good for passing a floor plan on.
 - **Full backup:** **Back up everything (plan, pictures, packs)** saves one file with the plan, every background and screen picture and the installed packs. **Restore a full backup …** brings it back into the same or another installation. Every pack is checked again. Packs signed for another installation are fetched there again through the shop connection. The licence key is not in the file.
 
-Home Assistant's own backup includes NeonPlan 3D completely as well.
+Home Assistant's own backup includes Accurona completely as well.
 
-**From other programs:** the **import page** (<https://neonplan3d.mastershort.de/import/>, also under **Backup → To the import page**) turns plans of other programs into a NeonPlan file: Sweet Home 3D (`.sh3d`), iPhone/iPad LiDAR scans (RoomPlan JSON), CAD drawings (`.dxf`), 3D models from Blender, SketchUp & co. (`.glb`, `.gltf`, `.obj`, `.stl`), Floorplanner and Valetudo robot vacuum maps. It shows a preview with rooms, doors, windows and furniture, lets you rename rooms and, depending on the format, set the unit, the layers or the floor levels; the file stays on your computer. Load the downloaded file here with **Import …**. If you would rather let an AI write the plan, the template is in [docs/ai-import.md](https://github.com/Mastershort/neonplan3d/blob/main/docs/ai-import.md); the import page checks and repairs the result.
+**From other programs:** the **import page** (<https://neonplan3d.mastershort.de/import/>, also under **Backup → To the import page**) turns plans of other programs into a Accurona file: Sweet Home 3D (`.sh3d`), iPhone/iPad LiDAR scans (RoomPlan JSON), CAD drawings (`.dxf`), 3D models from Blender, SketchUp & co. (`.glb`, `.gltf`, `.obj`, `.stl`), Floorplanner and Valetudo robot vacuum maps. It shows a preview with rooms, doors, windows and furniture, lets you rename rooms and, depending on the format, set the unit, the layers or the floor levels; the file stays on your computer. Load the downloaded file here with **Import …**. If you would rather let an AI write the plan, the template is in [docs/ai-import.md](https://github.com/Mastershort/neonplan3d/blob/main/docs/ai-import.md); the import page checks and repairs the result.
 
 ---
 
 ## 11. Data and privacy
 
 - The plan, pictures and packs are stored in Home Assistant under `.storage`. None of it leaves your installation.
-- NeonPlan 3D only connects to the internet if you enter a licence key. Then it asks mastershort.de once a day for updates and sends the key and the anonymous installation id.
+- Accurona only connects to the internet if you enter a licence key. Then it asks mastershort.de once a day for updates and sends the key and the anonymous installation id.
 - Camera pictures, history and states stay in Home Assistant and are only shown in the browser.
 - Time travel reads the history from Home Assistant's recorder, only for the devices of the plan. It never reads people or their trackers.
 
@@ -1233,10 +1233,10 @@ Home Assistant's own backup includes NeonPlan 3D completely as well.
 **Help and feedback:** report a bug as an [issue on GitHub](https://github.com/Mastershort/neonplan3d/issues/new/choose) and an idea as a [discussion](https://github.com/Mastershort/neonplan3d/discussions/categories/ideas). Nothing gets lost, everyone sees the state, and you are credited in the release notes once it is built. The two buttons for it are also at the bottom of the editor's sidebar and on the Extensions page.
 
 **How do I get the latest update?**
-Settings → System → Updates. HACS only looks for new versions every few hours, so a fresh update may not show there yet. Then: HACS → NeonPlan 3D → ⋮ → **Update information** → **Download**. Then restart Home Assistant and reload the page (Ctrl+F5; in the Companion app: Settings → Companion app → reset frontend cache).
+Settings → System → Updates. HACS only looks for new versions every few hours, so a fresh update may not show there yet. Then: HACS → Accurona → ⋮ → **Update information** → **Download**. Then restart Home Assistant and reload the page (Ctrl+F5; in the Companion app: Settings → Companion app → reset frontend cache).
 
 **Can I use helpers instead of real sensors?**
-Yes. Wherever NeonPlan expects a number (power, charge, range, position …), `input_number` and `number` helpers can be picked too, and wherever it expects on/off (contact, presence …), `input_boolean` as well. For power the helper needs the unit W or kW.
+Yes. Wherever Accurona expects a number (power, charge, range, position …), `input_number` and `number` helpers can be picked too, and wherever it expects on/off (contact, presence …), `input_boolean` as well. For power the helper needs the unit W or kW.
 
 **An Echo's volume does not change.**
 Alexa Media Player does not set the volume on some Echos, or only with a delay, and reports the new value late. Check it in Developer tools → Actions with `media_player.volume_set`: if nothing happens there, it is the integration (see chapter 6.5).
@@ -1244,7 +1244,7 @@ Alexa Media Player does not set the volume on some Echos, or only with a delay, 
 **"Restart needed" appears at the top.**
 After an update the old version still runs in the background. Restart Home Assistant.
 
-**On an iPhone or iPad NeonPlan closes when I move or zoom with two fingers.**
+**On an iPhone or iPad Accurona closes when I move or zoom with two fingers.**
 That is no crash: the Home Assistant app has gestures of its own. If a two-finger swipe has an action there (e.g. to the start page), the app runs it and leaves the page. In the app, set the two-finger gestures under **Settings → Companion App → Gestures** to **None**. It never happens in Safari.
 
 **A device is missing in a room's device list.**
@@ -1275,10 +1275,10 @@ Check **North** under Settings: degrees clockwise from "up" in the plan.
 The key was connected to more than five new installations in the last twelve months. Contact us, we will help.
 
 **Activation says "The shop is busy right now" or "HTTP 429".**
-The shop's web host throttles too many requests from one address. Since 1.9.1 NeonPlan retries twice with a pause by itself; if it still fails, wait a minute and click **Activate** again. Versions before 1.9.1 were turned away by the host because of their user agent – there only the update helps.
+The shop's web host throttles too many requests from one address. Since 1.9.1 Accurona retries twice with a pause by itself; if it still fails, wait a minute and click **Activate** again. Versions before 1.9.1 were turned away by the host because of their user agent – there only the update helps.
 
-**The notice "This page still shows NeonPlan 3D x.y, Home Assistant already has …" stays.**
-The browser or the companion app still holds an old NeonPlan bundle. Tap **Reload**; in the companion app go to Settings → Companion app → **Reset frontend cache**, then close the app completely and open it again. Restarting Home Assistant does not help here. The same applies when a bought Pro add-on says "needs a newer NeonPlan version" under the packs.
+**The notice "This page still shows Accurona x.y, Home Assistant already has …" stays.**
+The browser or the companion app still holds an old Accurona bundle. Tap **Reload**; in the companion app go to Settings → Companion app → **Reset frontend cache**, then close the app completely and open it again. Restarting Home Assistant does not help here. The same applies when a bought Pro add-on says "needs a newer Accurona version" under the packs.
 
 **Two holograms hang on the roof (Energy Pro).**
 That is intended: the big one is the **house balance** (Solar & Energy), the smaller one the **plant card** of the inverter whose field that is – with several plants each has its own. Too much? In the **Hologram** section hang the house balance **Free in the plan** (handle ◈), or untick **Show the plant card** in the inverter form. A small card that seems to stick to the roof is often the device hologram of a device in the room below – turn the camera a little.

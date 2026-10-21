@@ -608,7 +608,7 @@ export class Fp3dView3d extends LitElement {
     this._find = null;
     this._central = false;
     try {
-      this._thumbsCompact = localStorage.getItem("neonplan3d.thumbs_compact") === "1";
+      this._thumbsCompact = localStorage.getItem("accurona.thumbs_compact") === "1";
     } catch {
       this._thumbsCompact = false;
     }
@@ -641,7 +641,7 @@ export class Fp3dView3d extends LitElement {
     this._micProbe = micProbeAsked();
     this._alerts = [];
     this._household = [];
-    this._hhFolded = readFlag("neonplan3d.hhFolded");
+    this._hhFolded = readFlag("accurona.hhFolded");
     this._binInfo = null;
     this._gangMenu = null;
     this.householdCard = true;
@@ -653,8 +653,8 @@ export class Fp3dView3d extends LitElement {
     this.cameraWall = false;
     this.holograms = null;
     try {
-      this._flows = localStorage.getItem("neonplan3d.flows") === "1";
-      this._holoShow = localStorage.getItem("neonplan3d.holos") !== "0";
+      this._flows = localStorage.getItem("accurona.flows") === "1";
+      this._holoShow = localStorage.getItem("accurona.holos") !== "0";
     } catch {
       this._flows = false;
       this._holoShow = true;
@@ -676,7 +676,7 @@ export class Fp3dView3d extends LitElement {
     this.watchAsk();
   }
 
-  /** Listens to the sentences Assist and the service `neonplan3d.ask` hand to the views (once the connection is there). */
+  /** Listens to the sentences Assist and the service `accurona.ask` hand to the views (once the connection is there). */
   private watchAsk(): void {
     const hass = this.hass;
     if (this.unsubAsk || !hass?.connection || !this.isConnected) return;
@@ -3395,7 +3395,7 @@ export class Fp3dView3d extends LitElement {
     const fold = () => {
       this._thumbsCompact = !compact;
       try {
-        localStorage.setItem("neonplan3d.thumbs_compact", this._thumbsCompact ? "1" : "0");
+        localStorage.setItem("accurona.thumbs_compact", this._thumbsCompact ? "1" : "0");
       } catch {
         // private mode: the choice lasts for this page only
       }
@@ -3535,7 +3535,7 @@ export class Fp3dView3d extends LitElement {
     if (!this._household.length || !this.householdCard || !hasFeature("household") || this.panelOpen) return nothing;
     const fold = () => {
       this._hhFolded = !this._hhFolded;
-      writeFlag("neonplan3d.hhFolded", this._hhFolded);
+      writeFlag("accurona.hhFolded", this._hhFolded);
     };
     return html`<div class="fp3d-hh ${this._hhFolded ? "fp3d-hh-folded" : ""}">
       <button class="fp3d-hh-head" aria-expanded=${!this._hhFolded} @click=${fold}>🏠 ${translate(this.hass, "hh_title")} <b>${this._household.length}</b></button>
@@ -3642,7 +3642,7 @@ export class Fp3dView3d extends LitElement {
         },
       });
     } catch (err) {
-      console.error("NeonPlan 3D: the pets failed to load", err);
+      console.error("Accurona: the pets failed to load", err);
     } finally {
       this.petsLoading = false;
     }
@@ -3673,7 +3673,7 @@ export class Fp3dView3d extends LitElement {
         night: () => this.hass?.states["sun.sun"]?.state === "below_horizon",
       });
     } catch (err) {
-      console.error("NeonPlan 3D: the ghost failed to load", err);
+      console.error("Accurona: the ghost failed to load", err);
     } finally {
       this.ghostLoading = false;
     }
@@ -4054,7 +4054,7 @@ export class Fp3dView3d extends LitElement {
 
   /**
    * One sentence, from the microphone or from Assist: a place or device to show is shown, a question is answered by
-   * the modules. Returns what was answered (for Assist to speak) or null when the sentence is not NeonPlan's.
+   * the modules. Returns what was answered (for Assist to speak) or null when the sentence is not Accurona's.
    * `speak`: the view speaks the answer itself (false when a satellite asked: it speaks).
    */
   private async handleSentence(hass: HomeAssistant, b: Building, v: Awaited<ReturnType<typeof loadVoice>>, text: string, speak: boolean): Promise<string | null> {
@@ -4318,7 +4318,7 @@ export class Fp3dView3d extends LitElement {
         const next = structuredClone(cur);
         mutate(next);
         this.building = next;
-        saveBuilding(this.hass, next).catch((err) => this.serviceFailed("neonplan3d/building/save", err));
+        saveBuilding(this.hass, next).catch((err) => this.serviceFailed("accurona/building/save", err));
       },
       callService: (domain, service, data) => (this.hass ? this.hass.callService(domain, service, data) : Promise.resolve()),
       newId: (prefix) => uid(prefix),
@@ -4584,7 +4584,7 @@ export class Fp3dView3d extends LitElement {
     const left = Math.max(8, Math.min(w - 240, m.x - 116));
     const top = Math.max(8, Math.min(h - 360, m.y - 170));
     return html`<div class="fp3d-menu-backdrop" @click=${() => (this._menu = null)}></div>
-      <fp3d-quick-menu
+      <accurona-quick-menu
         style="left:${left}px;top:${top}px"
         ?low=${this._low}
         .hass=${this.hass}
@@ -4595,7 +4595,7 @@ export class Fp3dView3d extends LitElement {
         ?pro=${hasFeature("camera_cockpit")}
         @close=${() => (this._menu = null)}
         @camera-look=${(e: CustomEvent<{ entity: string }>) => this.lookThrough(e.detail.entity)}
-      ></fp3d-quick-menu>`;
+      ></accurona-quick-menu>`;
   }
 
   private onDeviceTap(entityId: string, x = 0, y = 0): void {
@@ -4692,7 +4692,7 @@ export class Fp3dView3d extends LitElement {
   private toggleHolos(): void {
     this._holoShow = !this._holoShow;
     try {
-      localStorage.setItem("neonplan3d.holos", this._holoShow ? "1" : "0");
+      localStorage.setItem("accurona.holos", this._holoShow ? "1" : "0");
     } catch {
       // private mode: the choice lasts for this page only
     }
@@ -4705,7 +4705,7 @@ export class Fp3dView3d extends LitElement {
   private toggleFlows(): void {
     this._flows = !this._flows;
     try {
-      localStorage.setItem("neonplan3d.flows", this._flows ? "1" : "0");
+      localStorage.setItem("accurona.flows", this._flows ? "1" : "0");
     } catch {
       // private mode: the choice lasts for this page only
     }
@@ -4806,7 +4806,7 @@ export class Fp3dView3d extends LitElement {
       ${this.renderClock()} ${this.renderAlerts()} ${this.clean || this._walk ? nothing : html`${this.renderHousehold()} ${this.renderThumbs()} ${this.renderScenes()} ${this.renderFind()} ${this.renderCentral()}`} ${this.clean ? nothing : this.renderWalk()} ${this.renderSwipe()} ${this.renderInfo()} ${this.renderBinInfo()} ${this.renderGangMenu()} ${this.renderThrough()} ${this.renderCameraWall()}
       ${this.clean ? nothing : this.renderProHint()} ${this.renderMenu()} ${this.renderEye()}
       ${this.renderMic()}
-      ${this._micProbe && this.hass ? html`<fp3d-mic-probe .hass=${this.hass} .building=${this.building} @close=${() => ((this._micProbe = false), micProbeDone())}></fp3d-mic-probe>` : nothing}
+      ${this._micProbe && this.hass ? html`<accurona-mic-probe .hass=${this.hass} .building=${this.building} @close=${() => ((this._micProbe = false), micProbeDone())}></accurona-mic-probe>` : nothing}
       ${this.showStats && this._stats
         ? html`<span class="fp3d-stats"
             ><b>${this._stats.fps ? translate(this.hass, "stats_fps", { fps: this._stats.fps, ms: this._stats.worstMs }) : translate(this.hass, "stats_idle")}</b>
@@ -5982,7 +5982,7 @@ export class Fp3dView3d extends LitElement {
       .fp3d-through-on :is(.fp3d-pin, .fp3d-dev, .fp3d-energy, .fp3d-legend, .fp3d-thumbs, .fp3d-scenes, .fp3d-find-btn, .fp3d-stats) {
         display: none;
       }
-      fp3d-quick-menu {
+      accurona-quick-menu {
         position: absolute;
         z-index: 6;
       }
@@ -6605,7 +6605,7 @@ export class Fp3dView3d extends LitElement {
   ];
 }
 
-if (!customElements.get("fp3d-view3d")) customElements.define("fp3d-view3d", Fp3dView3d);
+if (!customElements.get("accurona-view3d")) customElements.define("accurona-view3d", Fp3dView3d);
 
 /** Power as "850 W" or "1,2 kW". */
 function formatPower(hass: HomeAssistant | undefined, w: number): string {

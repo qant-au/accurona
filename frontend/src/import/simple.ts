@@ -1,6 +1,6 @@
 // The simple import format (docs/plan-format.md): what a person, a script or an AI writes easily – floors with rooms
 // as outlines, walls, doors and windows by their middle, furniture by kind and size. The importer turns it into a
-// proper plan. And the check for complete NeonPlan plans that were written by hand or by an AI: broken parts are
+// proper plan. And the check for complete Accurona plans that were written by hand or by an AI: broken parts are
 // repaired or left out, with a warning for each.
 
 import type { Building, FurnitureType, Vec2 } from "../model.ts";
@@ -78,11 +78,11 @@ export function readSimple(data: unknown): RawPlan {
     return floor;
   });
   if (!floors.length) throw new Error("nothing_found");
-  return { source: "NeonPlan", floors, roomsAtInnerFaces: d.rooms_at === "inner", warnings };
+  return { source: "Accurona", floors, roomsAtInnerFaces: d.rooms_at === "inner", warnings };
 }
 
 /**
- * A complete NeonPlan plan as a person or an AI wrote it, checked and repaired: rooms with fewer than three usable
+ * A complete Accurona plan as a person or an AI wrote it, checked and repaired: rooms with fewer than three usable
  * points go, outlines are tidied, doors and windows on edges that do not exist go, positions are kept on their
  * edge, unknown furniture becomes the nearest known kind, ids are made unique.
  */

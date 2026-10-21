@@ -26,11 +26,11 @@ jobs:
       - uses: actions/checkout@v4
       - name: Assemble the site
         run: |
-          mkdir -p _site/preview _site/custom_components/neonplan3d
+          mkdir -p _site/preview _site/custom_components/accurona
           cp site/index.html _site/
           mkdir -p _site/import && cp site/import/index.html site/import/neonplan-import.js _site/import/
           cp preview/index.html preview/*.js _site/preview/
-          cp -r custom_components/neonplan3d/frontend _site/custom_components/neonplan3d/
+          cp -r custom_components/accurona/frontend _site/custom_components/accurona/
           touch _site/.nojekyll
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

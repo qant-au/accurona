@@ -1,4 +1,4 @@
-"""Fixtures for NeonPlan 3D tests."""
+"""Fixtures for Accurona tests."""
 
 from __future__ import annotations
 

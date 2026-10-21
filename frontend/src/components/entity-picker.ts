@@ -217,4 +217,4 @@ export class EntityPicker extends LitElement {
   ];
 }
 
-if (!customElements.get("fp3d-entity-picker")) customElements.define("fp3d-entity-picker", EntityPicker);
+if (!customElements.get("accurona-entity-picker")) customElements.define("accurona-entity-picker", EntityPicker);

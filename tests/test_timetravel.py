@@ -13,9 +13,9 @@ from homeassistant.helpers import entity_registry as er
 from homeassistant.setup import async_setup_component
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
-from custom_components.neonplan3d import packs, timetravel
-from custom_components.neonplan3d.const import DOMAIN
-from custom_components.neonplan3d.timetravel_rows import (
+from custom_components.accurona import packs, timetravel
+from custom_components.accurona.const import DOMAIN
+from custom_components.accurona.timetravel_rows import (
     MAX_ROWS,
     bucket,
     cap_rows,
@@ -207,7 +207,7 @@ async def _setup(hass: HomeAssistant) -> None:
 
 def _msg(**over: Any) -> dict[str, Any]:
     return {
-        "type": "neonplan3d/timetravel/history",
+        "type": "accurona/timetravel/history",
         "start_time": START,
         "end_time": START + 86400,
         "entity_ids": ["light.kitchen", "person.anna"],

@@ -22,7 +22,7 @@ type HeatMode = NonNullable<CardConfig["heatmap"]>;
 
 function savedWalls(): WallMode | null {
   try {
-    const v = localStorage.getItem("neonplan3d.card_walls");
+    const v = localStorage.getItem("accurona.card_walls");
     return v === "auto" || v === "cut" ? v : null;
   } catch {
     return null;
@@ -119,7 +119,7 @@ export class Floorplan3dCard extends LitElement {
   }
 
   private view3d() {
-    return this.shadowRoot?.querySelector("fp3d-view3d") as (HTMLElement & { resetView(): void; lookThrough(entityId: string): void; historyEntities(): HistorySpec; proHint(f: Feature): void }) | null;
+    return this.shadowRoot?.querySelector("accurona-view3d") as (HTMLElement & { resetView(): void; lookThrough(entityId: string): void; historyEntities(): HistorySpec; proHint(f: Feature): void }) | null;
   }
 
   /** Time travel on or off; without the Pro add-on its hint shows. */
@@ -237,18 +237,18 @@ clearTimeout(this.cleanTimer);
   /** Visual editor in the dashboard (no YAML needed). */
   static async getConfigElement(): Promise<HTMLElement> {
     await loadCardEditor();
-    return document.createElement("neonplan3d-card-editor");
+    return document.createElement("accurona-card-editor");
   }
 
   static getStubConfig(): CardConfig {
-    return { type: "custom:neonplan3d-card" };
+    return { type: "custom:accurona-card" };
   }
 
   /** A wall view picked on the card stays for the next visit on this device (#309). */
   private setWalls(mode: WallMode): void {
     this._walls = mode;
     try {
-      localStorage.setItem("neonplan3d.card_walls", mode);
+      localStorage.setItem("accurona.card_walls", mode);
     } catch {
       // no storage: not remembered
     }
@@ -343,7 +343,7 @@ clearTimeout(this.cleanTimer);
     return html`<ha-card class="${this._night ? "fp3d-night" : ""} ${this._pseudoFull ? "fp3d-pseudo-full" : ""}" style=${accent ? `--fp3d-accent:${accent}` : ""} @pointerdown=${this.touch} @keydown=${this.onKey} @wheel=${this.touch}>
       <div class="fp3d-card-body ${tt ? "fp3d-tt" : ""}" style="height:${size}">
         ${b && b.floors.some((f) => f.rooms.length)
-          ? html`<fp3d-view3d
+          ? html`<accurona-view3d
               .hass=${this.tt.hass(this.hass)}
               .replay=${this.tt.session?.replay ?? null}
               .building=${b}
@@ -401,7 +401,7 @@ clearTimeout(this.cleanTimer);
               .dimmed=${this._night}
               .autoOrbit=${this._orbit}
               .startView=${c?.start_view ?? null}
-              style=${tt ? `--fp3d-bottom-inset: ${bar ? "calc(52px + var(--fp3d-tt-h))" : "var(--fp3d-tt-h)"}` : bar ? "--fp3d-bottom-inset: 52px" : ""}
+              style=${tt ? `--fp3d-bottom-inset: ${bar ? "calc(52px + var(--accurona-tt-h))" : "var(--accurona-tt-h)"}` : bar ? "--fp3d-bottom-inset: 52px" : ""}
               @room-tap=${(e: CustomEvent<{ floorId: string; roomId: string | null }>) => {
                 // in the house view (or on another floor) a tap first opens the whole floor
                 if (this.canSwitch && (b?.floors.length ?? 0) > 1 && e.detail.floorId && floorId !== e.detail.floorId) {
@@ -417,10 +417,10 @@ clearTimeout(this.cleanTimer);
                 this._roomId = null;
               }}
               @back=${() => this.back()}
-            ></fp3d-view3d>`
+            ></accurona-view3d>`
           : html`<p class="fp3d-card-msg">${this.data.error ?? (b ? translate(this.hass, "no_building") : translate(this.hass, "loading"))}</p>`}
         ${this._roomId && b && this._config?.room_panel !== false
-          ? html`<fp3d-room-panel
+          ? html`<accurona-room-panel
               @camera-look=${(e: CustomEvent<{ entity: string }>) => this.view3d()?.lookThrough(e.detail.entity)}
               class="fp3d-card-panel"
               .hass=${this.tt.hass(this.hass)}
@@ -430,13 +430,13 @@ clearTimeout(this.cleanTimer);
               .building=${b}
               .confirmEntities=${confirmEntities(this.hass, b.floors)}
               @close=${() => (this._roomId = null)}
-            ></fp3d-room-panel>`
+            ></accurona-room-panel>`
           : nothing}
         ${bar && b
           ? html`<div class="fp3d-card-controls">
               ${canGoBack ? html`<button class="fp3d-chip" @click=${() => this.back()}>${t("back")}</button>` : nothing}
               ${c?.time_travel
-                ? html`<button class="fp3d-chip fp3d-tt-chip" aria-pressed=${tt} title=${t("tt_hint")} @click=${() => this.toggleTimeTravel()}>
+                ? html`<button class="fp3d-chip accurona-tt-chip" aria-pressed=${tt} title=${t("tt_hint")} @click=${() => this.toggleTimeTravel()}>
                     ${hasFeature("time_travel") ? "⏪" : "🔒"} ${t("tt_chip")}
                   </button>`
                 : nothing}
@@ -465,7 +465,7 @@ clearTimeout(this.cleanTimer);
                 : nothing}
             </div>`
           : nothing}
-        ${this.tt.session ? html`<fp3d-time-bar .session=${this.tt.session}></fp3d-time-bar>` : nothing}
+        ${this.tt.session ? html`<accurona-time-bar .session=${this.tt.session}></accurona-time-bar>` : nothing}
         ${c?.fullscreen_button && !this._clean && !(this._roomId && c.room_panel !== false)
           ? html`<button class="fp3d-card-full" title=${t(this._fullscreen ? "fullscreen_exit" : "fullscreen")} aria-label=${t(this._fullscreen ? "fullscreen_exit" : "fullscreen")} @click=${() => this.toggleFullscreen()}>
               ${this._fullscreen ? "✕" : "⛶"}
@@ -500,15 +500,15 @@ clearTimeout(this.cleanTimer);
       }
       /* time travel: its bar at the bottom, the switches and the room panel above it */
       .fp3d-tt > * {
-        --fp3d-tt-h: 64px;
+        --accurona-tt-h: 64px;
       }
       .fp3d-tt .fp3d-card-controls {
-        bottom: calc(var(--fp3d-tt-h) + 2px);
+        bottom: calc(var(--accurona-tt-h) + 2px);
       }
       .fp3d-tt .fp3d-card-panel {
-        bottom: calc(var(--fp3d-tt-h) + 4px);
+        bottom: calc(var(--accurona-tt-h) + 4px);
       }
-      .fp3d-tt-chip[aria-pressed="true"] {
+      .accurona-tt-chip[aria-pressed="true"] {
         background: #ffb020;
         color: #1a1200;
       }
@@ -523,7 +523,7 @@ clearTimeout(this.cleanTimer);
         right: 56px;
       }
       /* the view's walk button steps aside for the card's own buttons at the top right */
-      fp3d-view3d {
+      accurona-view3d {
         --fp3d-walk-right: 104px;
       }
       .fp3d-card-full {
@@ -582,7 +582,7 @@ clearTimeout(this.cleanTimer);
         container-type: size;
         container-name: fp3d;
       }
-      fp3d-view3d {
+      accurona-view3d {
         flex: 1;
       }
       .fp3d-card-msg {
@@ -614,19 +614,19 @@ clearTimeout(this.cleanTimer);
         }
         /* the time bar takes two rows here */
         .fp3d-tt > * {
-          --fp3d-tt-h: 100px;
+          --accurona-tt-h: 100px;
         }
       }
     `,
   ];
 }
 
-if (!customElements.get("neonplan3d-card")) {
-  customElements.define("neonplan3d-card", Floorplan3dCard);
+if (!customElements.get("accurona-card")) {
+  customElements.define("accurona-card", Floorplan3dCard);
   const w = window as Window & { customCards?: unknown[] };
   w.customCards = w.customCards ?? [];
   w.customCards.push({
-    type: "neonplan3d-card",
+    type: "accurona-card",
     name: translate(undefined, "card_name"),
     description: translate(undefined, "card_description"),
     preview: false,

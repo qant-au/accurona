@@ -1,4 +1,4 @@
-// Loads the editor bundle only when the editor is opened (it defines <fp3d-editor>).
+// Loads the editor bundle only when the editor is opened (it defines <accurona-editor>).
 
 /** Content hash of the editor bundle, set by the build (see build.mjs). */
 declare const __FP3D_EDITOR_HASH__: string;
@@ -6,7 +6,7 @@ declare const __FP3D_EDITOR_HASH__: string;
 let loading: Promise<unknown> | undefined;
 
 export function loadEditor(): Promise<unknown> {
-  const url = new URL(`./neonplan3d-editor.js?v=${__FP3D_EDITOR_HASH__}`, new URL(import.meta.url)).href;
+  const url = new URL(`./accurona-editor.js?v=${__FP3D_EDITOR_HASH__}`, new URL(import.meta.url)).href;
   loading ??= import(/* @vite-ignore */ url);
   return loading;
 }

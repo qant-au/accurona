@@ -826,4 +826,4 @@ export class Fp3dRoomPanel extends LitElement {
   ];
 }
 
-if (!customElements.get("fp3d-room-panel")) customElements.define("fp3d-room-panel", Fp3dRoomPanel);
+if (!customElements.get("accurona-room-panel")) customElements.define("accurona-room-panel", Fp3dRoomPanel);

@@ -1,6 +1,6 @@
 // The common end of every importer: floors with rooms, walls, doors, windows and furniture as another program
-// describes them (plan units in metres, x to the right, z down the plan) become a clean NeonPlan plan – rooms
-// tidied and joined, every door and window placed on a room edge, furniture mapped to NeonPlan's types.
+// describes them (plan units in metres, x to the right, z down the plan) become a clean Accurona plan – rooms
+// tidied and joined, every door and window placed on a room edge, furniture mapped to Accurona's types.
 
 import type { Building, Floor, FreeWall, Furniture, FurnitureType, Opening, Room, Vec2 } from "../model.ts";
 import { canLift, emptyBuilding, FURNITURE_SIZE, FURNITURE_TYPES, newFloor, normalizeBuilding, pointInPolygon, polygonArea } from "../model.ts";

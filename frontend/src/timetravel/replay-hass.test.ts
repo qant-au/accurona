@@ -184,18 +184,18 @@ test("replay: nothing can be switched – service calls throw and never reach Ho
   const h = createReplayHass(hass, timeline(), at(4000), { requested: ["light.a"] });
   assert.throws(() => h.callService("light", "turn_off", { entity_id: "light.a" }), ReplayReadOnly);
   assert.throws(() => h.callService("homeassistant", "turn_on", {}), ReplayReadOnly);
-  assert.throws(() => h.callWS({ type: "neonplan3d/building/save", building: {} }), ReplayReadOnly);
+  assert.throws(() => h.callWS({ type: "accurona/building/save", building: {} }), ReplayReadOnly);
   assert.throws(() => h.callWS({ type: "call_service", domain: "light", service: "turn_on" }), ReplayReadOnly);
   assert.throws(() => h.callWS({ type: "execute_script", sequence: [] }), ReplayReadOnly);
   assert.throws(() => h.connection.subscribeMessage(() => undefined, { type: "subscribe_trigger" }), ReplayReadOnly);
   // reading is allowed
-  await h.callWS({ type: "neonplan3d/building/get" });
+  await h.callWS({ type: "accurona/building/get" });
   await h.callWS({ type: "history/history_during_period" });
-  await h.connection.subscribeMessage(() => undefined, { type: "neonplan3d/building/subscribe" });
+  await h.connection.subscribeMessage(() => undefined, { type: "accurona/building/subscribe" });
   assert.deepEqual(calls, [
-    ["ws", "neonplan3d/building/get"],
+    ["ws", "accurona/building/get"],
     ["ws", "history/history_during_period"],
-    ["sub", "neonplan3d/building/subscribe"],
+    ["sub", "accurona/building/subscribe"],
   ]);
   for (const type of WS_ALLOWED) assert.ok(/\/(get|list|history|history_during_period|statistics_during_period)$/.test(type), type);
 });
