@@ -6,7 +6,8 @@ rename to Accurona is a script (`fork/identity.py`), so a merge never re-does it
 ## The two branches
 
 - **`upstream-accurona`** holds one commit per upstream release: upstream's tree with
-  Accurona's identity applied, plus our own files (`fork/OURS`). Each of those commits
+  Accurona's identity applied, plus our own files (`fork/OURS`), copied from `main` so
+  the snapshot is always made with the current tooling. Each of those commits
   has the upstream tag as a parent, so `git log` shows upstream's history and
   `git merge-base --is-ancestor <tag> main` holds after a merge.
 - **`main`** is where our work happens. It only ever merges `upstream-accurona`, so the
@@ -65,6 +66,9 @@ push URL set to `DISABLED`).
 ## Rehearsal record
 
 2026-10-21: rehearsed on a throwaway clone with upstream `main` at `c695320`
-(v1.23.1 plus two commits), in place of a tag. The snapshot built, `identity --check` was
-clean, the merge into `main` applied without conflicts, and the frontend and Python
-checks passed.
+(v1.23.1 plus two commits, one new test), in place of a tag. It found two faults, both
+fixed in `identity.py`: deleting a file during the merge needs `git rm -f`, and upstream's
+new unreleased-add-on guard read the `ROADMAP.md` the fork drops (now an override). After
+the fixes the snapshot built, `identity --check` was clean, the merge into `main` applied
+without conflicts and carried only upstream's change, `c695320` became an ancestor of
+`main`, and every check in step 3 passed (417 frontend tests, 88 Python tests).

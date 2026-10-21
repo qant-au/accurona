@@ -4,7 +4,7 @@
 #   fork/merge-upstream.sh v1.24.0
 #
 # 1. On the snapshot branch (upstream-accurona), record the upstream tag as a parent and
-#    replace the tree with upstream's, put our own files (fork/OURS) back, and give it
+#    replace the tree with upstream's, put our own files (fork/OURS) back from main, and give it
 #    Accurona's identity: fork/identity.py, ruff format, a frontend rebuild.
 # 2. Merge the snapshot into main. Its merge base is the previous snapshot, so the merge
 #    carries only what upstream changed, already renamed; it conflicts only where we have
@@ -38,7 +38,7 @@ git diff --stat "$prev" "$ref" -- README.md CLAUDE.md LICENSE .github/ISSUE_TEMP
 git switch -q "$snap"
 git merge -q -s ours --no-commit "$ref"   # upstream becomes a parent; the tree is set below
 git read-tree -u --reset "$ref"           # index and working tree = upstream's release
-git checkout "$snap" -- "${ours[@]}"      # our own files, as the snapshot had them
+git checkout "$main" -- "${ours[@]}"      # our own files and tooling, as main has them now
 python3 fork/identity.py
 "$ruff" format -q custom_components tests
 (cd frontend && npm ci --no-audit --no-fund >/dev/null && npm run build)
