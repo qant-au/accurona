@@ -13,6 +13,11 @@
   Changing any of them breaks compatibility with NeonPlan 3D plans and packs.
 - Keep our changes at the edges (new modules, `fork/`), so the hooks into upstream's core
   files stay small and merges stay cheap.
+- **Home Assistant is an optional host, not the base.** The engine talks to its host only
+  through upstream's `HomeAssistant` interface (`frontend/src/types.ts`); the standalone host
+  (`frontend/src/host/`) answers it from a plan store and a signal source. New host features
+  go there, never into the engine as a second code path. Check the standalone build with
+  `node ../fork/build-standalone.mjs && node ../fork/smoke-standalone.mjs` from `frontend/`.
 - Domain `accurona`, minimum Home Assistant 2025.1. Frontend in `frontend/` (Lit 3 +
   TypeScript, no decorators; three.js in a separate lazily loaded bundle). Bundles are
   committed to `custom_components/accurona/frontend/` and CI fails when they are stale, so

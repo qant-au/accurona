@@ -99,6 +99,12 @@ OVERRIDES = {
         ('"issue_tracker": "https://github.com/mastershort/neonplan3d/issues"',
          '"issue_tracker": "https://github.com/qant-au/accurona/issues"'),
     ],
+    # The editor's help box: problems and ideas come to this repo; there is no Accurona Discord.
+    "frontend/src/components/editor.ts": [
+        ("https://github.com/Mastershort/neonplan3d/issues/new/choose", "https://github.com/qant-au/accurona/issues/new/choose"),
+        ("https://github.com/Mastershort/neonplan3d/discussions/categories/ideas", "https://github.com/qant-au/accurona/discussions"),
+        ('        <a class="fp3d-btn" href="https://discord.gg/SSdVVFsev7" target="_blank" rel="noopener">💬 ${this.t("help_discord")}</a>\n', ""),
+    ],
     # Upstream's guard reads the public texts, ROADMAP.md among them; the fork drops that file.
     "frontend/src/unreleased-guard.test.ts": [
         ('"CHANGELOG.md", "ROADMAP.md", ', '"CHANGELOG.md", '),

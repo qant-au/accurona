@@ -15,10 +15,14 @@ See [NOTICE](NOTICE) for the credit and [LICENSE](LICENSE) for the terms.
 
 ## Status
 
-Early. Today Accurona is NeonPlan 3D 1.23.1 under its own name, as a Home Assistant
-integration that installs **beside** NeonPlan 3D without either one touching the other:
-its own integration domain (`accurona`), panel, card, custom elements, storage and static
-path.
+Early. The engine is NeonPlan 3D 1.23.1's plan model, editor and 3D view, under its own
+name, and it runs in two hosts:
+
+- **Standalone**, with no Home Assistant anywhere: a plan kept in the browser, embeddable
+  in any page (see [Embedding](#embedding)). This is the base everything else builds on.
+- **Home Assistant**, as an optional integration that installs **beside** NeonPlan 3D
+  without either one touching the other: its own integration domain (`accurona`), panel,
+  card, custom elements, storage and static path.
 
 What stays compatible with NeonPlan 3D:
 
@@ -27,19 +31,36 @@ What stays compatible with NeonPlan 3D:
 
 ## Where it is going
 
-1. **An engine without Home Assistant.** The plan model, editor and 3D viewer as an
-   embeddable package with its own API, so other hosts can use it. Home Assistant becomes
-   one optional host.
-2. **A Signal K Server plugin first.** Signal K is the open data standard on many boats,
-   and its server installs plugins from its own app store. The plugin is the first host
-   after Home Assistant.
-3. **Accurate hulls.** A hull interface built on cross-sections at stations, then a
+1. **Accurate hulls.** A hull interface built on cross-sections at stations, then a
    library of real hull families (fin-keel sloop, semi-displacement and planing
    cruisers, RIB, catamaran, launch) that you adjust to your own boat's measurements.
-4. **A first-run wizard.** Read the boat's details from the Signal K server (name,
-   length, beam, draft, tanks, engines, batteries), pick a hull, confirm the equipment,
-   and land on your boat on the water in 3D. The wizard writes an ordinary plan that the
-   editor then refines.
+2. **Live data from outside.** The standalone host takes a signal source; Signal K is the
+   first one, and once the marine work is in, a Signal K Server plugin installable from
+   its app store.
+3. **A first-run wizard**, once there is a library of boats and equipment to pick from:
+   read the boat's details from Signal K, pick a hull, confirm the equipment, and land on
+   your boat on the water in 3D, as an ordinary plan the editor then refines.
+
+## Embedding
+
+```sh
+cd frontend && npm ci && npm run build && node ../fork/build-standalone.mjs
+```
+
+`dist/standalone/` then holds the engine and `accurona-host.js`. Serve the folder over
+HTTP; `index.html` is a working example. In your own page:
+
+```js
+import { mountAccurona, browserStore } from "./accurona-host.js";
+
+const planner = await mountAccurona(document.querySelector("#plan"), {
+  store: browserStore("my-plan"), // or memoryStore(), or your own PlanStore
+  // signals: a SignalSource for live data; staticSignals() is the simplest
+});
+```
+
+The plan store and the signal source are interfaces (`frontend/src/host/types.ts`), so a
+server-side store or a live data feed plugs in without touching the engine.
 
 ## Install (Home Assistant)
 

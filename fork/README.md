@@ -9,6 +9,8 @@ merges never touch them.
 | `merge-upstream.sh`, `MERGING.md` | Merging an upstream release, and the procedure behind it. |
 | `OURS` | Files that are wholly ours; a merge puts them back rather than taking upstream's. |
 | `UPSTREAM` | The upstream release the tree was last synced to. |
+| `build-standalone.mjs`, `standalone/` | The engine with no Home Assistant: `dist/standalone/` with the embedding API (`frontend/src/host/`) and a demo page. |
+| `smoke-standalone.mjs` | Mounts that build in a headless Chrome and fails on any page error (CI: `fork.yml`). |
 | `brand/` | The integration's icons, copied over upstream's by `identity.py`. |
 | `github/` | GitHub files copied over upstream's by `identity.py` (the issue chooser). |
 
@@ -18,7 +20,7 @@ merges never touch them.
   `release.yml` (release zip) and `issue-labels.yml`. Dropped by `identity.py`:
   `discord-release.yml` (posts to the author's Discord), `shop-check.yml` (probes his
   shop) and `pages.yml` (publishes his site). Added: `fork.yml`, which runs
-  `identity.py --check`.
+  `identity.py --check` and builds and smoke-tests the standalone engine.
 - **Secrets.** None. No retained workflow needs one, in the Actions store or the
   Dependabot store: nothing reaches a private registry or an outside service.
 - **Dependabot.** Security updates only; versions arrive with upstream merges.
