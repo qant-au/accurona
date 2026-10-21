@@ -30,7 +30,7 @@ jobs:
           if len(body) > 3500:
               body = body[:3500].rsplit("\n", 1)[0] + "\n…"
           payload = {
-              "content": "<@&1557398674689232997> NeonPlan 3D **" + os.environ["TAG"] + "** is out – update via HACS.",
+              "content": "<@&1557398674689232997> Accurona **" + os.environ["TAG"] + "** is out – update via HACS.",
               "embeds": [{
                   "title": os.environ["NAME"] or os.environ["TAG"],
                   "url": os.environ["URL"],
@@ -40,7 +40,7 @@ jobs:
               }],
               "allowed_mentions": {"roles": ["1557398674689232997"]},
           }
-          req = urllib.request.Request(os.environ["WEBHOOK"], data=json.dumps(payload).encode(), headers={"Content-Type": "application/json", "User-Agent": "neonplan3d-release"})
+          req = urllib.request.Request(os.environ["WEBHOOK"], data=json.dumps(payload).encode(), headers={"Content-Type": "application/json", "User-Agent": "accurona-release"})
           urllib.request.urlopen(req, timeout=30)
           print("posted")
           PY

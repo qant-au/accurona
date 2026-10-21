@@ -35,14 +35,14 @@ type Mode = "view" | "editor" | "extensions";
 const prefs = {
   get(key: string): string | null {
     try {
-      return localStorage.getItem(`neonplan3d.${key}`);
+      return localStorage.getItem(`accurona.${key}`);
     } catch {
       return null;
     }
   },
   set(key: string, value: string): void {
     try {
-      localStorage.setItem(`neonplan3d.${key}`, value);
+      localStorage.setItem(`accurona.${key}`, value);
     } catch {
       // storage unavailable (private mode): the choice just is not remembered
     }
@@ -174,7 +174,7 @@ export class Floorplan3dPanel extends LitElement {
     this._shopConnected = null;
     this._giftLater = false;
     this._showOpen = false;
-    this._editorReady = !!customElements.get("fp3d-editor");
+    this._editorReady = !!customElements.get("accurona-editor");
     this._floorId = null;
     this._roomId = null;
     // the wall view stays as it was last set on this device (#309)
@@ -474,7 +474,7 @@ export class Floorplan3dPanel extends LitElement {
   }
 
   private view3d() {
-    return this.renderRoot.querySelector("fp3d-view3d") as (HTMLElement & { resetView(): void; lookThrough(entityId: string): void; historyEntities(): HistorySpec; proHint(f: Feature): void; currentView(): StartView | null }) | null;
+    return this.renderRoot.querySelector("accurona-view3d") as (HTMLElement & { resetView(): void; lookThrough(entityId: string): void; historyEntities(): HistorySpec; proHint(f: Feature): void; currentView(): StartView | null }) | null;
   }
 
   /** Time travel on or off; without the Pro add-on its hint shows. `at`: a start moment from a link. */
@@ -550,10 +550,10 @@ export class Floorplan3dPanel extends LitElement {
     const saveState = this.data.saveState;
     return html`
       <div class="fp3d-app ${this._clean && this._mode === "view" ? "fp3d-clean" : ""}" style=${this._accent ? `--fp3d-accent:${this._accent}` : ""}>
-        ${this._micProbe && this.hass ? html`<fp3d-mic-probe .hass=${this.hass} .building=${b} @close=${() => ((this._micProbe = false), micProbeDone())}></fp3d-mic-probe>` : nothing}
+        ${this._micProbe && this.hass ? html`<accurona-mic-probe .hass=${this.hass} .building=${b} @close=${() => ((this._micProbe = false), micProbeDone())}></accurona-mic-probe>` : nothing}
         ${this._clean && this._mode === "view" ? nothing : html`<header class="fp3d-header">
           <ha-menu-button .hass=${this.hass} .narrow=${this.narrow}></ha-menu-button>
-          <h1>NeonPlan 3D</h1>
+          <h1>Accurona</h1>
           ${this.isAdmin
             ? html`<div class="fp3d-seg" role="tablist">
                 <button role="tab" aria-pressed=${this._mode === "view"} @click=${() => this.setMode("view")}>${this.t("view")}</button>
@@ -752,13 +752,13 @@ export class Floorplan3dPanel extends LitElement {
     // only once the installed packs are known, so it never flashes up for whoever has both
     if (!this.isAdmin || this._giftLater || this._shopConnected === null || !this.data.packsLoaded || UNRELEASED.includes("fun_halloween") || (hasFeature("fun_halloween") && hasFeature("fun_pets"))) return nothing;
     try {
-      if (localStorage.getItem(`neonplan3d.news.${id}`) === "never") return nothing;
+      if (localStorage.getItem(`accurona.news.${id}`) === "never") return nothing;
     } catch {
       // no storage: shown each visit until "later"
     }
     const never = () => {
       try {
-        localStorage.setItem(`neonplan3d.news.${id}`, "never");
+        localStorage.setItem(`accurona.news.${id}`, "never");
       } catch {
         // a private window
       }
@@ -821,7 +821,7 @@ export class Floorplan3dPanel extends LitElement {
       );
       return html`<div class="fp3d-empty"><p>${this.t("loading")}</p></div>`;
     }
-    return html`<fp3d-extensions
+    return html`<accurona-extensions
       class="fp3d-body"
       .hass=${this.hass}
       .packs=${this.data.packs}
@@ -830,7 +830,7 @@ export class Floorplan3dPanel extends LitElement {
       @packs-changed=${() => void this.data.reloadPacks()}
       @offers-seen=${() => (this._newOffers = 0)}
       @packs-ready=${(e: CustomEvent<number>) => (this._readyPacks = e.detail)}
-    ></fp3d-extensions>`;
+    ></accurona-extensions>`;
   }
 
   private renderEditor(b: Building) {
@@ -841,7 +841,7 @@ export class Floorplan3dPanel extends LitElement {
       );
       return html`<div class="fp3d-empty"><p>${this.t("loading")}</p></div>`;
     }
-    return html`<fp3d-editor
+    return html`<accurona-editor
       class="fp3d-body"
       .hass=${this.hass}
       .building=${b}
@@ -856,7 +856,7 @@ export class Floorplan3dPanel extends LitElement {
       @mic-probe=${() => loadVoice().then(() => (this._micProbe = true)).catch(() => undefined)}
       @open-extensions=${() => this.setMode("extensions")}
       @building-changed=${(e: CustomEvent<{ building: Building }>) => this.data.edit(e.detail.building)}
-    ></fp3d-editor>`;
+    ></accurona-editor>`;
   }
 
   /** A single-row bar scrolls sideways with the mouse wheel (a desktop has no swipe). */
@@ -939,7 +939,7 @@ export class Floorplan3dPanel extends LitElement {
         </button>
       </nav>`}
       <div class="fp3d-stage-wrap ${this._roomId ? "fp3d-room-open" : ""} ${this._controlsRight ? "fp3d-side-right" : ""} ${tt ? "fp3d-tt" : ""}">
-        <fp3d-view3d
+        <accurona-view3d
           class="fp3d-body"
           .hass=${this.tt.hass(this.hass)}
           .replay=${this.tt.session?.replay ?? null}
@@ -991,10 +991,10 @@ export class Floorplan3dPanel extends LitElement {
             this._roomId = null;
           }}
           @back=${() => this.back()}
-        ></fp3d-view3d>
+        ></accurona-view3d>
         ${this._roomId
-          ? html`<fp3d-room-panel
-              class="fp3d-room-panel"
+          ? html`<accurona-room-panel
+              class="accurona-room-panel"
               @camera-look=${(e: CustomEvent<{ entity: string }>) => this.view3d()?.lookThrough(e.detail.entity)}
               .hass=${this.tt.hass(this.hass)}
               ?readOnly=${tt}
@@ -1003,9 +1003,9 @@ export class Floorplan3dPanel extends LitElement {
               .building=${b}
               .confirmEntities=${confirmEntities(this.hass, b.floors)}
               @close=${() => (this._roomId = null)}
-            ></fp3d-room-panel>`
+            ></accurona-room-panel>`
           : nothing}
-        ${this.tt.session ? html`<fp3d-time-bar .session=${this.tt.session}></fp3d-time-bar>` : nothing}
+        ${this.tt.session ? html`<accurona-time-bar .session=${this.tt.session}></accurona-time-bar>` : nothing}
         ${this._clean ? nothing : html`<div class="fp3d-overlay">
           <div class="fp3d-show-wrap">
             <button class="fp3d-chip" aria-haspopup="true" aria-expanded=${this._showOpen} @click=${() => (this._showOpen = !this._showOpen)}>${this.t("show_menu")} <span class="fp3d-caret">▾</span></button>
@@ -1100,7 +1100,7 @@ export class Floorplan3dPanel extends LitElement {
                   </div>`
               : nothing}
           </div>
-          <button class="fp3d-chip fp3d-tt-chip" aria-pressed=${tt} title=${this.t("tt_hint")} @click=${() => this.toggleTimeTravel()}>
+          <button class="fp3d-chip accurona-tt-chip" aria-pressed=${tt} title=${this.t("tt_hint")} @click=${() => this.toggleTimeTravel()}>
             ${hasFeature("time_travel") ? "⏪" : "🔒"} ${this.t("tt_chip")}
           </button>
           ${this._roomId || (this._floorId && b.floors.length > 1)
@@ -1458,10 +1458,10 @@ export class Floorplan3dPanel extends LitElement {
         container-type: size;
         container-name: fp3d;
       }
-      .fp3d-stage-wrap fp3d-view3d {
+      .fp3d-stage-wrap accurona-view3d {
         flex: 1;
       }
-      .fp3d-room-panel {
+      .accurona-room-panel {
         position: absolute;
         top: 58px;
         right: 14px;
@@ -1473,10 +1473,10 @@ export class Floorplan3dPanel extends LitElement {
         pointer-events: none;
       }
       /* the switches sit at the bottom (as in the card), where they never meet the energy values or warnings */
-      fp3d-view3d {
+      accurona-view3d {
         --fp3d-bottom-inset: 52px;
       }
-      .fp3d-clean fp3d-view3d {
+      .fp3d-clean accurona-view3d {
         --fp3d-bottom-inset: 0px;
       }
       .fp3d-furnish-bar {
@@ -1484,24 +1484,24 @@ export class Floorplan3dPanel extends LitElement {
       }
       /* time travel: its bar at the bottom; the switches, the buttons of the view and the room panel above it */
       .fp3d-tt > * {
-        --fp3d-tt-h: 64px;
+        --accurona-tt-h: 64px;
       }
-      .fp3d-tt fp3d-view3d {
-        --fp3d-bottom-inset: calc(52px + var(--fp3d-tt-h));
+      .fp3d-tt accurona-view3d {
+        --fp3d-bottom-inset: calc(52px + var(--accurona-tt-h));
       }
       .fp3d-tt .fp3d-overlay {
-        bottom: calc(var(--fp3d-tt-h) + 4px);
+        bottom: calc(var(--accurona-tt-h) + 4px);
       }
-      .fp3d-tt .fp3d-room-panel {
-        bottom: calc(var(--fp3d-tt-h) + 6px);
+      .fp3d-tt .accurona-room-panel {
+        bottom: calc(var(--accurona-tt-h) + 6px);
       }
-      .fp3d-tt-chip[aria-pressed="true"] {
+      .accurona-tt-chip[aria-pressed="true"] {
         background: #ffb020;
         color: #1a1200;
       }
       /* phones and portrait tablets: panel as a sheet at the bottom, the switches step aside */
       @container fp3d ((max-width: 700px) or ((orientation: portrait) and (max-width: 1000px))) {
-        .fp3d-room-panel {
+        .accurona-room-panel {
           top: auto;
           left: 8px;
           right: 8px;
@@ -1514,18 +1514,18 @@ export class Floorplan3dPanel extends LitElement {
           display: none;
         }
         /* the view's own buttons (search, eye) step up above the sheet */
-        .fp3d-room-open fp3d-view3d {
+        .fp3d-room-open accurona-view3d {
           --fp3d-bottom-inset: calc(55% + 8px);
         }
         /* phones: the time bar takes two rows; the switches make way for it */
         .fp3d-tt > * {
-          --fp3d-tt-h: 100px;
+          --accurona-tt-h: 100px;
         }
         .fp3d-tt .fp3d-overlay {
           display: none;
         }
-        .fp3d-tt fp3d-view3d {
-          --fp3d-bottom-inset: var(--fp3d-tt-h);
+        .fp3d-tt accurona-view3d {
+          --fp3d-bottom-inset: var(--accurona-tt-h);
         }
       }
       /* search and eye on the right (#285): the bar leaves room there instead */
@@ -1619,4 +1619,4 @@ export class Floorplan3dPanel extends LitElement {
   ];
 }
 
-if (!customElements.get("neonplan3d-panel")) customElements.define("neonplan3d-panel", Floorplan3dPanel);
+if (!customElements.get("accurona-panel")) customElements.define("accurona-panel", Floorplan3dPanel);

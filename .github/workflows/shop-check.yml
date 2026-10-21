@@ -17,7 +17,7 @@ jobs:
       - name: Catalog and pack endpoints answer like WordPress
         run: |
           set -u
-          ua="NeonPlan3D/check (Home Assistant; +https://github.com/Mastershort/neonplan3d)"
+          ua="Accurona/check (Home Assistant; +https://github.com/Mastershort/neonplan3d)"
           ok=1
           for path in catalog pack; do
             body=$(curl -sS --max-time 30 -o /tmp/body -w "%{http_code}" -X POST \

@@ -8,7 +8,7 @@ declare const __FP3D_VOICE_HASH__: string;
 let loading: Promise<typeof VoiceBundle> | undefined;
 
 export function loadVoice(): Promise<typeof VoiceBundle> {
-  const url = new URL(`./neonplan3d-voice.js?v=${__FP3D_VOICE_HASH__}`, new URL(import.meta.url)).href;
+  const url = new URL(`./accurona-voice.js?v=${__FP3D_VOICE_HASH__}`, new URL(import.meta.url)).href;
   loading ??= (import(/* @vite-ignore */ url) as Promise<typeof VoiceBundle>).catch((err) => {
     loading = undefined;
     throw err;
@@ -22,8 +22,8 @@ export function loadVoice(): Promise<typeof VoiceBundle> {
  */
 export function micProbeAsked(): boolean {
   try {
-    if (/[?&#]fp3d_mic=1\b/.test(location.href)) sessionStorage.setItem("neonplan3d.mic", "1");
-    return sessionStorage.getItem("neonplan3d.mic") === "1";
+    if (/[?&#]fp3d_mic=1\b/.test(location.href)) sessionStorage.setItem("accurona.mic", "1");
+    return sessionStorage.getItem("accurona.mic") === "1";
   } catch {
     return false;
   }
@@ -32,7 +32,7 @@ export function micProbeAsked(): boolean {
 /** Voice control on this device: the microphone button in the 3D view (the card has its option `voice`). */
 export function voiceOnHere(): boolean {
   try {
-    return localStorage.getItem("neonplan3d.voice") === "1";
+    return localStorage.getItem("accurona.voice") === "1";
   } catch {
     return false;
   }
@@ -40,17 +40,17 @@ export function voiceOnHere(): boolean {
 
 export function setVoiceHere(on: boolean): void {
   try {
-    if (on) localStorage.setItem("neonplan3d.voice", "1");
-    else localStorage.removeItem("neonplan3d.voice");
+    if (on) localStorage.setItem("accurona.voice", "1");
+    else localStorage.removeItem("accurona.voice");
   } catch {
     // private mode: nothing remembered
   }
 }
 
-/** This device's screen name for Assist and the service `neonplan3d.ask` ("Küche"); empty: reacts to every sentence. */
+/** This device's screen name for Assist and the service `accurona.ask` ("Küche"); empty: reacts to every sentence. */
 export function screenName(): string {
   try {
-    return localStorage.getItem("neonplan3d.screen") ?? "";
+    return localStorage.getItem("accurona.screen") ?? "";
   } catch {
     return "";
   }
@@ -58,8 +58,8 @@ export function screenName(): string {
 
 export function setScreenName(name: string): void {
   try {
-    if (name.trim()) localStorage.setItem("neonplan3d.screen", name.trim());
-    else localStorage.removeItem("neonplan3d.screen");
+    if (name.trim()) localStorage.setItem("accurona.screen", name.trim());
+    else localStorage.removeItem("accurona.screen");
   } catch {
     // private mode: nothing remembered
   }
@@ -68,7 +68,7 @@ export function setScreenName(name: string): void {
 /** The Assist pipeline chosen for this device (null: Home Assistant's preferred one). */
 export function voicePipeline(): string | null {
   try {
-    return localStorage.getItem("neonplan3d.voicePipeline");
+    return localStorage.getItem("accurona.voicePipeline");
   } catch {
     return null;
   }
@@ -76,8 +76,8 @@ export function voicePipeline(): string | null {
 
 export function setVoicePipeline(id: string | null): void {
   try {
-    if (id) localStorage.setItem("neonplan3d.voicePipeline", id);
-    else localStorage.removeItem("neonplan3d.voicePipeline");
+    if (id) localStorage.setItem("accurona.voicePipeline", id);
+    else localStorage.removeItem("accurona.voicePipeline");
   } catch {
     // private mode: nothing remembered
   }
@@ -86,7 +86,7 @@ export function setVoicePipeline(id: string | null): void {
 /** The probe closed: it does not open again in this tab. */
 export function micProbeDone(): void {
   try {
-    sessionStorage.removeItem("neonplan3d.mic");
+    sessionStorage.removeItem("accurona.mic");
   } catch {
     // private mode
   }

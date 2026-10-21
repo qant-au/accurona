@@ -18,7 +18,7 @@ export interface WireStat {
   mean: (number | null)[];
 }
 
-/** The answer of neonplan3d/timetravel/history (times in seconds since the epoch). */
+/** The answer of accurona/timetravel/history (times in seconds since the epoch). */
 export interface WireDay {
   day_start: number;
   end: number;

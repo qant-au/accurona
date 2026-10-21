@@ -13,9 +13,9 @@ import { thumbFor } from "../thumbs.ts";
 const RECENT_MAX = 10;
 const PAGE = 24;
 const THUMB_PX = 96;
-const STORE_OPEN = "neonplan3d.lib.open";
-const STORE_FAV = "neonplan3d.lib.fav";
-const STORE_RECENT = "neonplan3d.lib.recent";
+const STORE_OPEN = "accurona.lib.open";
+const STORE_FAV = "accurona.lib.fav";
+const STORE_RECENT = "accurona.lib.recent";
 
 type Translate = (key: string, vars?: Record<string, string | number>) => string;
 
@@ -527,4 +527,4 @@ export class FurnitureLibrary extends LitElement {
   ];
 }
 
-if (!customElements.get("fp3d-library")) customElements.define("fp3d-library", FurnitureLibrary);
+if (!customElements.get("accurona-library")) customElements.define("accurona-library", FurnitureLibrary);

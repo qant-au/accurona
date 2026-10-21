@@ -24,8 +24,8 @@ body:
   - type: input
     id: version
     attributes:
-      label: NeonPlan 3D version / Version
-      description: HACS → NeonPlan 3D, or Settings → Devices & services → NeonPlan 3D.
+      label: Accurona version / Version
+      description: HACS → Accurona, or Settings → Devices & services → Accurona.
       placeholder: "1.2.0"
     validations:
       required: true
