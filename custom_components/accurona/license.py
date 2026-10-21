@@ -24,6 +24,7 @@ from homeassistant.helpers import instance_id
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.loader import async_get_integration
 
+from . import upstream
 from .const import DOMAIN, PANEL_URL_PATH
 from .packs import PackError, fingerprint, parts_of, verify_pack
 from .storage import FloorplanData
@@ -107,6 +108,8 @@ def _retry_wait(res: aiohttp.ClientResponse, attempt: int) -> float | None:
 async def _post(hass: HomeAssistant, path: str, body: dict[str, Any]) -> Any:
     """One request to the shop; errors become LicenseErrors with the shop's code when it sent one.
     A 429 is retried a few times with a pause (the host throttles bursts from one address)."""
+    if not upstream.UPSTREAM_SERVICES:  # Accurona: the author's shop is not connected (upstream.py)
+        raise LicenseError("upstream_disabled")
     session = async_get_clientsession(hass)
     headers = {"User-Agent": await _user_agent_of(hass)}
     # the shop answers an add-on that needs a newer Accurona with a readable "please update" message

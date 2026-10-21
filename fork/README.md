@@ -27,3 +27,28 @@ merges never touch them.
   pushes are allowed.
 - **Issues and Discussions** are on. The issue chooser sends ideas and questions to
   Discussions.
+
+## The upstream author's online services
+
+NeonPlan 3D sells its Pro add-ons and packs through its author's shop (mastershort.de), and
+the app talks to it: licence keys, the pack catalogue and downloads, offers, the newsletter,
+gift and news notices, Pro teasers linking to the shop, and opt-in usage reports. Accurona
+keeps all of that code in the tree and maintained, so it could be switched on with the
+author's cooperation, but it is **off**: nothing reaches his servers and none of it shows.
+
+- **The switches.** `custom_components/accurona/upstream.py` (`UPSTREAM_SERVICES = False`)
+  and `frontend/src/upstream.ts` (`upstreamServices()` returns false). They are the only
+  places to change, together, and only after agreeing it with the author.
+- **Where they bite.** Backend: the shop's and the usage report's single request function
+  (`license._post`, `DiagnosticsReporter._post`). Frontend: `released()` in `features.ts`
+  (an add-on is advertised only once a pack unlocks it), the Extensions tab and route,
+  the offers check and gift notice, the news notice, four Pro teasers in the editor, and
+  the import page's stats beacon. Each hook is one line marked `Accurona:`.
+- **Still maintained.** Upstream's tests run with the services on (`tests/conftest.py`,
+  `features.test.ts`), so the shop code stays tested through every merge.
+  `tests/test_upstream_services.py` and `frontend/src/upstream.test.ts` prove that, switched
+  off, nothing is sent and nothing is advertised.
+- **Kept identical to upstream** so a switch-on reaches the author unchanged: every URL on
+  his hosts, the pack fingerprint, the shop's referral tag (all protected in `identity.py`).
+- **What a user loses while it is off:** the Extensions page, which is also where a pack
+  bought from the author is imported by hand. Packs already installed keep working.

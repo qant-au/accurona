@@ -27,6 +27,7 @@ import { getLicense, unseenOffers, unseenUpdates } from "./api.ts";
 import { TimeTravel } from "./load-timetravel.ts";
 import type { HistorySpec } from "./timetravel/types.ts";
 import type { Feature } from "./features.ts";
+import { upstreamServices } from "./upstream.ts";
 import type { FloorStack, Quality, WallMode } from "./viewer/viewer3d.ts";
 
 type Mode = "view" | "editor" | "extensions";
@@ -241,6 +242,7 @@ export class Floorplan3dPanel extends LitElement {
 
   private setMode(mode: Mode): void {
     if (mode === this._mode) return;
+    if (mode === "extensions" && !upstreamServices()) return; // Accurona: the shop page is off (upstream.ts)
     this.tt.stop();
     if (mode === "view") void this.data.flush();
     this._mode = mode;
@@ -523,7 +525,7 @@ export class Floorplan3dPanel extends LitElement {
 
   /** Once per page: are there shop offers the admin has not seen yet? (Only with a shop key.) */
   private checkOffers(): void {
-    if (this.offersChecked || !this.hass?.user?.is_admin) return;
+    if (this.offersChecked || !this.hass?.user?.is_admin || !upstreamServices()) return; // Accurona: also the gift notice
     this.offersChecked = true;
     getLicense(this.hass)
       .then((lic) => {
@@ -558,7 +560,7 @@ export class Floorplan3dPanel extends LitElement {
             ? html`<div class="fp3d-seg" role="tablist">
                 <button role="tab" aria-pressed=${this._mode === "view"} @click=${() => this.setMode("view")}>${this.t("view")}</button>
                 <button role="tab" aria-pressed=${this._mode === "editor"} @click=${() => this.setMode("editor")}>${this.t("editor")}</button>
-                <button role="tab" class="fp3d-tab-ext" aria-pressed=${this._mode === "extensions"} @click=${() => this.setMode("extensions")}>
+                <button role="tab" class="fp3d-tab-ext" style=${upstreamServices() ? "" : "display:none"} aria-pressed=${this._mode === "extensions"} @click=${() => this.setMode("extensions")}>
                   ✦ ${this.t("ext_tab")}${this._readyPacks
                     ? html`<span class="fp3d-badge" title=${this.t("ext_badge_ready_hint")}>⬇ ${this.t("ext_badge_ready", { n: this._readyPacks })}</span>`
                     : this._newOffers

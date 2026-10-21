@@ -7,6 +7,7 @@ import { EXPORT_FORMAT } from "../transfer.ts";
 import { buildPlan, type BuildOptions, type BuildResult, type Warning } from "./builder.ts";
 import { readFile, type ReadOptions, type ReadResult } from "./detect.ts";
 import type { LayerRole } from "./dxf.ts";
+import { upstreamServices } from "../upstream.ts";
 
 const DE = {
   title: "Plan importieren",
@@ -184,7 +185,7 @@ const state: State = { name: null, bytes: null, cache: {}, read: null, result: n
 function count(event: "open" | "read" | "fail" | "download", detail?: string): void {
   if (location.hostname !== "neonplan3d.mastershort.de") return;
   try {
-    navigator.sendBeacon?.("https://api.mastershort.de/stats/v1/hit", JSON.stringify({ page: "import", event, detail: detail ? detail.toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 16) : undefined }));
+    if (upstreamServices()) navigator.sendBeacon?.("https://api.mastershort.de/stats/v1/hit", JSON.stringify({ page: "import", event, detail: detail ? detail.toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 16) : undefined }));
   } catch {
     /* counting is never worth an error */
   }

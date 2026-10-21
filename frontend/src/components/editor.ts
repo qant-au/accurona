@@ -19,6 +19,7 @@ import { weatherEntity, isRainSource } from "../weather.ts";
 import { SHOW_PRESENCE } from "../flags.ts";
 import { hasFeature, labOn, manualUrl, released, shopUrl, UNRELEASED } from "../features.ts";
 import { isBeta, supporterUrl } from "../beta.ts";
+import { upstreamServices } from "../upstream.ts";
 import { BIN_SHAPES, BIN_SIZE, binColors, binShape, householdCountry, isPackPlant, MAILBOX_SHAPES, MAILBOX_SIZE, mailboxShape, WASTE_KINDS, wasteColors } from "../household.ts";
 import { cameraMotionSensors, detectionKind } from "../markers.ts";
 import { backdropImage } from "../backdrop.ts";
@@ -4057,7 +4058,8 @@ export class Fp3dEditor extends LitElement {
         ? { state: batteryOk ? "ok" : "todo", label: this.t(batteryOk ? "chk_battery" : "chk_battery_sensor"), action: () => goTo(batteries[0]) }
         : { state: "opt", label: this.t("chk_battery_opt"), action: () => this.addEnergyDevice("home_battery") },
       grid.length ? { state: "ok", label: this.t("chk_grid"), action: () => goTo(grid[0]) } : { state: "opt", label: this.t("chk_grid_opt"), action: () => this.addEnergyDevice("grid_point") },
-      pro ? { state: "ok", label: this.t("chk_pro_active") } : { state: "opt", label: this.t("chk_pro_get"), href: shopUrl(this.hass?.language) },
+      // Accurona: without the author's shop the "get Pro" row is left out (upstream.ts)
+      ...(pro || upstreamServices() ? ([pro ? { state: "ok", label: this.t("chk_pro_active") } : { state: "opt", label: this.t("chk_pro_get"), href: shopUrl(this.hass?.language) }] as Row[]) : []),
     ];
     const done = rows.filter((r) => r.state === "ok").length;
     return html`<section class="fp3d-checklist">
@@ -4094,6 +4096,7 @@ export class Fp3dEditor extends LitElement {
         <div class="fp3d-actions"><a class="fp3d-btn" href=${manualUrl(lang, "energy_pro")} target="_blank" rel="noopener">📖 ${this.t("manual")}</a></div>
       </section>`;
     }
+    if (!upstreamServices()) return nothing; // Accurona: no Pro teaser without the author's shop (upstream.ts)
     const picture = new URL("./images/solar-pro.jpg", import.meta.url).href;
     return html`<section class="fp3d-teaser">
       <div class="fp3d-teaser-head"><b>⚡ ${this.t("pro_name_energy_pro")}</b><a class="fp3d-btn fp3d-primary" href=${shopUrl(lang)} target="_blank" rel="noopener">${this.t("pro_unlock")}</a></div>
@@ -5178,7 +5181,7 @@ export class Fp3dEditor extends LitElement {
   private renderNews() {
     // the pets' notice went with the gift notice of the panel (both fun packs free with a customer account)
     const news: { id: string; feature: "fun_pets" }[] = [];
-    if (this.newsLater || !this.isAdmin) return nothing;
+    if (this.newsLater || !this.isAdmin || !upstreamServices()) return nothing; // Accurona: shop news is off
     const customer = (this.packs ?? []).some((p) => p.licensee);
     const item = news.find((n) => {
       if (UNRELEASED.includes(n.feature) || hasFeature(n.feature) || !customer) return false;
@@ -11946,6 +11949,7 @@ export class Fp3dEditor extends LitElement {
   /** Auto Pro: the car's entities – one entity of the car's device is enough, the roles are found beside it. */
   private renderCarForm(f: Furniture) {
     const lang = this.hass?.language;
+    if (!hasFeature("auto_pro") && !upstreamServices()) return nothing; // Accurona: no Pro teaser (upstream.ts)
     if (!hasFeature("auto_pro"))
       return html`<section class="fp3d-teaser">
         <div class="fp3d-teaser-head"><b>🚗 ${this.t("pro_name_auto_pro")}</b><a class="fp3d-btn fp3d-primary" href=${shopUrl(lang)} target="_blank" rel="noopener">${this.t("pro_unlock")}</a></div>
@@ -11993,6 +11997,7 @@ export class Fp3dEditor extends LitElement {
   private renderPictureRules(f: Furniture) {
     const admin = this.isAdmin;
     const rules = f.pictures ?? [];
+    if (!hasFeature("screens") && !upstreamServices()) return nothing; // Accurona: no Pro teaser (upstream.ts)
     if (!hasFeature("screens")) {
       return html`<div class="fp3d-wide">
         <div class="fp3d-sub">${this.t("screen_pictures")}</div>

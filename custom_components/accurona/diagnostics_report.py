@@ -31,6 +31,7 @@ from homeassistant.helpers.event import async_track_time_interval
 from homeassistant.helpers.storage import Store
 from homeassistant.loader import async_get_integration
 
+from . import upstream
 from .const import DOMAIN, STORAGE_KEY_DIAGNOSTICS, STORAGE_VERSION
 from .license import RETRY_WAITS, user_agent
 from .packs import KNOWN_FEATURES
@@ -388,6 +389,8 @@ class DiagnosticsReporter:
 
     async def _post(self, path: str, body: dict[str, Any]) -> bool:
         """One request to the Accurona server; True on success. Failures are only logged for debugging."""
+        if not upstream.UPSTREAM_SERVICES:  # Accurona: reports never go to the author's server (upstream.py)
+            return False
         session = async_get_clientsession(self.hass)
         headers = {"User-Agent": await user_agent(self.hass)}
         attempt = 0

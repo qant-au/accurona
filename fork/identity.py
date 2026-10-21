@@ -85,6 +85,7 @@ PROTECT = [
     re.compile(r"neonplan-import"),               # import file format and its page
     re.compile(r'EXPORT_FORMAT = "neonplan3d"'),  # plan export format
     re.compile(r'format: "neonplan3d"'),
+    re.compile(r"src=neonplan-app"),              # the shop's referral tag, for when it is switched on
 ]
 
 # Exact edits made after the transform, per file: (old, new).

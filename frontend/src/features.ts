@@ -3,6 +3,7 @@
  * The code of every feature is in the integration; the pack is the licence and carries its content.
  */
 import { getPacks } from "./packs.ts";
+import { upstreamServices } from "./upstream.ts";
 
 export type Feature = "camera_cockpit" | "weather" | "screens" | "energy_pro" | "sound" | "auto_pro" | "time_travel" | "pool" | "household" | "fridge_smart" | "fun_pets" | "fun_halloween";
 
@@ -50,7 +51,9 @@ export function projectionOn(): boolean {
 
 /** Whether an add-on may be shown and advertised: released, or unlocked, or the lab switch is on. */
 export function released(feature: Gated): boolean {
-  return !UNRELEASED.includes(feature) || (feature !== "diagnostics" && hasFeature(feature)) || labOn();
+  // Accurona: without the author's shop nothing is sold, so an add-on shows only once unlocked (upstream.ts)
+  const listed = upstreamServices() && !UNRELEASED.includes(feature);
+  return listed || (feature !== "diagnostics" && hasFeature(feature)) || labOn();
 }
 
 /** Features unlocked by a pack but not listed anywhere (exclusive items). */
@@ -72,7 +75,7 @@ const isGerman = (lang: string | undefined) => (lang ?? navigator.language).toLo
  * from the app. (The exact address comes from the shop – see "Rueckmeldung Claude Desktop - Fun-Pack Halloween.md".)
  */
 export function registerUrl(lang: string | undefined): string {
-  return `https://mastershort.de/my-account/?lang=${isGerman(lang) ? "de" : "en"}&src=accurona-app`;
+  return `https://mastershort.de/my-account/?lang=${isGerman(lang) ? "de" : "en"}&src=neonplan-app`;
 }
 
 export function shopUrl(lang: string | undefined): string {

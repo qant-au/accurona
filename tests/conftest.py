@@ -16,6 +16,12 @@ def auto_enable_custom_integrations(enable_custom_integrations):
 
 
 @pytest.fixture(autouse=True)
+def upstream_services_on(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Accurona: upstream's tests exercise the author's shop code, so it stays maintained; in use it is off."""
+    monkeypatch.setattr("custom_components.accurona.upstream.UPSTREAM_SERVICES", True)
+
+
+@pytest.fixture(autouse=True)
 def mock_frontend(hass: HomeAssistant) -> Generator[dict[str, object]]:
     """Stand in for the frontend and panel_custom components (hass_frontend is not installed in tests)."""
     hass.config.components.update({"frontend", "panel_custom"})

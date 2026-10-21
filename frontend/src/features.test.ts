@@ -1,6 +1,10 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { hasFeature, manualUrl, shopUrl, unlockedFeatures } from "./features.ts";
+import { setUpstreamServices } from "./upstream.ts";
+
+// Accurona: upstream's tests exercise the shop code, so it stays maintained; in use it is off (upstream.ts)
+setUpstreamServices(true);
 
 test("features come from installed packs that list them; unknown names are ignored", () => {
   assert.deepEqual([...unlockedFeatures([])], []);
