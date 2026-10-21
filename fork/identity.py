@@ -145,7 +145,7 @@ def main() -> int:
     def git_rm(path: str, why: str) -> None:
         changed.append(f"delete {path}{why}")
         if not check:
-            subprocess.run(["git", "rm", "-q", path], cwd=ROOT, check=True)
+            subprocess.run(["git", "rm", "-qf", path], cwd=ROOT, check=True)
 
     for path in tracked():
         if matches(path, DELETE):
