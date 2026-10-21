@@ -48,6 +48,8 @@ FORK = ROOT / "fork"
 EXCLUDE = [
     "LICENSE", "NOTICE", "README.md", "CLAUDE.md", "CHANGELOG.md", "docs/release-*.md",
     "fork/*", "custom_components/*/frontend/*.js", "site/import/*.js",
+    # ours, and they name the upstream product on purpose
+    "custom_components/accurona/upstream.py", "frontend/src/upstream.ts",
 ]
 # Upstream files the fork does not carry: his product roadmap, his shop's server code,
 # his donation link, and the workflows that post to his Discord, probe his shop and
