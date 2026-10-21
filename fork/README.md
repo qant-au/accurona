@@ -21,8 +21,8 @@ merges never touch them.
   `identity.py --check`.
 - **Secrets.** None. No retained workflow needs one, in the Actions store or the
   Dependabot store: nothing reaches a private registry or an outside service.
-- **Dependabot.** Security updates only for npm; versions arrive with upstream merges.
-  Version updates for GitHub Actions.
+- **Dependabot.** Security updates only; versions arrive with upstream merges.
+  The same for GitHub Actions, whose bumps would touch upstream's workflows.
 - **Branch protection on `main`.** Force pushes and branch deletion are blocked; direct
   pushes are allowed.
 - **Issues and Discussions** are on. The issue chooser sends ideas and questions to
