@@ -96,6 +96,10 @@ OVERRIDES = {
         ('"issue_tracker": "https://github.com/mastershort/neonplan3d/issues"',
          '"issue_tracker": "https://github.com/qant-au/accurona/issues"'),
     ],
+    # Upstream's guard reads the public texts, ROADMAP.md among them; the fork drops that file.
+    "frontend/src/unreleased-guard.test.ts": [
+        ('"CHANGELOG.md", "ROADMAP.md", ', '"CHANGELOG.md", '),
+    ],
 }
 # Our files copied over upstream's.
 COPIES = {
