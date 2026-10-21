@@ -1,0 +1,11 @@
+# Files that are Accurona's own. On an upstream merge they are put back as they were on
+# the snapshot branch, so upstream's versions never land and never conflict.
+# fork/merge-upstream.sh reads this list; one path per line.
+fork
+assets
+README.md
+NOTICE
+LICENSE
+CLAUDE.md
+.github/dependabot.yml
+.github/workflows/fork.yml

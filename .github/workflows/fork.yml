@@ -1,0 +1,21 @@
+# The fork's own check, kept out of upstream's ci.yml so merges never touch it: the tree
+# must already carry Accurona's identity (fork/identity.py --check makes no changes).
+name: Fork
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  identity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: python3 fork/identity.py --check

@@ -49,8 +49,14 @@ EXCLUDE = [
     "LICENSE", "NOTICE", "README.md", "CLAUDE.md", "CHANGELOG.md", "docs/release-*.md",
     "fork/*", "custom_components/*/frontend/*.js", "site/import/*.js",
 ]
-# Upstream files the fork does not carry: his product roadmap and his shop's server code.
-DELETE = ["ROADMAP.md", "tools/shop/*"]
+# Upstream files the fork does not carry: his product roadmap, his shop's server code,
+# his donation link, and the workflows that post to his Discord, probe his shop and
+# publish his site (see fork/README.md for the repo decisions).
+DELETE = [
+    "ROADMAP.md", "tools/shop/*", ".github/FUNDING.yml",
+    ".github/workflows/discord-release.yml", ".github/workflows/shop-check.yml",
+    ".github/workflows/pages.yml",
+]
 BUILT = "custom_components/*/frontend/*.js"
 
 NAMES = [
@@ -95,6 +101,8 @@ OVERRIDES = {
 COPIES = {
     "brand/icon.png": "custom_components/accurona/brand/icon.png",
     "brand/icon@2x.png": "custom_components/accurona/brand/icon@2x.png",
+    # The issue chooser points at this repo, not at the author's Discord, discussions and shop.
+    "github/ISSUE_TEMPLATE/config.yml": ".github/ISSUE_TEMPLATE/config.yml",
 }
 
 

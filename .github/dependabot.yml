@@ -1,0 +1,26 @@
+version: 2
+updates:
+  # Security updates only. Accurona is a maintained fork: dependency versions arrive with
+  # each upstream merge (fork/MERGING.md), and a bump of our own would put package.json and
+  # the lockfile in conflict with upstream on every merge. A limit of 0 stops version-update
+  # PRs; security updates are switched on in the repo settings and still open.
+  - package-ecosystem: npm
+    directory: /frontend
+    schedule:
+      interval: weekly
+      day: monday
+      time: "07:00"
+      timezone: Australia/Perth
+    open-pull-requests-limit: 0
+    commit-message:
+      prefix: build(deps)
+      prefix-development: build(deps-dev)
+
+  # Our own workflow (fork.yml) is ours to keep current; upstream's follow upstream.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: ci
