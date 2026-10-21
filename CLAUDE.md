@@ -1,11 +1,22 @@
-# NeonPlan 3D – notes for Claude
+# Accurona: notes for Claude
 
-- Spec and phase plan: `private/docs/plan.md` (German, not public). Unreleased docs (Pool Pro) live in `private/docs/pending/`. Talk to the user in German; code, identifiers and comments in English.
-- Domain `neonplan3d`, repo `mastershort/neonplan3d`, minimum Home Assistant 2025.1.
-- Frontend lives in `frontend/` (Lit 3 + TypeScript, no decorators; three.js in a separate lazily loaded bundle).
-  Bundles are committed to `custom_components/neonplan3d/frontend/`, and CI fails when they are stale, so run `npm run build` before committing.
-- Checks: `npm test`, `npm run typecheck`, `npm run build` (size budgets), `ruff check` / `ruff format`.
-  HA integration tests only run in the Linux CI.
-- Visual self-check: `npm run screenshot` renders `preview/index.html` (invented demo data, mock hass) into `preview/screenshots/`.
-- Deploy to the user's HA: `npm run deploy` (target in the untracked `deploy.local.json`). Never commit real floor plans, IPs or device names.
-- After each phase: bump the version in `manifest.json`, commit, push, check CI, and tell the user in German what is new and how to test it.
+- Accurona is an intentionally maintained fork of NeonPlan 3D (`Mastershort/neonplan3d`,
+  MIT). Upstream is the `upstream` remote, fetch only. Nothing is ever pushed or proposed
+  back as a merge.
+- **The rename from upstream's identity is a transform, not hand edits.** `fork/identity.py`
+  renames upstream's tree and is re-run after every upstream merge. Never hand-edit a
+  NeonPlan name into an Accurona one, and never hand-revert one: change the script.
+  `python3 fork/identity.py --check` must report `identity: clean`.
+- Kept as upstream wrote them, on purpose: the file-format markers (`"neonplan3d"` plan
+  export, `neonplan3d-backup`, `neonplan-import`), the pack fingerprint prefix
+  `neonplan3d:`, the `.fp3dpack` extension, and every URL on the author's hosts.
+  Changing any of them breaks compatibility with NeonPlan 3D plans and packs.
+- Keep our changes at the edges (new modules, `fork/`), so the hooks into upstream's core
+  files stay small and merges stay cheap.
+- Domain `accurona`, minimum Home Assistant 2025.1. Frontend in `frontend/` (Lit 3 +
+  TypeScript, no decorators; three.js in a separate lazily loaded bundle). Bundles are
+  committed to `custom_components/accurona/frontend/` and CI fails when they are stale, so
+  run `npm run build` before committing.
+- Checks: `npm test`, `npm run typecheck`, `npm run build` (size budgets), `ruff check`,
+  `ruff format --check`, `mypy custom_components/accurona`, `pytest -q`.
+- Never commit real floor plans, boat data, IPs or device names.
