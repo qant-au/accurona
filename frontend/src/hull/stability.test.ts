@@ -5,7 +5,7 @@ import { hydrostatics, SEA_WATER } from "./hydrostatics.ts";
 import { parametricHull } from "./parametric.ts";
 import { revolutionBody } from "./revolution.ts";
 import { shipdBody } from "./shipd.ts";
-import { axes, float, gzCurve, immersion } from "./stability.ts";
+import { axes, float, gzCurve, immersion, restingHeel } from "./stability.ts";
 import type { Hull } from "./types.ts";
 
 const near = (a: number, b: number, eps: number, what: string) => assert.ok(Math.abs(a - b) <= eps, `${what}: ${a} vs ${b}`);
@@ -53,6 +53,21 @@ test("stability: a wall-sided box's righting lever is sin φ (GM + ½ BM tan² �
     near(f.volume, L * B * T, 1e-4, "it keeps its displacement");
     near(f.attitude.trim, 0, 1e-6, "no trim with G amidships");
   }
+});
+
+test("stability: a stable boat rests upright; one with G over its metacentre lolls; one far over capsizes", () => {
+  const T = 1.5;
+  const BM = (B * B) / (12 * T);
+  const disp = L * B * T * SEA_WATER;
+  const upright = restingHeel(box, { displacement: disp, lcg: L / 2, vcg: 0.5 })!;
+  near(upright.attitude.heel, 0, 1e-12, "stable: upright");
+  // GM = −0.2: wall-sided, the lever is 0 again where tan² φ = −2 GM / BM, about 24°
+  const vcg = -T / 2 + BM + 0.2;
+  const loll = restingHeel(box, { displacement: disp, lcg: L / 2, vcg })!;
+  near(Math.tan(loll.attitude.heel), Math.sqrt(0.4 / BM), 2e-3, "the angle of loll");
+  near(loll.gz, 0, 1e-6, "at rest there");
+  // G 5 m up: no angle within 60° brings the lever back
+  assert.equal(restingHeel(box, { displacement: disp, lcg: L / 2, vcg: 5 }), null);
 });
 
 test("stability: the righting lever is odd in the heel, and beyond the deck edge falls away from the formula", () => {

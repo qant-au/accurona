@@ -3,12 +3,12 @@ import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import { hydrostatics } from "./hydrostatics.ts";
 import { bottomAt, halfAt, sheerAt } from "./sections.ts";
-import { ShipD, shipdBody, shipdConstraints, shipdFeasible, SHIPD_PARAMETERS } from "./shipd.ts";
+import { roots, ShipD, shipdBody, shipdConstraints, shipdFeasible, SHIPD_PARAMETERS } from "./shipd.ts";
 
 interface Reference {
   name: string;
   vector: number[];
-  constraints: number[];
+  constraints?: number[];
   pythonError?: string;
   waterlines?: { z: number; x: number[]; y: number[] }[];
   measures?: { WL: number; volume: number; waterplane: number; lcbFromBow: number; vcbFromKeel: number };
@@ -29,9 +29,42 @@ test("shipd: 45 parameters, 49 constraints", () => {
 
 test("shipd: the constraints are the original's, to rounding", () => {
   for (const r of fixture.reference) {
-    const c = shipdConstraints(r.vector)!;
-    c.forEach((v, i) => assert.ok(Math.abs(v - r.constraints[i]) <= 1e-9 * Math.max(1, Math.abs(r.constraints[i])), `${r.name} #${i}: ${v} ≠ ${r.constraints[i]}`));
+    const c = shipdConstraints(r.vector);
+    const want = r.constraints;
+    // a vector the original could not even construct: nor can this
+    if (!want) {
+      assert.equal(c, null, `${r.name} builds here but not in the original`);
+      continue;
+    }
+    assert.ok(c, `${r.name} builds in the original but not here`);
+    c.forEach((v, i) => assert.ok(Math.abs(v - want[i]) <= 1e-9 * Math.max(1, Math.abs(want[i])), `${r.name} #${i}: ${v} ≠ ${want[i]}`));
   }
+});
+
+test("shipd: the edge cases behave as the original's do", () => {
+  const find = (name: string) => fixture.reference.find((r) => r.name === name)!;
+  // a zero keel radius leaves the lower gunwale line undefined: the original raises, and so does this
+  assert.throws(() => new ShipD(find("zero-keel-radius").vector), /singular/);
+  assert.equal(shipdFeasible(find("zero-keel-radius").vector), false);
+  // bulbs on a keel radius below 0 are marked infeasible outright (constraints 36 to 38 and 42 to 45 are 1)
+  const c = shipdConstraints(find("bulbs-negative-keel-radius").vector)!;
+  assert.deepEqual(c.slice(36, 39), [1, 1, 1]);
+  assert.deepEqual(c.slice(42, 46), [1, 1, 1, 1]);
+  // a stern bulb nearly as wide as the hull meets the stern taper at its start (its waterlines are in the parity test)
+  const h = new ShipD(find("wide-stern-bulb").vector);
+  const z = 0.5 * h.WL * h.HSBOA;
+  assert.ok(h.halfBeam_SB(z, h.SB_Prof[5]) >= h.halfBeam_Stern(h.delta_stern(z), h.solve_waterline_stern(z)));
+});
+
+test("shipd: polynomial roots as numpy finds them, real and complex", () => {
+  const sorted = (rs: [number, number][]) => rs.map(([re, im]) => [Math.round(re * 1e9) / 1e9 + 0, Math.round(im * 1e9) / 1e9 + 0]).sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+  assert.deepEqual(sorted(roots([1, -6, 11, -6])), [[1, 0], [2, 0], [3, 0]]);
+  assert.deepEqual(sorted(roots([1, 0, 1])), [[0, -1], [0, 1]]);
+  // leading zeros dropped, trailing zeros are roots at 0
+  assert.deepEqual(sorted(roots([0, 0, 2, -4])), [[2, 0]]);
+  assert.deepEqual(sorted(roots([1, -1, 0, 0])), [[0, 0], [0, 0], [1, 0]]);
+  // a cubic with a complex pair
+  assert.deepEqual(sorted(roots([1, -1, 1, -1])), [[0, -1], [0, 1], [1, 0]]);
 });
 
 test("shipd: waterline half-breadths are the original's at its own points (bulbs, transoms, both stern forms)", () => {

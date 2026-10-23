@@ -50,7 +50,7 @@ function solve(A: number[][], b: number[]): Vec {
 }
 
 /** The roots of a polynomial (highest power first, leading zeros dropped) as [re, im], like numpy's roots. */
-function roots(coeffs: Vec): [number, number][] {
+export function roots(coeffs: Vec): [number, number][] {
   let c = [...coeffs];
   while (c.length && c[0] === 0) c.shift();
   // numpy drops trailing zeros as roots at 0

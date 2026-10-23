@@ -4,6 +4,9 @@ import { test } from "node:test";
 import { bodyRange, sheerAt } from "./sections.ts";
 import { shipdBody } from "./shipd.ts";
 import { ribTube, tubeBottom } from "./tube.ts";
+import type { HullBody } from "./types.ts";
+
+const near = (a: number, b: number, eps: number, what: string) => assert.ok(Math.abs(a - b) <= eps, `${what}: ${a} vs ${b}`);
 
 // the variety set's RIB hull: 6.5 m, deep V, its transom raked so the foot lies aft of the deck's end
 const fixture: { variety: { name: string; bodies: { vector: number[] }[] }[] } = JSON.parse(readFileSync(new URL("./fixtures/shipd.json", import.meta.url), "utf8"));
@@ -45,6 +48,21 @@ test("tube: it sits on the deck edge above the water, and lifts at the bow", () 
   assert.ok(Math.abs(mid[1] - (sheerAt(hull, mid[0])! + 0.05)) < 1e-9, "a tenth of the diameter above the sheer");
   const bow = t.path[Math.floor(t.path.length / 2)];
   assert.ok(bow[1] > mid[1] + 0.1);
+});
+
+test("tube: on a plain vertical transom the deck runs right aft, and the tubes past it", () => {
+  // a box 5 m long, 2 m wide, its transom straight up at x = 0, its bow a point
+  const punt: HullBody = {
+    center: 0,
+    sections: [0, 1, 2, 3, 4, 5].map((x) => {
+      const h = x < 3 ? 1 : 1 - (x - 3) / 2;
+      return { x, points: [[-0.3, h], [0.4, h]] as [number, number][] };
+    }),
+  };
+  const t = ribTube(punt, { diameter: 0.4 });
+  near(t.path[0][0], -0.32, 1e-9, "0.8 diameters aft of the transom");
+  near(t.path[0][2], -1.1, 1e-9, "the deck's half-breadth plus a quarter diameter");
+  near(t.path[0][1], 0.44, 1e-9, "a tenth of the diameter above the sheer");
 });
 
 test("tube: a given corner radius is kept, and never tighter than the tube itself", () => {

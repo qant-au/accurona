@@ -322,7 +322,8 @@ export function float(hull: Hull, load: Load, heel = 0, split = 1, start?: Attit
 /**
  * The heel a boat rests at with its load: 0 for a symmetric hull with G on its centre line, a list when the hull or
  * the load is lopsided (a single outrigger, an asymmetric demihull, weight to one side). Found where the righting
- * lever is 0, bracketing outward from upright; null if none is found within 60°.
+ * lever is 0, bracketing outward from upright. A boat balanced upright but unstable there (G above the metacentre)
+ * rests at its angle of loll instead. Null if no rest is found within 60°: it capsizes.
  */
 export function restingHeel(hull: Hull, load: Load, split = 1): Floating | null {
   let near: Attitude | undefined;
@@ -332,12 +333,23 @@ export function restingHeel(hull: Hull, load: Load, split = 1): Floating | null 
     return f;
   };
   const upright = at(0);
-  if (Math.abs(upright.gz) < 1e-9) return upright;
-  // a positive lever turns the boat back towards port (it rights a starboard heel), so the rest lies to port of here
-  const dir = upright.gz > 0 ? -1 : 1;
+  let dir: number;
   let inner = 0;
   let innerGz = upright.gz;
+  if (Math.abs(upright.gz) < 1e-9) {
+    // balanced upright: at rest there if it is stable, but with G above the metacentre the lever pushes it on over,
+    // and it lolls to one side or the other until the lever comes back to 0 (the starboard one is found)
+    const small = at((0.5 * Math.PI) / 180);
+    if (small.gz > 0) return upright;
+    dir = 1;
+    inner = (0.5 * Math.PI) / 180;
+    innerGz = small.gz;
+  } else {
+    // a positive lever turns the boat back towards port (it rights a starboard heel), so the rest lies to port of here
+    dir = upright.gz > 0 ? -1 : 1;
+  }
   for (const deg of [0.5, 1, 2, 4, 8, 15, 25, 40, 60]) {
+    if (deg * (Math.PI / 180) <= Math.abs(inner)) continue;
     const heel = (dir * deg * Math.PI) / 180;
     const f = at(heel);
     if (Math.sign(f.gz) !== Math.sign(innerGz)) {
