@@ -4,6 +4,7 @@
 
 import {
   AmbientLight,
+  Box3,
   BufferAttribute,
   BufferGeometry,
   CircleGeometry,
@@ -38,6 +39,8 @@ export interface HullViewer {
   show(name: string): void;
   /** Heel it (degrees, starboard down positive) and float it there with its load. */
   heel(degrees: number): void;
+  /** Put the camera at an angle round the hull (degrees from astern, anticlockwise from above) and above the water. */
+  orbit(azimuth: number, elevation: number): void;
   state(): { name: string; hydro: Hydrostatics; load: Load; heel: number; trim: number; gz: number; curve: [number, number][] };
   destroy(): void;
 }
@@ -50,21 +53,25 @@ function geometry(m: HullMesh): BufferGeometry {
   return g;
 }
 
-/** A hull painted as boats are: antifouling below the design waterline, a boot-top stripe along it, topsides above. */
-function painted(m: HullMesh, size: number, submerged: boolean): BufferGeometry {
-  const g = geometry(m);
-  const colours = new Float32Array(m.positions.length);
-  const [top, boot, bottom, sub] = [COLOURS.topsides, COLOURS.boot, COLOURS.bottom, COLOURS.submarine].map((c) => new Color(c));
+/**
+ * A hull's material, painted as boats are: antifouling below the design waterline, a boot-top stripe along it and
+ * topsides above, by height in the hull's own frame (so the lines stay level with the hull as it heels, and crisp
+ * whatever the mesh), or one dark grey for a submarine.
+ */
+function paint(size: number, submerged: boolean, see: boolean): MeshStandardMaterial {
+  const m = new MeshStandardMaterial({ roughness: 0.55, metalness: 0.05, side: DoubleSide, transparent: see, opacity: see ? 0.25 : 1 });
   const stripe = Math.max(0.01, size / 300);
-  for (let i = 0; i < m.positions.length; i += 3) {
-    const y = m.positions[i + 1];
-    const c = submerged ? sub : y < -stripe / 3 ? bottom : y < stripe ? boot : top;
-    colours[i] = c.r;
-    colours[i + 1] = c.g;
-    colours[i + 2] = c.b;
-  }
-  g.setAttribute("color", new BufferAttribute(colours, 3));
-  return g;
+  const colour = (c: number) => new Color(submerged ? COLOURS.submarine : c);
+  const uniforms = { uTop: { value: colour(COLOURS.topsides) }, uBoot: { value: colour(COLOURS.boot) }, uBottom: { value: colour(COLOURS.bottom) }, uLow: { value: -stripe / 3 }, uHigh: { value: stripe } };
+  m.onBeforeCompile = (shader) => {
+    Object.assign(shader.uniforms, uniforms);
+    shader.vertexShader = shader.vertexShader.replace("#include <common>", "#include <common>\nvarying float vHullY;").replace("#include <begin_vertex>", "#include <begin_vertex>\nvHullY = position.y;");
+    shader.fragmentShader = shader.fragmentShader
+      .replace("#include <common>", "#include <common>\nvarying float vHullY;\nuniform vec3 uTop;\nuniform vec3 uBoot;\nuniform vec3 uBottom;\nuniform float uLow;\nuniform float uHigh;")
+      .replace("vec4 diffuseColor = vec4( diffuse, opacity );", "vec4 diffuseColor = vec4( vHullY < uLow ? uBottom : vHullY < uHigh ? uBoot : uTop, opacity );");
+  };
+  m.customProgramCacheKey = () => `hull-paint:${stripe}:${submerged}`;
+  return m;
 }
 
 /** The station lines: each section's outline, both sides, as line segments. */
@@ -90,6 +97,10 @@ function stationLines(hull: Hull): BufferGeometry {
 const fmt = (v: number, digits = 2) => (Math.abs(v) >= 1000 ? Math.round(v).toLocaleString("en") : v.toFixed(digits));
 const mass = (t: number) => (t >= 1 ? `${fmt(t)} t` : `${fmt(t * 1000, 1)} kg`);
 
+/**
+ * Mount the viewer in `root`. `?hull=<name>` opens a hull; `?bare` shows the 3D view alone, with the hull's name and
+ * note as a caption (for recordings).
+ */
 export function mountHullViewer(root: HTMLElement): HullViewer {
   root.innerHTML = `
     <style>
@@ -105,6 +116,10 @@ export function mountHullViewer(root: HTMLElement): HullViewer {
       .hv input[type=range] { flex: 1; }
       .hv .chart { background: #0b1220; border: 1px solid #1c2740; border-radius: 6px; }
       .hv .stage { position: relative; min-height: 360px; }
+      .hv.bare { grid-template-columns: 1fr; }
+      .hv.bare aside { display: none; }
+      .hv .caption { position: absolute; left: 20px; bottom: 16px; color: #eaf2ff; font-size: 15px; text-shadow: 0 1px 3px #000; }
+      .hv .caption span { display: block; color: #9fb2d2; font-size: 13px; }
       .hv canvas { display: block; }
       @media (max-width: 760px) { .hv { grid-template-columns: 1fr; grid-template-rows: auto 60vh; height: auto; } .hv aside { border-right: 0; order: 2; } }
     </style>
@@ -120,9 +135,14 @@ export function mountHullViewer(root: HTMLElement): HullViewer {
         <label><input type="checkbox" data-inner /> Inner skin <span class="note" data-thickness></span></label>
         <div><div class="note">Righting lever GZ (m) against heel, 0 to 80°</div><svg class="chart" data-chart viewBox="0 0 300 140" width="100%"></svg></div>
       </aside>
-      <div class="stage" data-stage></div>
+      <div class="stage" data-stage><div class="caption" data-caption hidden></div></div>
     </div>`;
   const q = <T extends Element>(sel: string) => root.querySelector(sel) as T;
+  const bare = new URLSearchParams(location.search).has("bare");
+  if (bare) {
+    q<HTMLDivElement>(".hv").classList.add("bare");
+    q<HTMLDivElement>("[data-caption]").hidden = false;
+  }
   const pick = q<HTMLSelectElement>("[data-pick]");
   const stage = q<HTMLDivElement>("[data-stage]");
   const heelInput = q<HTMLInputElement>("[data-heel]");
@@ -154,7 +174,7 @@ export function mountHullViewer(root: HTMLElement): HullViewer {
   const sun = new DirectionalLight(0xffffff, 1.6);
   sun.position.set(-1, 2, 1.5);
   scene.add(sun);
-  const camera = new PerspectiveCamera(40, 1, 0.01, 10000);
+  const camera = new PerspectiveCamera(28, 1, 0.01, 10000);
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
   const water = new Mesh(new CircleGeometry(1, 96), new MeshStandardMaterial({ color: COLOURS.water, transparent: true, opacity: 0.45, side: DoubleSide, depthWrite: false }));
@@ -163,7 +183,7 @@ export function mountHullViewer(root: HTMLElement): HullViewer {
   const boat = new Group();
   scene.add(boat);
 
-  let current: { name: string; built: CatalogueHull; hydro: Hydrostatics; load: Load; heel: number; trim: number; gz: number; curve: [number, number][]; size: number } | null = null;
+  let current: { name: string; built: CatalogueHull; hydro: Hydrostatics; load: Load; heel: number; trim: number; gz: number; curve: [number, number][]; size: number; frame: number; middle: Vector3 } | null = null;
   let token = 0;
 
   const resize = () => {
@@ -198,9 +218,8 @@ export function mountHullViewer(root: HTMLElement): HullViewer {
     const showInner = innerInput.checked;
     const thickness = Math.max(0.003, current.size / 300);
     q<HTMLSpanElement>("[data-thickness]").textContent = showInner ? `(${fmt(thickness * 1000, 0)} mm plating)` : "";
-    const skin = new MeshStandardMaterial({ vertexColors: true, roughness: 0.55, metalness: 0.05, side: DoubleSide, transparent: showInner, opacity: showInner ? 0.25 : 1 });
-    const submerged = (current.built.waterline ?? 0) > 0;
-    for (const body of hull.bodies) boat.add(new Mesh(painted(bodyMesh(body), current.size, submerged), skin));
+    const skin = paint(current.size, (current.built.waterline ?? 0) > 0, showInner);
+    for (const body of hull.bodies) boat.add(new Mesh(geometry(bodyMesh(body)), skin));
     if (showInner) {
       const inner = new MeshStandardMaterial({ color: COLOURS.inner, roughness: 0.8, side: DoubleSide });
       for (const body of hull.bodies) boat.add(new Mesh(geometry(bodyMesh(innerBody(body, thickness), 32, true)), inner));
@@ -268,6 +287,19 @@ export function mountHullViewer(root: HTMLElement): HullViewer {
     step();
   };
 
+  /** The camera at an angle round the hull and above the water, far enough off to take it all in. */
+  const orbit = (azimuth: number, elevation: number) => {
+    if (!current) return;
+    // a long lens from well off, round the middle of all that is drawn: the near end does not loom
+    const r = current.frame * 1.25;
+    const a = azimuth * DEG;
+    const e = elevation * DEG;
+    const c = current.middle;
+    camera.position.set(c.x - Math.cos(a) * Math.cos(e) * r, c.y + Math.sin(e) * r, c.z + Math.sin(a) * Math.cos(e) * r);
+    controls.target.copy(c);
+    controls.update();
+  };
+
   const heel = (degrees: number) => {
     if (!current) return;
     heelInput.value = String(degrees);
@@ -285,6 +317,7 @@ export function mountHullViewer(root: HTMLElement): HullViewer {
     const entry = CATALOGUE.find((e) => e.name === name) ?? CATALOGUE[0];
     pick.value = entry.name;
     q<HTMLDivElement>("[data-note]").textContent = entry.note;
+    q<HTMLDivElement>("[data-caption]").innerHTML = `${entry.name}<span>${entry.note}</span>`;
     const built = entry.build();
     const hydro = hydrostatics(built.hull, built.waterline ?? 0);
     let x0 = Infinity;
@@ -305,18 +338,19 @@ export function mountHullViewer(root: HTMLElement): HullViewer {
     const vcg = hydro.waterplane > 0 ? Math.min(hydro.vcb + 0.4 * hydro.bmT, 0.5 * Math.max(0, top)) : hydro.vcb - 0.05 * (top - low);
     const load: Load = { displacement: hydro.displacement, lcg: hydro.lcb, vcg, tcg: hydro.tcb };
     vcgInput.value = vcg.toFixed(2);
-    current = { name: entry.name, built, hydro, load, heel: 0, trim: 0, gz: 0, curve: [], size };
-    water.scale.setScalar(size * 2);
+    current = { name: entry.name, built, hydro, load, heel: 0, trim: 0, gz: 0, curve: [], size, frame: size, middle: new Vector3() };
+    water.scale.setScalar(size * 8);
     water.position.y = 0;
     build();
     heel(0);
-    const r = size * 0.9;
-    camera.position.set(-r * 0.9, r * 0.45, r * 0.9);
+    // frame all of it: the hull, and the tubes and parts that reach beyond it
+    const box = new Box3().setFromObject(boat);
+    current.frame = box.getSize(new Vector3()).length();
+    current.middle = box.getCenter(new Vector3());
     camera.near = size / 1000;
     camera.far = size * 50;
     camera.updateProjectionMatrix();
-    controls.target.set(0, 0, 0);
-    controls.update();
+    orbit(225, 22);
     const my = ++token;
     curve(my);
     const url = new URL(location.href);
@@ -350,6 +384,7 @@ export function mountHullViewer(root: HTMLElement): HullViewer {
   return {
     show,
     heel,
+    orbit,
     state: () => {
       const c = current!;
       return { name: c.name, hydro: c.hydro, load: c.load, heel: c.heel, trim: c.trim, gz: c.gz, curve: c.curve };
