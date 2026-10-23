@@ -7,4 +7,5 @@ export { parametricHull, type ParametricHullSpec } from "./parametric.ts";
 export { ShipD, shipdBody, shipdConstraints, shipdFeasible, SHIPD_PARAMETERS, type ShipDBodyOptions } from "./shipd.ts";
 export { pontoonBody, revolutionBody, type PontoonSpec, type RevolutionOptions } from "./revolution.ts";
 export { ribTube, tubeBottom, type Tube, type TubeSpec } from "./tube.ts";
+export * as parts from "./parts.ts";
 export { axes, float, gzCurve, hullMiddle, immersion, type Attitude, type Floating, type Immersion, type Load, type Vec3 } from "./stability.ts";
