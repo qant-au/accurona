@@ -19,6 +19,7 @@ import { weatherEntity, isRainSource } from "../weather.ts";
 import { SHOW_PRESENCE } from "../flags.ts";
 import { hasFeature, labOn, manualUrl, released, shopUrl, UNRELEASED } from "../features.ts";
 import { isBeta, supporterUrl } from "../beta.ts";
+import { haFeatures } from "../homeassistant.ts";
 import { upstreamServices } from "../upstream.ts";
 import { BIN_SHAPES, BIN_SIZE, binColors, binShape, householdCountry, isPackPlant, MAILBOX_SHAPES, MAILBOX_SIZE, mailboxShape, WASTE_KINDS, wasteColors } from "../household.ts";
 import { cameraMotionSensors, detectionKind } from "../markers.ts";
@@ -3937,7 +3938,9 @@ export class Fp3dEditor extends LitElement {
       return html`<button class="fp3d-btn fp3d-back" @click=${() => this.selectItem("furniture", null)}>‹ ${this.t("tool_energy")}</button>
         ${this.renderFurnitureForm(device)}`;
     const pro = hasFeature("energy_pro");
-    return html`${this.renderEnergyChecklist()}${this.renderSolarList()}${this.renderEnergyDevices()}${this.renderEnergyBalance()}${pro ? this.renderCableSettings() : nothing}${pro ? this.renderHologramSettings() : nothing}${this.renderProCard()}`;
+    // Accurona: the checklist and the balance read Home Assistant's energy dashboard (homeassistant.ts)
+    const ha = haFeatures(this.hass);
+    return html`${ha ? this.renderEnergyChecklist() : nothing}${this.renderSolarList()}${this.renderEnergyDevices()}${ha ? this.renderEnergyBalance() : nothing}${pro ? this.renderCableSettings() : nothing}${pro ? this.renderHologramSettings() : nothing}${this.renderProCard()}`;
   }
 
   /**
@@ -5454,7 +5457,9 @@ export class Fp3dEditor extends LitElement {
       { key: "backup", icon: "💾", label: this.t("backup"), admin: true },
       { key: "modules", icon: "🧩", label: this.t("settings_modules"), admin: true },
     ];
-    const topics = all.filter((t) => admin || !t.admin);
+    // Accurona: without Home Assistant, its director, voice and favourites settings are left out (homeassistant.ts)
+    const haOnly: SettingsTopic[] = ["director", "voice", "favorites"];
+    const topics = all.filter((t) => (admin || !t.admin) && (haFeatures(this.hass) || !haOnly.includes(t.key)));
     const toggle = () => {
       closeTools();
       this._settingsMenu = !open;
@@ -10163,7 +10168,7 @@ export class Fp3dEditor extends LitElement {
     }
     if (room && this._tool !== "measure") {
       return html`<button class="fp3d-btn fp3d-back" @click=${() => this.selectItem("room", null)}>‹ ${this.t("back_to_floor")}</button>
-        ${this.renderRoomForm(room, areas)} ${this.renderDeviceList(room)}`;
+        ${this.renderRoomForm(room, areas)} ${haFeatures(this.hass) ? this.renderDeviceList(room) : nothing}`;
     }
     return html`
       ${admin ? nothing : html`<p class="fp3d-note">${this.t("read_only")}</p>`}
@@ -10248,7 +10253,7 @@ export class Fp3dEditor extends LitElement {
           : this.device
             ? this.renderDeviceForm(this.device)
           : room
-            ? html`${this.renderRoomForm(room, areas)} ${this.renderDeviceList(room)}`
+            ? html`${this.renderRoomForm(room, areas)} ${haFeatures(this.hass) ? this.renderDeviceList(room) : nothing}`
             : floor
               ? this.renderRoomList(floor)
               : nothing}
@@ -10322,13 +10327,15 @@ export class Fp3dEditor extends LitElement {
           >${this.t("aliases")}
           <input type="text" maxlength="240" .value=${(room.aliases ?? []).join(", ")} ?disabled=${!admin} placeholder=${this.t("aliases_placeholder")} @change=${(e: Event) => this.updateRoom({ aliases: splitAliases((e.target as HTMLInputElement).value) })}
         /></label>
-        <label class="fp3d-field fp3d-wide"
-          >${this.t("area")}
-          <select ?disabled=${!admin} @change=${(e: Event) => this.setArea((e.target as HTMLSelectElement).value)}>
-            <option value="" ?selected=${!room.area_id}>${this.t("no_area")}</option>
-            ${areas.map((a) => html`<option value=${a.area_id} ?selected=${a.area_id === room.area_id}>${a.name}</option>`)}
-          </select></label
-        >
+        ${haFeatures(this.hass)
+          ? html`<label class="fp3d-field fp3d-wide"
+              >${this.t("area")}
+              <select ?disabled=${!admin} @change=${(e: Event) => this.setArea((e.target as HTMLSelectElement).value)}>
+                <option value="" ?selected=${!room.area_id}>${this.t("no_area")}</option>
+                ${areas.map((a) => html`<option value=${a.area_id} ?selected=${a.area_id === room.area_id}>${a.name}</option>`)}
+              </select></label
+            >`
+          : nothing}
         <label class="fp3d-field fp3d-wide"
           >${this.t("material")}
           <select ?disabled=${!admin} @change=${(e: Event) => this.updateRoom({ floor_material: (e.target as HTMLSelectElement).value })}>

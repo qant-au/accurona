@@ -37,4 +37,10 @@ export interface HostOptions {
   admin?: boolean;
   /** For the sun and the time of day: the site's position. */
   location?: { latitude: number; longitude: number; timeZone?: string };
+  /**
+   * Whether the planner shows its Home Assistant-only parts (Assist, the room device panel, time travel, cameras,
+   * weather, services, the energy dashboard, Home Assistant areas and devices). Default false: a host turns it on
+   * only when it bridges to a Home Assistant.
+   */
+  homeAssistant?: boolean;
 }

@@ -96,6 +96,7 @@ import { TRAIL_ICON, TRAIL_WINDOW_MS, trailEvents, trailPoints, trailSources, tr
 import { limitEffects, weatherEntity, weatherState } from "../weather.ts";
 import { SHOW_PRESENCE } from "../flags.ts";
 import { hasFeature, manualUrl, projectionOn, shopUrl, type Feature } from "../features.ts";
+import { haFeatures } from "../homeassistant.ts";
 import { upstreamServices } from "../upstream.ts";
 import { searchIndex, searchItems, type SearchItem } from "../search.ts";
 import type { Shown } from "../voice/targets.ts";
@@ -680,7 +681,8 @@ export class Fp3dView3d extends LitElement {
   /** Listens to the sentences Assist and the service `accurona.ask` hand to the views (once the connection is there). */
   private watchAsk(): void {
     const hass = this.hass;
-    if (this.unsubAsk || !hass?.connection || !this.isConnected) return;
+    // Accurona: Assist is Home Assistant's (homeassistant.ts)
+    if (this.unsubAsk || !hass?.connection || !this.isConnected || !haFeatures(hass)) return;
     this.unsubAsk = subscribeAsk(hass, (ask) => void this.onAsk(ask)).catch(() => {
       // a replay or an older backend: nothing to listen to
       this.unsubAsk = null;

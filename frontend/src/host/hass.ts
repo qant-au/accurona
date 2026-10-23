@@ -4,6 +4,7 @@
 // are refused with Home Assistant's own error shape; the engine treats those features as absent.
 
 import { emptyBuilding, type Building } from "../model.ts";
+import type { HostMark } from "../homeassistant.ts";
 import type { HassEntity, HomeAssistant } from "../types.ts";
 import type { HostOptions } from "./types.ts";
 
@@ -91,8 +92,10 @@ export async function createHass(options: HostOptions): Promise<HassHandle> {
   };
 
   const { location } = options;
-  function make(states: Record<string, HassEntity>): HomeAssistant {
+  function make(states: Record<string, HassEntity>): HomeAssistant & HostMark {
     return {
+      // the Home Assistant-only parts of the planner stay hidden unless the embedder says it is there (homeassistant.ts)
+      accurona: { homeAssistant: options.homeAssistant ?? false },
       language: options.language ?? (typeof navigator === "undefined" ? "en" : navigator.language),
       user: { is_admin: options.admin ?? true, name: "" },
       areas: {},

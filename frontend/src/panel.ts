@@ -27,6 +27,7 @@ import { getLicense, unseenOffers, unseenUpdates } from "./api.ts";
 import { TimeTravel } from "./load-timetravel.ts";
 import type { HistorySpec } from "./timetravel/types.ts";
 import type { Feature } from "./features.ts";
+import { haFeatures } from "./homeassistant.ts";
 import { upstreamServices } from "./upstream.ts";
 import type { FloorStack, Quality, WallMode } from "./viewer/viewer3d.ts";
 
@@ -552,7 +553,7 @@ export class Floorplan3dPanel extends LitElement {
     const saveState = this.data.saveState;
     return html`
       <div class="fp3d-app ${this._clean && this._mode === "view" ? "fp3d-clean" : ""}" style=${this._accent ? `--fp3d-accent:${this._accent}` : ""}>
-        ${this._micProbe && this.hass ? html`<accurona-mic-probe .hass=${this.hass} .building=${b} @close=${() => ((this._micProbe = false), micProbeDone())}></accurona-mic-probe>` : nothing}
+        ${this._micProbe && this.hass && haFeatures(this.hass) ? html`<accurona-mic-probe .hass=${this.hass} .building=${b} @close=${() => ((this._micProbe = false), micProbeDone())}></accurona-mic-probe>` : nothing}
         ${this._clean && this._mode === "view" ? nothing : html`<header class="fp3d-header">
           <ha-menu-button .hass=${this.hass} .narrow=${this.narrow}></ha-menu-button>
           <h1>Accurona</h1>
@@ -883,6 +884,8 @@ export class Floorplan3dPanel extends LitElement {
     const floor = b.floors.find((f) => f.id === this._floorId);
     const roomFloors = floor ? [floor] : b.floors;
     const tt = this.tt.active;
+    // Accurona: the Home Assistant-only parts show only with Home Assistant behind the host (homeassistant.ts)
+    const ha = haFeatures(this.hass);
     return html`
       ${this._clean ? nothing : html`<nav class="fp3d-nav ${this._navWrap ? "fp3d-nav-wrap" : ""}" @wheel=${this.onNavWheel}>
         ${b.floors.length > 1
@@ -940,7 +943,7 @@ export class Floorplan3dPanel extends LitElement {
           ${this._navWrap ? "\u2194" : "\u2261"}
         </button>
       </nav>`}
-      <div class="fp3d-stage-wrap ${this._roomId ? "fp3d-room-open" : ""} ${this._controlsRight ? "fp3d-side-right" : ""} ${tt ? "fp3d-tt" : ""}">
+      <div class="fp3d-stage-wrap ${this._roomId && ha ? "fp3d-room-open" : ""} ${this._controlsRight ? "fp3d-side-right" : ""} ${tt ? "fp3d-tt" : ""}">
         <accurona-view3d
           class="fp3d-body"
           .hass=${this.tt.hass(this.hass)}
@@ -952,8 +955,12 @@ export class Floorplan3dPanel extends LitElement {
           .controlsRight=${this._controlsRight}
           .keepView=${this._keepView}
           .angleLock=${this._angleLock}
-          ?trail=${this._trail}
-          .cameraWall=${this._cameraWall && !tt}
+          ?trail=${this._trail && ha}
+          .cameraWall=${this._cameraWall && !tt && ha}
+          .central=${ha}
+          .scenes=${ha}
+          .householdCard=${ha}
+          .showEnergy=${ha}
           @camera-wall-close=${() => (this._cameraWall = false)}
           @camera-wall-open=${() => (this._cameraWall = true)}
           .clean=${this._clean}
@@ -962,9 +969,9 @@ export class Floorplan3dPanel extends LitElement {
             this._clean = !this._clean;
             prefs.set("clean", this._clean ? "1" : "0");
           }}
-          .weather=${this._weather}
-          .director=${this._director}
-          .voice=${this._voiceHere}
+          .weather=${this._weather && ha}
+          .director=${this._director && ha}
+          .voice=${this._voiceHere && ha}
           .screen=${this._screen || null}
           .panelOpen=${!!this._roomId}
           .floorId=${b.floors.length > 1 ? this._floorId : (b.floors[0]?.id ?? null)}
@@ -994,7 +1001,7 @@ export class Floorplan3dPanel extends LitElement {
           }}
           @back=${() => this.back()}
         ></accurona-view3d>
-        ${this._roomId
+        ${this._roomId && ha
           ? html`<accurona-room-panel
               class="accurona-room-panel"
               @camera-look=${(e: CustomEvent<{ entity: string }>) => this.view3d()?.lookThrough(e.detail.entity)}
@@ -1007,7 +1014,7 @@ export class Floorplan3dPanel extends LitElement {
               @close=${() => (this._roomId = null)}
             ></accurona-room-panel>`
           : nothing}
-        ${this.tt.session ? html`<accurona-time-bar .session=${this.tt.session}></accurona-time-bar>` : nothing}
+        ${this.tt.session && ha ? html`<accurona-time-bar .session=${this.tt.session}></accurona-time-bar>` : nothing}
         ${this._clean ? nothing : html`<div class="fp3d-overlay">
           <div class="fp3d-show-wrap">
             <button class="fp3d-chip" aria-haspopup="true" aria-expanded=${this._showOpen} @click=${() => (this._showOpen = !this._showOpen)}>${this.t("show_menu")} <span class="fp3d-caret">▾</span></button>
@@ -1069,7 +1076,7 @@ export class Floorplan3dPanel extends LitElement {
           >
             ${this.t("room_names_short")}
           </button>
-          <button
+          ${ha ? html`<button
             class="fp3d-chip"
             aria-pressed=${this._trail}
             title=${this.t("trail_hint")}
@@ -1098,13 +1105,13 @@ export class Floorplan3dPanel extends LitElement {
             }}
           >
             ${hasFeature("weather") ? "" : "🔒 "}${this.t("weather_short")}
-          </button>
+          </button>` : nothing}
                   </div>`
               : nothing}
           </div>
-          <button class="fp3d-chip accurona-tt-chip" aria-pressed=${tt} title=${this.t("tt_hint")} @click=${() => this.toggleTimeTravel()}>
+          ${ha ? html`<button class="fp3d-chip accurona-tt-chip" aria-pressed=${tt} title=${this.t("tt_hint")} @click=${() => this.toggleTimeTravel()}>
             ${hasFeature("time_travel") ? "⏪" : "🔒"} ${this.t("tt_chip")}
-          </button>
+          </button>` : nothing}
           ${this._roomId || (this._floorId && b.floors.length > 1)
             ? html`<button class="fp3d-chip" @click=${() => this.back()}>${this.t("back")}</button>`
             : nothing}

@@ -72,6 +72,33 @@ try {
 
   await new Promise((ok) => setTimeout(ok, 1500));
   await page.screenshot({ path: join(root, "dist/standalone-smoke.png") });
+
+  // Home Assistant's parts: hidden with no Home Assistant behind the host, shown when the page turns them on (?ha).
+  // The 3D view draws its chips only for a plan with a room, so one is saved first; the time-travel chip stands in
+  // for the rest (the hooks themselves are pinned by frontend/src/homeassistant.test.ts)
+  const ttChip = async (address) => {
+    await page.goto(address, { waitUntil: "networkidle0" });
+    await page.waitForFunction(() => window.accurona?.element?.shadowRoot?.querySelector("h1"), { timeout: 15000 });
+    await page.evaluate(async () => {
+      const hass = window.accurona.element.hass;
+      const { building } = await hass.callWS({ type: "accurona/building/get" });
+      const room = { id: "r1", name: "Saloon", area_id: null, points: [[0, 0], [4, 0], [4, 3], [0, 3]], floor_material: "wood" };
+      await hass.callWS({ type: "accurona/building/save", building: { ...building, floors: [{ id: "f1", name: "Deck", elevation: 0, height: 2.1, cut_height: 1.15, rooms: [room], openings: [], furniture: [], placements: [], background: null, outdoor: [], walls: [], ha_floor: null }] } });
+    });
+    // the panel reads the plan when it opens: reload, then make sure the 3D view is showing (it keeps the last mode)
+    await page.reload({ waitUntil: "networkidle0" });
+    await page.waitForFunction(() => window.accurona?.element?.shadowRoot?.querySelector(".fp3d-seg button"), { timeout: 15000 });
+    await page.evaluate(() => {
+      const first = window.accurona.element.shadowRoot.querySelector(".fp3d-seg button");
+      if (first.getAttribute("aria-pressed") !== "true") first.click();
+    });
+    await page.waitForFunction(() => window.accurona.element.shadowRoot.querySelector(".fp3d-overlay"), { timeout: 15000 });
+    return page.evaluate(() => !!window.accurona.element.shadowRoot.querySelector(".accurona-tt-chip"));
+  };
+  // a plan kept in the browser (not ?fresh), so it is there after the reload
+  const kept = url.replace("?fresh", "?plan=smoke-ha");
+  if (await ttChip(kept)) failures.push("the time-travel chip shows with no Home Assistant");
+  if (!(await ttChip(`${kept}&ha`))) failures.push("with ?ha the time-travel chip does not show");
 } finally {
   await browser.close();
   server.close();
@@ -81,4 +108,4 @@ if (failures.length) {
   console.error(failures.map((f) => `FAIL ${f}`).join("\n"));
   process.exit(1);
 }
-console.log("ok   standalone planner mounts, opens the editor and keeps a saved plan (dist/standalone-smoke.png)");
+console.log("ok   standalone planner mounts, opens the editor, keeps a saved plan, hides Home Assistant's parts unless asked (dist/standalone-smoke.png)");

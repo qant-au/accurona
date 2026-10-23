@@ -16,7 +16,10 @@
 - **Home Assistant is an optional host, not the base.** The engine talks to its host only
   through upstream's `HomeAssistant` interface (`frontend/src/types.ts`); the standalone host
   (`frontend/src/host/`) answers it from a plan store and a signal source. New host features
-  go there, never into the engine as a second code path. Check the standalone build with
+  go there, never into the engine as a second code path. The planner's Home Assistant-only parts
+  (Assist, the room device panel, time travel, cameras, weather, services, the energy dashboard, HA areas and
+  devices) show only when the host marks Home Assistant as there (`frontend/src/homeassistant.ts`); the standalone
+  host leaves them off unless `homeAssistant: true` is passed. Check the standalone build with
   `node ../fork/build-standalone.mjs && node ../fork/smoke-standalone.mjs && node ../fork/smoke-hulls.mjs` from
   `frontend/`.
 - Domain `accurona`, minimum Home Assistant 2025.1. Frontend in `frontend/` (Lit 3 +

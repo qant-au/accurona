@@ -56,6 +56,7 @@ import { mountAccurona, browserStore } from "./accurona-host.js";
 const planner = await mountAccurona(document.querySelector("#plan"), {
   store: browserStore("my-plan"), // or memoryStore(), or your own PlanStore
   // signals: a SignalSource for live data; staticSignals() is the simplest
+  // homeAssistant: true shows the parts that need a Home Assistant behind the host (off by default)
 });
 ```
 
