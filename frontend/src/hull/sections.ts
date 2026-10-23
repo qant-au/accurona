@@ -3,27 +3,33 @@
 // of the way up. That keeps the skin closed between stations of different depths and shapes.
 
 import type { Vec2 } from "../model.ts";
-import type { Hull, HullBody, Section } from "./types.ts";
+import type { Hull, HullBody, Section, SectionPoint } from "./types.ts";
 
 const bottomOf = (s: Section): number => s.points[0][0];
 const sheerOf = (s: Section): number => s.points[s.points.length - 1][0];
 
-/** Half-breadth of a section at height fraction t (0 at its lowest point, 1 at the sheer). */
-function halfAtFraction(s: Section, t: number): number {
+/** A point's half-breadth to port (side −1) or to starboard (side 1). */
+const sideHalf = (p: SectionPoint, side: -1 | 1): number => (side > 0 ? (p[2] ?? p[1]) : p[1]);
+
+/** Half-breadth of a section, port or starboard, at height fraction t (0 at its lowest point, 1 at the sheer). */
+function halfAtFraction(s: Section, t: number, side: -1 | 1 = -1): number {
   const p = s.points;
   const y0 = bottomOf(s);
   const span = sheerOf(s) - y0;
-  if (span <= 1e-9) return t <= 0 ? p[0][1] : p[p.length - 1][1];
+  if (span <= 1e-9) return sideHalf(t <= 0 ? p[0] : p[p.length - 1], side);
   const y = y0 + span * Math.min(1, Math.max(0, t));
   for (let i = 1; i < p.length; i++) {
     if (y <= p[i][0]) {
       const dy = p[i][0] - p[i - 1][0];
       const w = dy > 1e-12 ? (y - p[i - 1][0]) / dy : 1;
-      return p[i - 1][1] + (p[i][1] - p[i - 1][1]) * w;
+      return sideHalf(p[i - 1], side) + (sideHalf(p[i], side) - sideHalf(p[i - 1], side)) * w;
     }
   }
-  return p[p.length - 1][1];
+  return sideHalf(p[p.length - 1], side);
 }
+
+/** Whether a section is asymmetric: some point gives its own starboard half-breadth. */
+const asymmetric = (s: Section): boolean => s.points.some((p) => p[2] !== undefined);
 
 /** The two stations either side of x and how far between them x lies, or null outside the body. */
 function bracket(body: HullBody, x: number): { a: Section; b: Section; w: number } | null {
@@ -55,10 +61,11 @@ export function sheerAt(body: HullBody, x: number): number | null {
 }
 
 /**
- * Half-breadth of the body at x and height y: null outside the body's length, below its bottom or above its top
- * (the sheer, or the top of a part such as a bulb, or a submerged hull's top, that ends lower).
+ * Half-breadth of the body at x and height y, to port (side −1, and the same to starboard on a symmetric hull) or
+ * to starboard (side 1): null outside the body's length, below its bottom or above its top (the sheer, or the top
+ * of a part such as a bulb, or a submerged hull's top, that ends lower).
  */
-export function halfAt(body: HullBody, x: number, y: number): number | null {
+export function halfAt(body: HullBody, x: number, y: number, side: -1 | 1 = -1): number | null {
   const k = bracket(body, x);
   if (!k) return null;
   const bottom = bottomOf(k.a) + (bottomOf(k.b) - bottomOf(k.a)) * k.w;
@@ -66,7 +73,7 @@ export function halfAt(body: HullBody, x: number, y: number): number | null {
   const sheer = sheerOf(k.a) + (sheerOf(k.b) - sheerOf(k.a)) * k.w;
   if (y > sheer + 1e-9) return null;
   const t = sheer - bottom > 1e-9 ? (y - bottom) / (sheer - bottom) : 1;
-  return halfAtFraction(k.a, t) + (halfAtFraction(k.b, t) - halfAtFraction(k.a, t)) * k.w;
+  return halfAtFraction(k.a, t, side) + (halfAtFraction(k.b, t, side) - halfAtFraction(k.a, t, side)) * k.w;
 }
 
 /** The height fractions (0 to 1) of a section's points. */
@@ -86,7 +93,9 @@ export function sectionAt(body: HullBody, x: number): Section | null {
   const ts = [...new Set([...fractions(k.a), ...fractions(k.b)].map((t) => Math.round(t * 1e12) / 1e12))].sort((p, q) => p - q);
   const bottom = bottomOf(k.a) + (bottomOf(k.b) - bottomOf(k.a)) * k.w;
   const sheer = sheerOf(k.a) + (sheerOf(k.b) - sheerOf(k.a)) * k.w;
-  return { x, points: ts.map((t) => [bottom + (sheer - bottom) * t, halfAtFraction(k.a, t) + (halfAtFraction(k.b, t) - halfAtFraction(k.a, t)) * k.w]) };
+  const at = (t: number, side: -1 | 1) => halfAtFraction(k.a, t, side) + (halfAtFraction(k.b, t, side) - halfAtFraction(k.a, t, side)) * k.w;
+  const both = asymmetric(k.a) || asymmetric(k.b);
+  return { x, points: ts.map((t): SectionPoint => (both ? [bottom + (sheer - bottom) * t, at(t, -1), at(t, 1)] : [bottom + (sheer - bottom) * t, at(t, -1)])) };
 }
 
 /** The station positions with each interval split into `split` parts: where the queries are sampled along x. */
@@ -132,11 +141,12 @@ export function bodyOutlineAt(body: HullBody, y: number): Vec2[] | null {
   const x1 = i1 < xs.length - 1 ? crossing(body, y, xs[i1], xs[i1 + 1]) : xs[i1];
   const along = [x0, ...xs.slice(i0, i1 + 1).filter((x) => x > x0 + 1e-9 && x < x1 - 1e-9), x1];
   const halves = along.map((x) => halfAt(body, x, y) ?? 0);
+  const outer = along.map((x) => halfAt(body, x, y, 1) ?? 0);
   const port: Vec2[] = along.map((x, k) => [x, body.center - halves[k]]);
-  const starboard: Vec2[] = along.map((x, k): Vec2 => [x, body.center + halves[k]]).reverse();
+  const starboard: Vec2[] = along.map((x, k): Vec2 => [x, body.center + outer[k]]).reverse();
   // a half-breadth of zero at either end is one point, not two
-  if (halves[halves.length - 1] < 1e-9) starboard.shift();
-  if (halves[0] < 1e-9) starboard.pop();
+  if (halves[halves.length - 1] < 1e-9 && outer[outer.length - 1] < 1e-9) starboard.shift();
+  if (halves[0] < 1e-9 && outer[0] < 1e-9) starboard.pop();
   return [...port, ...starboard];
 }
 

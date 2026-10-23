@@ -4,10 +4,14 @@
 // sections.ts, never the source's own terms.
 //
 // Plan coordinates, metres: x along the length from the stern forward, y up from the design waterline (y = 0),
-// z across the boat (a body's sections are symmetric about its centre line, z = center; port is −z).
+// z across the boat (a body's centre line is z = center; port is −z, starboard +z).
 
-/** A point on a section: height above the waterline (y) and the half-breadth there. */
-export type SectionPoint = [y: number, half: number];
+/**
+ * A point on a section: height above the waterline (y) and the half-breadth there, the same each side; or, for a
+ * hull that is not symmetric about its centre line (an asymmetric catamaran demihull), the half-breadth to port and
+ * then the half-breadth to starboard.
+ */
+export type SectionPoint = [y: number, half: number, starboard?: number];
 
 export interface Section {
   /** Where the station is along the length. */

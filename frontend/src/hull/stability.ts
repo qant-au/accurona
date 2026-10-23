@@ -60,7 +60,7 @@ export function hullMiddle(hull: Hull): number {
 function sectionPolygon(body: HullBody, x: number): [number, number][] | null {
   const s = sectionAt(body, x);
   if (!s) return null;
-  const starboard = s.points.map(([y, half]): [number, number] => [body.center + half, y]);
+  const starboard = s.points.map(([y, half, other]): [number, number] => [body.center + (other ?? half), y]);
   const port = s.points.map(([y, half]): [number, number] => [body.center - half, y]).reverse();
   return [...starboard, ...port];
 }
@@ -191,10 +191,10 @@ function levelFor(hull: Hull, volume: number, heel: number, trim: number, split:
   const xm = hullMiddle(hull);
   for (const body of hull.bodies) {
     const [x0, x1] = bodyRange(body);
-    for (const s of body.sections) for (const [y, half] of s.points) {
+    for (const s of body.sections) for (const [y, half, other] of s.points) {
       lo = Math.min(lo, y);
       hi = Math.max(hi, y);
-      reach = Math.max(reach, Math.abs(body.center) + half);
+      reach = Math.max(reach, Math.abs(body.center) + Math.max(half, other ?? half));
     }
     reach = Math.max(reach, Math.abs(Math.tan(trim)) * Math.max(Math.abs(x0 - xm), Math.abs(x1 - xm)));
   }
@@ -250,6 +250,36 @@ export function float(hull: Hull, load: Load, heel = 0, split = 1): Floating {
     } else last = closest; // no trim balances it (G too high to be stable fore and aft): the nearest to balance
   }
   return { volume: last.im.volume, centroid: last.im.centroid, attitude: { heel, trim: last.trim, level: last.level }, gz: last.gz };
+}
+
+/**
+ * The heel a boat rests at with its load: 0 for a symmetric hull with G on its centre line, a list when the hull or
+ * the load is lopsided (a single outrigger, an asymmetric demihull, weight to one side). Found where the righting
+ * lever is 0, bracketing outward from upright; null if none is found within 60°.
+ */
+export function restingHeel(hull: Hull, load: Load, split = 1): Floating | null {
+  const at = (heel: number) => float(hull, load, heel, split);
+  const upright = at(0);
+  if (Math.abs(upright.gz) < 1e-9) return upright;
+  // a positive lever turns the boat back towards port (it rights a starboard heel), so the rest lies to port of here
+  const dir = upright.gz > 0 ? -1 : 1;
+  let inner = 0;
+  let innerGz = upright.gz;
+  for (const deg of [0.5, 1, 2, 4, 8, 15, 25, 40, 60]) {
+    const heel = (dir * deg * Math.PI) / 180;
+    const f = at(heel);
+    if (Math.sign(f.gz) !== Math.sign(innerGz)) {
+      // the lever rises with the heel through a stable rest, so the root is a rising one in the heel's direction
+      const lo = Math.min(inner, heel);
+      const hi = Math.max(inner, heel);
+      const sign = at(lo).gz < 0 ? 1 : -1;
+      const h = rising((t) => sign * at(t).gz, lo, hi, 1e-6);
+      return at(h);
+    }
+    inner = heel;
+    innerGz = f.gz;
+  }
+  return null;
 }
 
 /** The righting lever at each heel (radians), floating the load free to trim at each. */

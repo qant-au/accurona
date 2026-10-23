@@ -122,7 +122,17 @@ const DISPLACEMENT: Record<string, [number, number]> = {
   "aircraft-carrier-333m": [70000, 130000],
   "frigate-136m": [3000, 5500],
   "missile-boat-39m": [150, 400],
+  "ddg-1000-wave-piercer-186m": [12000, 25000],
 };
+
+test("shipd: a positive bow-rise term sets the stem back as it rises: a wave-piercing bow", () => {
+  const v = fixture.variety.find((x) => x.name === "ddg-1000-wave-piercer-186m")!.bodies[0].vector;
+  const h = new ShipD(v);
+  // the original's x runs aft from the bow: the stem at the deck lies aft of the stem at the waterline
+  assert.ok(h.bow_profile(h.Dd) > h.bow_profile(h.WL) + 5, `${h.bow_profile(h.Dd)} vs ${h.bow_profile(h.WL)}`);
+  const plain = new ShipD(fixture.variety.find((x) => x.name === "ddg-1000-186m")!.bodies[0].vector);
+  assert.ok(plain.bow_profile(plain.Dd) <= plain.bow_profile(plain.WL));
+});
 
 test("shipd: a variety of real hulls is feasible and floats at a displacement of its kind", () => {
   assert.deepEqual(fixture.variety.map((v) => v.name).sort(), Object.keys(DISPLACEMENT).sort());

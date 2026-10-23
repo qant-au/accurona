@@ -93,6 +93,25 @@ test("outline: where the keel rises at both ends, the waterline outline starts a
   assert.equal(outlineAt({ bodies: [canoe, canoe] }, 0).length, 2);
 });
 
+test("sections: an asymmetric body has its own half-breadth each side, interpolated and outlined", () => {
+  // port 1 m, starboard 2 m at the first station; port 1 m, starboard 3 m at the second
+  const asym: HullBody = {
+    center: 5,
+    sections: [
+      { x: 0, points: [[-1, 1, 2], [1, 1, 2]] },
+      { x: 2, points: [[-1, 1, 3], [1, 1, 3]] },
+    ],
+  };
+  near(halfAt(asym, 1, 0, -1), 1);
+  near(halfAt(asym, 1, 0, 1), 2.5);
+  assert.deepEqual(sectionAt(asym, 1)!.points[0], [-1, 1, 2.5]);
+  const o = bodyOutlineAt(asym, 0)!;
+  assert.equal(Math.min(...o.map(([, z]) => z)), 4);
+  assert.equal(Math.max(...o.map(([, z]) => z)), 8);
+  // a symmetric section between symmetric stations stays two numbers a point
+  assert.equal(sectionAt(widening, 1)!.points[0].length, 2);
+});
+
 test("sectionAt: on a station it is that station; between stations it has every point either one has", () => {
   const a: HullBody = { center: 0, sections: [{ x: 0, points: [[-1, 0], [0, 1], [1, 1]] }, { x: 2, points: [[-1, 1], [1, 1]] }] };
   assert.deepEqual(sectionAt(a, 0)!.points, [[-1, 0], [0, 1], [1, 1]]);

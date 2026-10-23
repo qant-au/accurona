@@ -208,7 +208,8 @@ export function bottomPoint(body: HullBody, x: number, off: number): SurfacePoin
   const s = sectionAt(body, x);
   if (!s) return null;
   const w = Math.abs(off);
-  const p = s.points;
+  // the half-breadth on the side asked for (an asymmetric hull has its own each side)
+  const p = s.points.map(([y, half, other]): [number, number] => [y, off >= 0 ? (other ?? half) : half]);
   for (let i = 0; i < p.length; i++) {
     if (p[i][1] < w) continue;
     // where the section first reaches this breadth: between the point below and this one
@@ -228,11 +229,11 @@ export function bottomPoint(body: HullBody, x: number, off: number): SurfacePoin
 
 /** The point on the hull's side at x and height y, port (−1) or starboard (1), with the outward normal. */
 export function sidePoint(body: HullBody, x: number, y: number, side: -1 | 1): SurfacePoint | null {
-  const h = halfAt(body, x, y);
+  const h = halfAt(body, x, y, side);
   if (h === null) return null;
   const e = 1e-3 * Math.max(1e-3, (sheerAt(body, x) ?? 0) - (bottomAt(body, x) ?? 0));
-  const above = halfAt(body, x, y + e) ?? h;
-  const below = halfAt(body, x, y - e) ?? h;
+  const above = halfAt(body, x, y + e, side) ?? h;
+  const below = halfAt(body, x, y - e, side) ?? h;
   const dh = (above - below) / (2 * e);
   const l = Math.hypot(1, dh);
   return { point: [x, y, body.center + side * h], normal: [0, -dh / l, side / l] };

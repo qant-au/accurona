@@ -8,4 +8,5 @@ export { ShipD, shipdBody, shipdConstraints, shipdFeasible, SHIPD_PARAMETERS, ty
 export { pontoonBody, revolutionBody, type PontoonSpec, type RevolutionOptions } from "./revolution.ts";
 export { ribTube, tubeBottom, type Tube, type TubeSpec } from "./tube.ts";
 export * as parts from "./parts.ts";
-export { axes, float, gzCurve, hullMiddle, immersion, type Attitude, type Floating, type Immersion, type Load, type Vec3 } from "./stability.ts";
+export { asymmetricBody, foilOutrigger, outriggerBodies, placeBody, steppedBody, strutBody, type FoilOutriggerSpec, type OutriggerSpec, type Step, type StrutSpec } from "./forms.ts";
+export { axes, float, gzCurve, hullMiddle, immersion, restingHeel, type Attitude, type Floating, type Immersion, type Load, type Vec3 } from "./stability.ts";
