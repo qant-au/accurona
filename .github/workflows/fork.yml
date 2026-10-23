@@ -37,5 +37,6 @@ jobs:
       - run: npm run build
       - run: node ../fork/build-standalone.mjs
       - run: node ../fork/smoke-standalone.mjs
+      - run: node ../fork/smoke-hulls.mjs
         env:
           CHROME_PATH: /usr/bin/google-chrome

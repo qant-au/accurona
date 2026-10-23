@@ -9,8 +9,9 @@ merges never touch them.
 | `merge-upstream.sh`, `MERGING.md` | Merging an upstream release, and the procedure behind it. |
 | `OURS` | Files that are wholly ours; a merge puts them back rather than taking upstream's. |
 | `UPSTREAM` | The upstream release the tree was last synced to. |
-| `build-standalone.mjs`, `standalone/` | The engine with no Home Assistant: `dist/standalone/` with the embedding API (`frontend/src/host/`) and a demo page. |
+| `build-standalone.mjs`, `standalone/` | The engine with no Home Assistant: `dist/standalone/` with the embedding API (`frontend/src/host/`) and a demo page, and the hull viewer (`hulls.html`, `frontend/src/hull/viewer.ts`). |
 | `smoke-standalone.mjs` | Mounts that build in a headless Chrome and fails on any page error (CI: `fork.yml`). |
+| `smoke-hulls.mjs` | Opens the hull viewer headless and shows every hull in the catalogue, failing on any page error or bad number (CI: `fork.yml`). |
 | `brand/` | The integration's icons, copied over upstream's by `identity.py`. |
 | `github/` | GitHub files copied over upstream's by `identity.py` (the issue chooser). |
 

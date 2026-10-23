@@ -17,7 +17,8 @@
   through upstream's `HomeAssistant` interface (`frontend/src/types.ts`); the standalone host
   (`frontend/src/host/`) answers it from a plan store and a signal source. New host features
   go there, never into the engine as a second code path. Check the standalone build with
-  `node ../fork/build-standalone.mjs && node ../fork/smoke-standalone.mjs` from `frontend/`.
+  `node ../fork/build-standalone.mjs && node ../fork/smoke-standalone.mjs && node ../fork/smoke-hulls.mjs` from
+  `frontend/`.
 - Domain `accurona`, minimum Home Assistant 2025.1. Frontend in `frontend/` (Lit 3 +
   TypeScript, no decorators; three.js in a separate lazily loaded bundle). Bundles are
   committed to `custom_components/accurona/frontend/` and CI fails when they are stale, so

@@ -62,6 +62,15 @@ const planner = await mountAccurona(document.querySelector("#plan"), {
 The plan store and the signal source are interfaces (`frontend/src/host/types.ts`), so a
 server-side store or a live data feed plugs in without touching the engine.
 
+## Hulls
+
+The hull code is in `frontend/src/hull/`: hulls as sections at stations, the Ship-D
+parameterisation, round hulls and pontoons, RIB tubes, underwater parts, hydrostatics, and
+stability at any heel and trim. The same build puts a hull viewer in
+`dist/standalone/hulls.html`: every hull in the catalogue in 3D on the water, with its
+numbers, a heel slider that floats it there with its load, and its righting-lever curve.
+`hulls.html?hull=<name>` opens one.
+
 ## Install (Home Assistant)
 
 Accurona is not yet published to HACS. Until it is, add this repository to HACS as a

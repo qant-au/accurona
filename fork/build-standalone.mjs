@@ -3,7 +3,8 @@
 //   cd frontend && npm run build && node ../fork/build-standalone.mjs
 //
 // dist/standalone/ gets the engine's bundles and assets exactly as built for the integration (the engine is the
-// same code), plus accurona-host.js (the embedding API, frontend/src/host/) and a demo page (index.html).
+// same code), plus accurona-host.js (the embedding API, frontend/src/host/) and a demo page (index.html), and the
+// hull viewer: accurona-hulls.js (frontend/src/hull/viewer.ts, with three.js) and its page (hulls.html).
 // Serve the folder over HTTP to use it; nothing in it talks to a server.
 
 import { cpSync, mkdirSync, rmSync, statSync } from "node:fs";
@@ -17,24 +18,33 @@ const { build } = createRequire(join(root, "frontend/package.json"))("esbuild");
 const engine = join(root, "custom_components/accurona/frontend");
 const out = join(root, "dist/standalone");
 const BUDGET = 48 * 1024;
+const HULLS_BUDGET = 760 * 1024;
 
 rmSync(out, { recursive: true, force: true });
 mkdirSync(out, { recursive: true });
 cpSync(engine, out, { recursive: true });
 cpSync(join(root, "fork/standalone/index.html"), join(out, "index.html"));
+cpSync(join(root, "fork/standalone/hulls.html"), join(out, "hulls.html"));
 
-await build({
-  entryPoints: [join(root, "frontend/src/host/embed.ts")],
-  outfile: join(out, "accurona-host.js"),
-  bundle: true,
-  format: "esm",
-  target: ["safari15", "chrome94", "firefox93", "edge94"],
-  minify: true,
-  legalComments: "none",
-  logLevel: "warning",
-});
+const bundle = (entry, file) =>
+  build({
+    entryPoints: [join(root, entry)],
+    outfile: join(out, file),
+    bundle: true,
+    format: "esm",
+    target: ["safari15", "chrome94", "firefox93", "edge94"],
+    minify: true,
+    legalComments: "none",
+    logLevel: "warning",
+  });
+await bundle("frontend/src/host/embed.ts", "accurona-host.js");
+await bundle("frontend/src/hull/viewer.ts", "accurona-hulls.js");
 
-const size = statSync(join(out, "accurona-host.js")).size;
-console.log(`${size <= BUDGET ? "ok  " : "OVER"} accurona-host.js: ${(size / 1024).toFixed(1)} KB (budget ${BUDGET / 1024} KB)`);
+let over = false;
+for (const [file, budget] of [["accurona-host.js", BUDGET], ["accurona-hulls.js", HULLS_BUDGET]]) {
+  const size = statSync(join(out, file)).size;
+  over ||= size > budget;
+  console.log(`${size <= budget ? "ok  " : "OVER"} ${file}: ${(size / 1024).toFixed(1)} KB (budget ${budget / 1024} KB)`);
+}
 console.log(`standalone build in ${out}`);
-if (size > BUDGET) process.exit(1);
+if (over) process.exit(1);
