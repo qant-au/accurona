@@ -9,5 +9,8 @@ export { pontoonBody, revolutionBody, type PontoonSpec, type RevolutionOptions }
 export { ribTube, tubeBottom, type Tube, type TubeSpec } from "./tube.ts";
 export * as parts from "./parts.ts";
 export { innerBody } from "./skin.ts";
+export { bodyMesh, meshVolume, ringsMesh, tubeGeometry, type Mesh } from "./mesh.ts";
+export { CATALOGUE, type CatalogueEntry, type CatalogueHull } from "./catalogue.ts";
+export { SHIPD_EXAMPLES, type ShipDExample } from "./examples.ts";
 export { asymmetricBody, foilOutrigger, outriggerBodies, placeBody, steppedBody, strutBody, type FoilOutriggerSpec, type OutriggerSpec, type Step, type StrutSpec } from "./forms.ts";
 export { axes, float, gzCurve, hullMiddle, immersion, restingHeel, type Attitude, type Floating, type Immersion, type Load, type Vec3 } from "./stability.ts";

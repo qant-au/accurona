@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
 import { test } from "node:test";
+import { SHIPD_EXAMPLES } from "./examples.ts";
 import { hydrostatics, SEA_WATER } from "./hydrostatics.ts";
 import { parametricHull } from "./parametric.ts";
 import { revolutionBody } from "./revolution.ts";
@@ -116,8 +116,7 @@ test("stability: a monohull's curve starts at the slope of its metacentric heigh
 });
 
 test("stability: a catamaran's lever peaks where the windward hull lifts out, then falls away", () => {
-  const fixture: { variety: { name: string; bodies: { vector: number[]; center?: number }[] }[] } = JSON.parse(readFileSync(new URL("./fixtures/shipd.json", import.meta.url), "utf8"));
-  const cat = fixture.variety.find((v) => v.name === "catamaran-12m")!;
+  const cat = SHIPD_EXAMPLES.find((v) => v.name === "catamaran-12m")!;
   const hull: Hull = { bodies: cat.bodies.map((b) => shipdBody(b.vector, { center: b.center })) };
   const h = hydrostatics(hull);
   // G 1.2 m above the water; the hulls 5.2 m apart, 0.7 m deep: the windward one lifts out near atan(0.7 / 2.6) ≈ 15°

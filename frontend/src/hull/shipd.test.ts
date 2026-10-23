@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { test } from "node:test";
+import { SHIPD_EXAMPLES } from "./examples.ts";
 import { hydrostatics } from "./hydrostatics.ts";
 import { bottomAt, halfAt, sheerAt } from "./sections.ts";
 import { roots, ShipD, shipdBody, shipdConstraints, shipdFeasible, SHIPD_PARAMETERS } from "./shipd.ts";
@@ -13,12 +14,7 @@ interface Reference {
   waterlines?: { z: number; x: number[]; y: number[] }[];
   measures?: { WL: number; volume: number; waterplane: number; lcbFromBow: number; vcbFromKeel: number };
 }
-interface Variety {
-  name: string;
-  note: string;
-  bodies: { vector: number[]; center?: number; aft?: number }[];
-}
-const fixture: { reference: Reference[]; variety: Variety[] } = JSON.parse(readFileSync(new URL("./fixtures/shipd.json", import.meta.url), "utf8"));
+const fixture: { reference: Reference[] } = JSON.parse(readFileSync(new URL("./fixtures/shipd.json", import.meta.url), "utf8"));
 const rel = (a: number, b: number, tol: number, what: string) => assert.ok(Math.abs(a - b) <= tol * Math.abs(b), `${what}: ${a} not within ${tol * 100} % of ${b}`);
 
 test("shipd: 45 parameters, 49 constraints", () => {
@@ -129,7 +125,7 @@ test("shipd: the body runs stern to bow, sections bottom to top, waterline at y 
   assert.ok(Math.abs(halfAt(body, mid, 0)! - h.halfBeam_MidBody(h.WL)) < 1e-3 * h.Bd);
 });
 
-// The variety set: the dataset's sample hulls adapted to real kinds of hull at their real sizes. Each must be
+// The example hulls (examples.ts): the dataset's sample hulls adapted to real kinds of hull at their real sizes. Each must be
 // feasible and come out at a displacement in the range a real boat or ship of that kind has.
 const DISPLACEMENT: Record<string, [number, number]> = {
   "runabout-4.5m": [0.3, 1.2],
@@ -159,17 +155,17 @@ const DISPLACEMENT: Record<string, [number, number]> = {
 };
 
 test("shipd: a positive bow-rise term sets the stem back as it rises: a wave-piercing bow", () => {
-  const v = fixture.variety.find((x) => x.name === "ddg-1000-wave-piercer-186m")!.bodies[0].vector;
+  const v = SHIPD_EXAMPLES.find((x) => x.name === "ddg-1000-wave-piercer-186m")!.bodies[0].vector;
   const h = new ShipD(v);
   // the original's x runs aft from the bow: the stem at the deck lies aft of the stem at the waterline
   assert.ok(h.bow_profile(h.Dd) > h.bow_profile(h.WL) + 5, `${h.bow_profile(h.Dd)} vs ${h.bow_profile(h.WL)}`);
-  const plain = new ShipD(fixture.variety.find((x) => x.name === "ddg-1000-186m")!.bodies[0].vector);
+  const plain = new ShipD(SHIPD_EXAMPLES.find((x) => x.name === "ddg-1000-186m")!.bodies[0].vector);
   assert.ok(plain.bow_profile(plain.Dd) <= plain.bow_profile(plain.WL));
 });
 
-test("shipd: a variety of real hulls is feasible and floats at a displacement of its kind", () => {
-  assert.deepEqual(fixture.variety.map((v) => v.name).sort(), Object.keys(DISPLACEMENT).sort());
-  for (const v of fixture.variety) {
+test("shipd: the example hulls are feasible and floats at a displacement of its kind", () => {
+  assert.deepEqual(SHIPD_EXAMPLES.map((v) => v.name).sort(), Object.keys(DISPLACEMENT).sort());
+  for (const v of SHIPD_EXAMPLES) {
     for (const b of v.bodies) assert.ok(shipdFeasible(b.vector), `${v.name} is infeasible`);
     const hull = { bodies: v.bodies.map((b) => shipdBody(b.vector, { center: b.center, aft: b.aft })) };
     const hs = hydrostatics(hull);
@@ -181,7 +177,7 @@ test("shipd: a variety of real hulls is feasible and floats at a displacement of
 
 test("shipd: stations stay few enough to work with, and the sections stay true to the waterlines", () => {
   // every station costs the hydrostatics, stability and the 3D mesh: refinement stops where splitting stops paying
-  for (const v of fixture.variety) {
+  for (const v of SHIPD_EXAMPLES) {
     const h = new ShipD(v.bodies[0].vector);
     const body = shipdBody(v.bodies[0].vector);
     assert.ok(body.sections.length < 1300, `${v.name}: ${body.sections.length} stations`);
@@ -209,8 +205,8 @@ test("shipd: stations stay few enough to work with, and the sections stay true t
 });
 
 test("shipd: a hull scales with its length; a 1:100 model displaces a millionth", () => {
-  const ship = fixture.variety.find((v) => v.name === "lcs-freedom-118m")!.bodies[0].vector;
-  const model = fixture.variety.find((v) => v.name === "lcs-model-1.18m")!.bodies[0].vector;
+  const ship = SHIPD_EXAMPLES.find((v) => v.name === "lcs-freedom-118m")!.bodies[0].vector;
+  const model = SHIPD_EXAMPLES.find((v) => v.name === "lcs-model-1.18m")!.bodies[0].vector;
   const a = hydrostatics({ bodies: [shipdBody(ship)] });
   const b = hydrostatics({ bodies: [shipdBody(model)] });
   rel(b.volume * 1e6, a.volume, 1e-6, "volume");
@@ -218,12 +214,12 @@ test("shipd: a hull scales with its length; a 1:100 model displaces a millionth"
 });
 
 test("shipd: multihulls are bodies side by side, their volumes adding up", () => {
-  const cat = fixture.variety.find((v) => v.name === "catamaran-12m")!;
+  const cat = SHIPD_EXAMPLES.find((v) => v.name === "catamaran-12m")!;
   const demi = hydrostatics({ bodies: [shipdBody(cat.bodies[0].vector)] });
   const both = hydrostatics({ bodies: cat.bodies.map((b) => shipdBody(b.vector, { center: b.center })) });
   rel(both.volume, 2 * demi.volume, 1e-9, "catamaran volume");
   assert.ok(both.bmT > 5 * demi.bmT, "far stiffer across than one demihull");
-  const tri = fixture.variety.find((v) => v.name === "lcs-independence-127m")!;
+  const tri = SHIPD_EXAMPLES.find((v) => v.name === "lcs-independence-127m")!;
   const parts = tri.bodies.map((b) => hydrostatics({ bodies: [shipdBody(b.vector, { center: b.center, aft: b.aft })] }).volume);
   const whole = hydrostatics({ bodies: tri.bodies.map((b) => shipdBody(b.vector, { center: b.center, aft: b.aft })) });
   rel(whole.volume, parts.reduce((s, v) => s + v, 0), 1e-9, "trimaran volume");

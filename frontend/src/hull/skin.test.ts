@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
 import { test } from "node:test";
+import { SHIPD_EXAMPLES } from "./examples.ts";
 import { asymmetricBody } from "./forms.ts";
 import { hydrostatics } from "./hydrostatics.ts";
 import { parametricHull } from "./parametric.ts";
@@ -60,9 +60,8 @@ test("skin: on a V hull every inside point is the plating's thickness from the o
 });
 
 test("skin: Ship-D hulls with bulbs, transoms and chines get a whole inside", () => {
-  const fixture: { variety: { name: string; bodies: { vector: number[] }[] }[] } = JSON.parse(readFileSync(new URL("./fixtures/shipd.json", import.meta.url), "utf8"));
   for (const name of ["container-ship-300m", "planing-cruiser-12m", "double-ender-8m", "ddg-1000-wave-piercer-186m"]) {
-    const body = shipdBody(fixture.variety.find((v) => v.name === name)!.bodies[0].vector);
+    const body = shipdBody(SHIPD_EXAMPLES.find((v) => v.name === name)!.bodies[0].vector);
     const [x0, x1] = bodyRange(body);
     const inner = innerBody(body, (x1 - x0) / 400);
     for (const s of inner.sections) {

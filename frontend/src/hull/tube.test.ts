@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
 import { test } from "node:test";
+import { SHIPD_EXAMPLES } from "./examples.ts";
 import { bodyRange, sheerAt } from "./sections.ts";
 import { shipdBody } from "./shipd.ts";
 import { ribTube, tubeBottom } from "./tube.ts";
@@ -8,9 +8,8 @@ import type { HullBody } from "./types.ts";
 
 const near = (a: number, b: number, eps: number, what: string) => assert.ok(Math.abs(a - b) <= eps, `${what}: ${a} vs ${b}`);
 
-// the variety set's RIB hull: 6.5 m, deep V, its transom raked so the foot lies aft of the deck's end
-const fixture: { variety: { name: string; bodies: { vector: number[] }[] }[] } = JSON.parse(readFileSync(new URL("./fixtures/shipd.json", import.meta.url), "utf8"));
-const hull = shipdBody(fixture.variety.find((v) => v.name === "rib-6.5m")!.bodies[0].vector);
+// the example RIB hull: 6.5 m, deep V, its transom raked so the foot lies aft of the deck's end
+const hull = shipdBody(SHIPD_EXAMPLES.find((v) => v.name === "rib-6.5m")!.bodies[0].vector);
 const [stern, stem] = bodyRange(hull);
 
 test("tube: from aft of the transom round the bow and back, the same both sides", () => {
