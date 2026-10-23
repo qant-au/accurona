@@ -105,10 +105,31 @@ function polygons(body: HullBody, split: number): { xs: number[]; polys: ([numbe
   let entry = bySplit.get(split);
   if (!entry) {
     const xs = sampleXs(body, split);
-    entry = { xs, polys: xs.map((x) => sectionPolygon(body, x)) };
+    // a point a hair off the straight line between its neighbours changes nothing but the time: drop it
+    let depth = 0;
+    for (const s of body.sections) depth = Math.max(depth, s.points[s.points.length - 1][0] - s.points[0][0]);
+    const eps = 1e-6 * depth;
+    entry = { xs, polys: xs.map((x) => simplify(sectionPolygon(body, x), eps)) };
     bySplit.set(split, entry);
   }
   return entry;
+}
+
+/** A closed polygon without the points that lie within eps of the line joining their neighbours. */
+function simplify(poly: [number, number][] | null, eps: number): [number, number][] | null {
+  if (!poly || poly.length < 4) return poly;
+  const out: [number, number][] = [];
+  for (let i = 0; i < poly.length; i++) {
+    const a = out.length ? out[out.length - 1] : poly[poly.length - 1];
+    const p = poly[i];
+    const b = poly[(i + 1) % poly.length];
+    const dx = b[0] - a[0];
+    const dy = b[1] - a[1];
+    const l = Math.hypot(dx, dy);
+    const off = l > 0 ? Math.abs(dx * (p[1] - a[1]) - dy * (p[0] - a[0])) / l : Math.hypot(p[0] - a[0], p[1] - a[1]);
+    if (off > eps) out.push(p);
+  }
+  return out.length >= 3 ? out : poly;
 }
 
 /** The immersed volume and its centre at an attitude. `split` sets how finely between stations it is sampled. */
@@ -183,36 +204,78 @@ function rising(f: (t: number) => number, lo: number, hi: number, tol: number): 
   return (lo * fb - hi * fa) / (fb - fa);
 }
 
-/** The water level that immerses `volume` at a heel and trim (the volume only grows with the level). */
-function levelFor(hull: Hull, volume: number, heel: number, trim: number, split: number): number {
-  let lo = Infinity;
-  let hi = -Infinity;
-  let reach = 0;
-  const xm = hullMiddle(hull);
-  for (const body of hull.bodies) {
-    const [x0, x1] = bodyRange(body);
-    for (const s of body.sections) for (const [y, half, other] of s.points) {
-      lo = Math.min(lo, y);
-      hi = Math.max(hi, y);
-      reach = Math.max(reach, Math.abs(body.center) + Math.max(half, other ?? half));
+/** A hull's lowest and highest points and its reach across and along: the bounds a water level can lie in. */
+const extentCache = new WeakMap<Hull, { lo: number; hi: number; across: number; along: number }>();
+
+function extent(hull: Hull): { lo: number; hi: number; across: number; along: number } {
+  let e = extentCache.get(hull);
+  if (!e) {
+    let lo = Infinity;
+    let hi = -Infinity;
+    let across = 0;
+    let along = 0;
+    const xm = hullMiddle(hull);
+    for (const body of hull.bodies) {
+      const [x0, x1] = bodyRange(body);
+      along = Math.max(along, Math.abs(x0 - xm), Math.abs(x1 - xm));
+      for (const s of body.sections) for (const [y, half, other] of s.points) {
+        lo = Math.min(lo, y);
+        hi = Math.max(hi, y);
+        across = Math.max(across, Math.abs(body.center) + Math.max(half, other ?? half));
+      }
     }
-    reach = Math.max(reach, Math.abs(Math.tan(trim)) * Math.max(Math.abs(x0 - xm), Math.abs(x1 - xm)));
+    e = { lo, hi, across, along };
+    extentCache.set(hull, e);
   }
+  return e;
+}
+
+/**
+ * The water level that immerses `volume` at a heel and trim (the volume only grows with the level). Given a guess
+ * (the level a neighbouring attitude floated at), the root is bracketed close round it first, which saves most of
+ * the work when a curve is run heel by heel.
+ */
+function levelFor(hull: Hull, volume: number, heel: number, trim: number, split: number, guess?: number): number {
+  const e = extent(hull);
   // the tilted plane can reach further than the hull's own depth, across its breadth and along its length
-  const pad = reach * (Math.abs(Math.tan(heel)) + 1) + 1e-3;
-  const tol = 1e-9 * Math.max(1, hi - lo);
-  return rising((level) => immersion(hull, { heel, trim, level }, split).volume - volume, lo - pad, hi + pad, tol);
+  const pad = Math.max(e.across, Math.abs(Math.tan(trim)) * e.along) * (Math.abs(Math.tan(heel)) + 1) + 1e-3;
+  const tol = 1e-9 * Math.max(1, e.hi - e.lo);
+  const f = (level: number) => immersion(hull, { heel, trim, level }, split).volume - volume;
+  let lo = e.lo - pad;
+  let hi = e.hi + pad;
+  if (guess !== undefined && Number.isFinite(guess)) {
+    let d = 0.01 * Math.max(1e-3, e.hi - e.lo);
+    const fg = f(guess);
+    // walk out from the guess, doubling, until the volume crosses
+    let a = guess;
+    for (let i = 0; i < 30; i++) {
+      const b = fg < 0 ? Math.min(hi, a + d) : Math.max(lo, a - d);
+      const fb = f(b);
+      if ((fg < 0 && fb >= 0) || (fg >= 0 && fb <= 0)) {
+        lo = Math.min(a, b);
+        hi = Math.max(a, b);
+        break;
+      }
+      a = b;
+      d *= 2;
+      if (a <= lo || a >= hi) break;
+    }
+  }
+  return rising(f, lo, hi, tol);
 }
 
 /**
  * The hull floating with a load at a heel: the level and trim that carry the displacement with the centre of
- * buoyancy on the vertical through the centre of gravity fore and aft, and the righting lever there.
+ * buoyancy on the vertical through the centre of gravity fore and aft, and the righting lever there. `start`, an
+ * attitude it floated at nearby (the last heel of a curve), lets the search begin there.
  */
-export function float(hull: Hull, load: Load, heel = 0, split = 1): Floating {
+export function float(hull: Hull, load: Load, heel = 0, split = 1, start?: Attitude): Floating {
   const volume = load.displacement / (load.density ?? SEA_WATER);
   const G: Vec3 = [load.lcg, load.vcg, load.tcg ?? 0];
+  let levelGuess = start?.level;
   const state = (trim: number) => {
-    const level = levelFor(hull, volume, heel, trim, split);
+    const level = levelFor(hull, volume, heel, trim, split, levelGuess);
+    levelGuess = level;
     const im = immersion(hull, { heel, trim, level }, split);
     const { along, across } = axes(heel, trim);
     const d: Vec3 = [im.centroid[0] - G[0], im.centroid[1] - G[1], im.centroid[2] - G[2]];
@@ -220,23 +283,27 @@ export function float(hull: Hull, load: Load, heel = 0, split = 1): Floating {
   };
   // the trim that balances fore and aft. Near its floating trim a boat is stable fore and aft, so trimming by the
   // bow moves B forward of G and the balance rises with the trim; far from it (a high G, a deck under) it need not.
-  // So the root is bracketed outward from level, in widening steps, and the nearest one taken.
-  let last = state(0);
+  // So the root is bracketed outward from where it starts (level, or the trim it floated at nearby), in widening
+  // steps, and the nearest one taken.
+  const t0 = start?.trim ?? 0;
+  let last = state(t0);
   if (Math.abs(last.balance) > 1e-9) {
     const dir = last.balance < 0 ? 1 : -1;
-    let inner = 0;
-    let outer = 0;
+    let inner = t0;
+    let outer: number | null = null;
     let closest = last;
-    for (const step of [0.005, 0.02, 0.05, 0.1, 0.2, 0.35, 0.5]) {
-      const s = state(dir * step);
+    for (const step of [0.002, 0.005, 0.02, 0.05, 0.1, 0.2, 0.35, 0.5, 0.8]) {
+      const t = t0 + dir * step;
+      if (Math.abs(t) > 1) break;
+      const s = state(t);
       if (Math.abs(s.balance) < Math.abs(closest.balance)) closest = s;
       if ((dir > 0 && s.balance >= 0) || (dir < 0 && s.balance <= 0)) {
-        outer = dir * step;
+        outer = t;
         break;
       }
-      inner = dir * step;
+      inner = t;
     }
-    if (outer !== 0) {
+    if (outer !== null) {
       const solved = rising(
         (trim) => {
           last = state(trim);
@@ -258,7 +325,12 @@ export function float(hull: Hull, load: Load, heel = 0, split = 1): Floating {
  * lever is 0, bracketing outward from upright; null if none is found within 60°.
  */
 export function restingHeel(hull: Hull, load: Load, split = 1): Floating | null {
-  const at = (heel: number) => float(hull, load, heel, split);
+  let near: Attitude | undefined;
+  const at = (heel: number) => {
+    const f = float(hull, load, heel, split, near);
+    near = f.attitude;
+    return f;
+  };
   const upright = at(0);
   if (Math.abs(upright.gz) < 1e-9) return upright;
   // a positive lever turns the boat back towards port (it rights a starboard heel), so the rest lies to port of here
@@ -282,10 +354,12 @@ export function restingHeel(hull: Hull, load: Load, split = 1): Floating | null 
   return null;
 }
 
-/** The righting lever at each heel (radians), floating the load free to trim at each. */
+/** The righting lever at each heel (radians), floating the load free to trim at each, each starting from the last. */
 export function gzCurve(hull: Hull, load: Load, heels: readonly number[], split = 1): { heel: number; gz: number; trim: number }[] {
+  let near: Attitude | undefined;
   return heels.map((heel) => {
-    const f = float(hull, load, heel, split);
+    const f = float(hull, load, heel, split, near);
+    near = f.attitude;
     return { heel, gz: f.gz, trim: f.attitude.trim };
   });
 }

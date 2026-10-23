@@ -711,9 +711,13 @@ export function shipdBody(vector: readonly number[], options: ShipDBodyOptions =
   const tiny = 1e-5 * h.Dd;
   // the heights: closer together towards the keel (where a keel radius turns fastest), plus every height a form
   // changes at: the knuckles of the midship and transom sections, the bow and stern knuckles, the waterline, bulbs
+  // a bulb's top and the transom's foot are steps in height: a waterline just under one is a different shape from
+  // one just over it, so both are sampled, a hair either side
+  const hair = 1e-6 * h.Dd;
+  const steps = [h.SK[1], ...(h.bit_BB ? [h.WL] : []), ...(h.bit_SB ? [h.HSBOA * h.WL] : [])].flatMap((z) => [z - hair, z + hair]);
   const special = [
     h.BK[1], h.SK[1], h.WL, h.Hbb * h.WL, h.HSBOA * h.WL, h.Hsb * h.WL * h.HSBOA, h.Rk_LG_int[1], h.Rc_LG_int[1],
-    h.Rc_UG_int[1], h.Rk_LG_int_trans[1], h.Rc_LG_int_trans[1], h.Rc_UG_int_trans[1],
+    h.Rc_UG_int[1], h.Rk_LG_int_trans[1], h.Rc_LG_int_trans[1], h.Rc_UG_int_trans[1], ...steps,
   ].filter((z) => Number.isFinite(z) && z > tiny && z < h.Dd);
   const graded = Array.from({ length: nLevels }, (_, i) => tiny + (h.Dd - tiny) * (i / (nLevels - 1)) ** 1.6);
   // exact heights, never rounded: a waterline a hair below WL is a different waterline (the bulb is still there)
@@ -767,29 +771,35 @@ export function shipdBody(vector: readonly number[], options: ShipDBodyOptions =
   // Between two stations the shape is interpolated by the share of each section's height, which is exact for a
   // smooth hull but not across a knuckle that sits at a different share of each (a transom's lower edge, a chine
   // meeting a rising keel). So each interval is checked against the waterlines themselves at its middle, and split
-  // where the interpolation is off by more than a small share of the half-beam.
+  // where the interpolation is off by more than a small share of the half-beam. A split only goes on while it
+  // pays: a smooth shape's error falls about fourfold each time the interval is halved, but across a step in the
+  // shape (a raked transom's edge crossing the stations) it does not fall at all, and splitting further there only
+  // multiplies stations without making the hull any truer.
   const tol = 0.005 * Math.max(...lines.map((l) => (l.range[0] + l.range[1]) / 2).map((xm, k) => lines[k].half(xm) ?? 0));
   const stations = stationXs.map((xs) => ({ xs, s: sectionAtXs(xs) })).filter((st): st is { xs: number; s: Section } => !!st.s);
-  const fits = (a: { xs: number; s: Section }, b: { xs: number; s: Section }, xm: number): boolean => {
+  const error = (a: { xs: number; s: Section }, b: { xs: number; s: Section }, xm: number): number => {
     const pair: HullBody = { center: 0, sections: [b.s, a.s] };
-    return lines.every((l) => {
+    let worst = 0;
+    for (const l of lines) {
       const direct = l.half(xm);
       const between = halfAt(pair, h.LOA - xm, l.z - h.WL);
-      if (direct === null || between === null) return (direct ?? 0) <= tol && (between ?? 0) <= tol;
-      return Math.abs(direct - between) <= tol;
-    });
+      worst = Math.max(worst, direct === null || between === null ? Math.max(direct ?? 0, between ?? 0) : Math.abs(direct - between));
+    }
+    return worst;
   };
   const refined: { xs: number; s: Section }[] = [stations[0]];
-  const split = (a: { xs: number; s: Section }, b: { xs: number; s: Section }, depth: number) => {
+  const split = (a: { xs: number; s: Section }, b: { xs: number; s: Section }, depth: number, before: number) => {
     const xm = (a.xs + b.xs) / 2;
     const s = depth < 6 ? sectionAtXs(xm) : null;
-    if (s && !fits(a, b, xm)) {
+    const err = s ? error(a, b, xm) : 0;
+    // the first three halvings always go ahead: a narrow feature (a bulb's neck) is only seen once a station is near it
+    if (s && err > tol && (depth < 3 || err < 0.75 * before)) {
       const m = { xs: xm, s };
-      split(a, m, depth + 1);
-      split(m, b, depth + 1);
+      split(a, m, depth + 1, err);
+      split(m, b, depth + 1, err);
     } else refined.push(b);
   };
-  for (let i = 1; i < stations.length; i++) split(stations[i - 1], stations[i], 0);
+  for (let i = 1; i < stations.length; i++) split(stations[i - 1], stations[i], 0, Infinity);
   // stations from the stern (the original's largest x) forward, in our x from the stern
   const sections = refined.reverse().map(({ s }) => ({ x: aft + s.x, points: s.points }));
   return { center, sections };

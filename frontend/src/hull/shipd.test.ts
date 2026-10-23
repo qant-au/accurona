@@ -146,6 +146,35 @@ test("shipd: a variety of real hulls is feasible and floats at a displacement of
   }
 });
 
+test("shipd: stations stay few enough to work with, and the sections stay true to the waterlines", () => {
+  // every station costs the hydrostatics, stability and the 3D mesh: refinement stops where splitting stops paying
+  for (const v of fixture.variety) {
+    const h = new ShipD(v.bodies[0].vector);
+    const body = shipdBody(v.bodies[0].vector);
+    assert.ok(body.sections.length < 1300, `${v.name}: ${body.sections.length} stations`);
+    // and between them the shape is within 6 % of the half-beam everywhere, and within 0.5 % at all but 1.5 % of
+    // points (the outliers sit at transom and bulb corners between two sampled heights; the teardrop of the
+    // submarine attempt has the most)
+    let over = 0;
+    let n = 0;
+    for (let k = 1; k < 20; k++) {
+      const z = (h.Dd * k) / 20;
+      const f = h.waterline(z);
+      for (let i = 0; i <= 200; i++) {
+        const xs = (h.LOA * i) / 200;
+        const d = f(xs);
+        const o = halfAt(body, h.LOA - xs, z - h.WL);
+        if (d === null || o === null) continue;
+        const e = Math.abs(d - o) / (1.3 * h.Bd);
+        assert.ok(e < 0.06, `${v.name}: ${(e * 100).toFixed(1)} % at x ${xs.toFixed(2)}, z ${z.toFixed(2)}`);
+        if (e > 0.005) over++;
+        n++;
+      }
+    }
+    assert.ok(over < 0.015 * n, `${v.name}: ${over} of ${n} points over 0.5 %`);
+  }
+});
+
 test("shipd: a hull scales with its length; a 1:100 model displaces a millionth", () => {
   const ship = fixture.variety.find((v) => v.name === "lcs-freedom-118m")!.bodies[0].vector;
   const model = fixture.variety.find((v) => v.name === "lcs-model-1.18m")!.bodies[0].vector;

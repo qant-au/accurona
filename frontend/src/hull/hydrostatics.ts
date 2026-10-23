@@ -104,8 +104,9 @@ export function hydrostatics(hull: Hull, waterline = 0, density = SEA_WATER): Hy
   let my = 0;
   let mz = 0;
   for (const body of hull.bodies) {
-    // the trapezoid rule over the stations, each interval split, so a transom's full section counts at the end
-    const xs = sampleXs(body, 8);
+    // the trapezoid rule over the stations, each interval split (a section's area varies as the square between
+    // stations): eightfold for a sparse hull, less as stations get denser, down to none from 800 stations
+    const xs = sampleXs(body, Math.min(8, Math.max(1, Math.ceil(800 / body.sections.length))));
     const s = xs.map((x) => sectionArea(body, x, waterline));
     for (let i = 1; i < xs.length; i++) {
       const dx = xs[i] - xs[i - 1];
