@@ -55,8 +55,8 @@ export function sheerAt(body: HullBody, x: number): number | null {
 }
 
 /**
- * Half-breadth of the body at x and height y: null outside the body's length or below its bottom; at and above
- * the sheer, the deck line.
+ * Half-breadth of the body at x and height y: null outside the body's length, below its bottom or above its top
+ * (the sheer, or the top of a part such as a bulb, or a submerged hull's top, that ends lower).
  */
 export function halfAt(body: HullBody, x: number, y: number): number | null {
   const k = bracket(body, x);
@@ -64,6 +64,7 @@ export function halfAt(body: HullBody, x: number, y: number): number | null {
   const bottom = bottomOf(k.a) + (bottomOf(k.b) - bottomOf(k.a)) * k.w;
   if (y < bottom - 1e-9) return null;
   const sheer = sheerOf(k.a) + (sheerOf(k.b) - sheerOf(k.a)) * k.w;
+  if (y > sheer + 1e-9) return null;
   const t = sheer - bottom > 1e-9 ? (y - bottom) / (sheer - bottom) : 1;
   return halfAtFraction(k.a, t) + (halfAtFraction(k.b, t) - halfAtFraction(k.a, t)) * k.w;
 }
@@ -96,11 +97,11 @@ export function sampleXs(body: HullBody, split = 4): number[] {
   return xs;
 }
 
-/** The x between a (body reaches y) and b (it does not) where the bottom passes through y. */
+/** The x between a (the body is there at height y) and b (it is not) where its edge passes through y. */
 function crossing(body: HullBody, y: number, a: number, b: number): number {
   for (let i = 0; i < 40; i++) {
     const mid = (a + b) / 2;
-    if ((bottomAt(body, mid) ?? Infinity) <= y) a = mid;
+    if (halfAt(body, mid, y) !== null) a = mid;
     else b = mid;
   }
   return a;
@@ -108,12 +109,12 @@ function crossing(body: HullBody, y: number, a: number, b: number): number {
 
 /**
  * The outline of one body at height y in plan ([x, z]): port side from aft forward, then starboard back. Null
- * when the body does not reach down to y. Where the bottom rises through y at both ends (a keel line), the
- * longest stretch that reaches it is taken.
+ * when the body is nowhere at that height. Where it is there in more than one stretch (a keel line rising through
+ * y at both ends, a bulb below the waterline), the longest is taken.
  */
 export function bodyOutlineAt(body: HullBody, y: number): Vec2[] | null {
   const xs = sampleXs(body);
-  const reaches = xs.map((x) => (bottomAt(body, x) ?? Infinity) <= y + 1e-9);
+  const reaches = xs.map((x) => halfAt(body, x, y) !== null);
   let best: [number, number] | null = null;
   for (let i = 0; i < xs.length; ) {
     if (!reaches[i]) {

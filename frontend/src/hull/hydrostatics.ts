@@ -1,7 +1,10 @@
 // A hull's hydrostatics at a waterline, from the section queries alone, so every hull source gets the same
 // numbers: the immersed volume and its centre, the waterplane and its moments, the metacentric radii. The
 // centre of gravity is not the hull's to know (it comes from what is aboard), so the metacentric heights are
-// left to the caller: GM = VCB + BM − VCG, all three as heights from the waterline.
+// left to the caller: GM = VCB + BM − VCG, VCB and VCG as heights in the hull's frame (y; at the design waterline
+// that is the height above the water). A hull wholly under the water
+// (a submarine) has no waterplane, so BM is 0 and its stability is VCB − VCG alone: the centre of gravity has to
+// sit below the centre of buoyancy.
 
 import type { Vec2 } from "../model.ts";
 import { outlineAt, sampleXs, sectionAt } from "./sections.ts";
@@ -56,9 +59,7 @@ function sectionArea(body: HullBody, x: number, wl: number): { area: number; my:
     }
     strip(y0, h0, y1, h1);
   }
-  // a waterline over the sheer: the deck line carried straight up
-  const [sheer, deck] = p[p.length - 1];
-  if (wl > sheer) strip(sheer, deck, wl, deck);
+  // a waterline over the section's top (a submerged hull, a bulb) adds nothing: the hull ends there
   return { area, my };
 }
 

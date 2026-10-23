@@ -21,12 +21,13 @@ test("sections: exact on a station, linear between stations at the same height",
   near(halfAt(widening, 0.5, -0.5), 1.5);
 });
 
-test("sections: nothing below the bottom or outside the length; the deck line above the sheer", () => {
+test("sections: nothing below the bottom, above the top or outside the length", () => {
   assert.equal(halfAt(widening, 1, -1.01), null);
   assert.equal(halfAt(widening, -0.1, 0), null);
   assert.equal(halfAt(widening, 2.1, 0), null);
   assert.equal(bottomAt(widening, 3), null);
-  near(halfAt(widening, 1, 5), 2);
+  assert.equal(halfAt(widening, 1, 1.01), null);
+  near(halfAt(widening, 1, 1), 2);
 });
 
 test("sections: a section's shape is followed between its points", () => {
