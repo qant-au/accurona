@@ -12,6 +12,7 @@ merges never touch them.
 | `build-standalone.mjs`, `standalone/` | The engine with no Home Assistant: `dist/standalone/` with the embedding API (`frontend/src/host/`) and a demo page, and the hull viewer (`hulls.html`, `frontend/src/hull/viewer.ts`). |
 | `smoke-standalone.mjs` | Mounts that build in a headless Chrome and fails on any page error (CI: `fork.yml`). |
 | `smoke-hulls.mjs` | Opens the hull viewer headless and shows every hull in the catalogue, failing on any page error or bad number (CI: `fork.yml`). |
+| `../demos/` | The hull turntable GIFs in `docs/demos/`, recorded from the hull viewer (`demos/README.md`). |
 | `brand/` | The integration's icons, copied over upstream's by `identity.py`. |
 | `github/` | GitHub files copied over upstream's by `identity.py` (the issue chooser). |
 
