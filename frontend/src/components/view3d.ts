@@ -96,6 +96,7 @@ import { TRAIL_ICON, TRAIL_WINDOW_MS, trailEvents, trailPoints, trailSources, tr
 import { limitEffects, weatherEntity, weatherState } from "../weather.ts";
 import { SHOW_PRESENCE } from "../flags.ts";
 import { hasFeature, manualUrl, projectionOn, shopUrl, type Feature } from "../features.ts";
+import { upstreamServices } from "../upstream.ts";
 import { searchIndex, searchItems, type SearchItem } from "../search.ts";
 import type { Shown } from "../voice/targets.ts";
 import { anyModule, moduleAlerts, moduleCards, modulePools, moduleScene, moduleVoice, moduleWatched, syncModules, type ModuleCard, type ModuleHost, type ScenePiece, type SpokenAlert, type SpokenCar, type SpokenDevice, type SpokenOpening, type VoiceAnswer } from "../modules.ts";
@@ -3651,7 +3652,8 @@ export class Fp3dView3d extends LitElement {
   /** Fun pack "Halloween": while it is unlocked and the ghost switched on, it floats through the house now and then. */
   private async syncGhost(): Promise<void> {
     const b = this.building;
-    const on = !!b && hasFeature("fun_halloween") && b.settings.halloween?.ghost !== false && this.ghostOn !== false;
+    // Accurona: the ghost is the author's fun pack, off with his other services (upstream.ts)
+    const on = upstreamServices() && !!b && hasFeature("fun_halloween") && b.settings.halloween?.ghost !== false && this.ghostOn !== false;
     if (!this.viewer || !on) {
       this.ghost?.dispose();
       this.ghost = null;
