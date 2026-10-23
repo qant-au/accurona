@@ -5,3 +5,5 @@ export { bodyOutlineAt, bodyRange, bottomAt, halfAt, outlineAt, sampleXs, sectio
 export { hydrostatics, SEA_WATER, type Hydrostatics } from "./hydrostatics.ts";
 export { parametricHull, type ParametricHullSpec } from "./parametric.ts";
 export { ShipD, shipdBody, shipdConstraints, shipdFeasible, SHIPD_PARAMETERS, type ShipDBodyOptions } from "./shipd.ts";
+export { pontoonBody, revolutionBody, type PontoonSpec, type RevolutionOptions } from "./revolution.ts";
+export { ribTube, tubeBottom, type Tube, type TubeSpec } from "./tube.ts";

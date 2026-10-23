@@ -114,6 +114,14 @@ const DISPLACEMENT: Record<string, [number, number]> = {
   "catamaran-12m": [6, 16],
   "lcs-independence-127m": [2000, 5000],
   "submarine-shipd-attempt": [500, 1500],
+  "ocean-racer-18m": [5, 12],
+  "three-master-52m": [800, 2500],
+  "coastguard-cutter-127m": [3500, 7000],
+  "patrol-boat-26.5m": [60, 180],
+  "police-launch-11m": [4, 12],
+  "aircraft-carrier-333m": [70000, 130000],
+  "frigate-136m": [3000, 5500],
+  "missile-boat-39m": [150, 400],
 };
 
 test("shipd: a variety of real hulls is feasible and floats at a displacement of its kind", () => {
